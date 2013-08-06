@@ -29,9 +29,9 @@ namespace NFleetExample
 
         private static void Run()
         {
-            var url = "some url";
-            var username = "username";
-            var password = "password";
+            const string url = "some url";
+            const string username = "username";
+            const string password = "password";
 
             var api1 = new Api( url, username, password );
 
