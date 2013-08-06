@@ -18,30 +18,45 @@ namespace NFleetSDK
 
         private TokenData currentToken;
 
-        public Api( string url )
+        private string username;
+        private string password;
+
+
+        public Api( string url, string username, string password )
         {
             baseUrl = url.Remove( 0, url.IndexOf( separator, StringComparison.Ordinal ) + separator.Length );
+            baseUrl = baseUrl.Replace( "81", "82" );
             client = new RestClient( url ) { FollowRedirects = false };
 #if DEBUG
             client.Timeout = Int32.MaxValue;
 #endif
+            this.username = username;
+            this.password = password;
         }
 
         public T Navigate<T>( Link link, object data = null ) where T : IResponseData, new()
         {
+
             var request = new RestRequest( link.Uri, link.Method.ToMethod() ) { RequestFormat = DataFormat.Json };
+
+            if ( link.Method == "POST" && link.Rel == "authenticate" && data == null )
+            {
+                Authenticate( username, password );
+                return (T)(IResponseData)currentToken;
+            }
+
             if ( currentToken != null )
                 request.AddHeader( "Authorization", currentToken.TokenType + " " + currentToken.AccessToken );
+
             // when POSTing, if data is null, add an empty object to prevent 500 Internal Server Error due to null payload
             request.AddBody( data == null && link.Method == "POST" ? new Empty() : data );
             var result = client.Execute<T>( request );
-            if ( result.Content.Length > 0 && result.ResponseStatus != ResponseStatus.Completed )
+            if ( ( result.Content.Length > 0 && result.ResponseStatus != ResponseStatus.Completed ) || result.StatusCode == 0 )
                 throw new IOException( result.ErrorMessage );
             var code = result.StatusCode;
             if ( code >= HttpStatusCode.BadRequest )
             {
-                var errorData = result.Data is ResponseData ? ( (ResponseData)(IResponseData)result.Data ).Items.FirstOrDefault() : null;
-                throw new IOException( String.Format( "{0} {1}{2}", (int)code, result.StatusDescription, errorData != null ? ": " + errorData.Message : "" ) );
+                ThrowException( result );
             }
             if ( code == HttpStatusCode.Created || code == HttpStatusCode.SeeOther )
             {
@@ -59,16 +74,30 @@ namespace NFleetSDK
             return result.Data;
         }
 
-        public void Authenticate( string username, string password )
+        public TokenData Authorize( TokenData token )
+        {
+            currentToken = token;
+            //TODO: authorize
+            return currentToken;
+        }
+
+        private static void ThrowException<T>( IRestResponse<T> result ) where T : new()
+        {
+            var code = result.StatusCode;
+            var errorData = result.Data is ResponseData ? ( (ResponseData)(IResponseData)result.Data ).Items.FirstOrDefault() : null;
+            throw new IOException( String.Format( "{0} {1}{2}", (int)code, result.StatusDescription, errorData != null ? ": " + errorData.Message : "" ) );
+        }
+
+        private void Authenticate( string uname, string passw )
         {
             //  make an unsuccessful request to root to obtain authentication url
             var authenticationUrl = GetAuthLocation();
 
             // if we did not receive location, we do not have to (or cannot) authorize
-            if ( authenticationUrl == null )return;
+            if ( authenticationUrl == null ) return;
 
             // post to the authentication url to create a token
-            var tokenLocation = Authenticate( username, password, authenticationUrl );
+            var tokenLocation = Authenticate( uname, passw, authenticationUrl );
 
             // request and store the token
             currentToken = RequestToken( tokenLocation );
@@ -77,8 +106,6 @@ namespace NFleetSDK
         private string GetAuthLocation()
         {
             var result = client.Execute<ApiData>( new RestRequest( "", Method.GET ) );
-            if ( result.Content.Length > 0 && result.ResponseStatus != ResponseStatus.Completed )
-                throw new IOException( result.ErrorMessage );
 
             var code = result.StatusCode;
             string authLocation = null;
@@ -108,11 +135,12 @@ namespace NFleetSDK
             authorizationRequest.AddBody( new AuthenticationRequestData { Scope = "data optimization" } );
 
             var response = client.Execute<AuthenticationData>( authorizationRequest );
-            if ( response.Content.Length > 0 && response.ResponseStatus != ResponseStatus.Completed )
-                throw new IOException( response.ErrorMessage );
 
-            if ( response.StatusCode != HttpStatusCode.Created && response.StatusCode != HttpStatusCode.SeeOther )
+            if ( response.StatusCode < HttpStatusCode.BadRequest && response.StatusCode != HttpStatusCode.Created && response.StatusCode != HttpStatusCode.SeeOther )
                 throw new IOException( "Unexpected response from server." );
+
+            if ( response.StatusCode >= HttpStatusCode.BadRequest )
+                ThrowException( response );
 
             var tokenLocationParameter = response.Headers.FirstOrDefault( h => h.Name == "Location" );
 
@@ -127,7 +155,7 @@ namespace NFleetSDK
         {
             var tokenRequest = new RestRequest( tokenLocation, Method.GET ) { RequestFormat = DataFormat.Json };
             var tokenResponse = client.Execute<TokenData>( tokenRequest );
-            if ( tokenResponse.Content.Length > 0 && tokenResponse.ResponseStatus != ResponseStatus.Completed )
+            if ( tokenResponse.ResponseStatus != ResponseStatus.Completed )
             {
                 throw new IOException( tokenResponse.ErrorMessage );
             }
