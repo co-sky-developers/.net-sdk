@@ -3,11 +3,11 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using NFleetSDK.Data;
 using RestSharp;
-using Sky.NFleet.Service.Request;
-using Sky.NFleet.Service.Response;
 
-namespace Sky.NFleet.Service.SDK
+
+namespace NFleetSDK
 {
     public sealed class Api
     {

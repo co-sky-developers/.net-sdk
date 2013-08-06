@@ -1,8 +1,8 @@
 ﻿using System;
+using NFleetSDK.Data;
 using RestSharp;
-using Sky.NFleet.Service.Response;
 
-namespace Sky.NFleet.Service.SDK
+namespace NFleetSDK
 {
     public static class LinkUtil
     {

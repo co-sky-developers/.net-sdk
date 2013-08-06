@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Sky.NFleet.Service.Response;
+using NFleetSDK.Data;
 
-namespace Sky.NFleet.Service.SDK
+namespace NFleetSDK
 {
     public class ResponseData : IResponseData
     {

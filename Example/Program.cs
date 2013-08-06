@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
-using Sky.NFleet.Service.Request;
-using Sky.NFleet.Service.Response;
+using NFleetSDK;
+using NFleetSDK.Data;
 
-namespace Sky.NFleet.Service.SDK.Example
+namespace NFleetExample
 {
     public static class Program
     {

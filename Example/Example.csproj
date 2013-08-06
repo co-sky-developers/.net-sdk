@@ -7,7 +7,7 @@
     <ProjectGuid>{D2B7848E-EF9F-4E32-A111-6E1A4D2DB012}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sky.NFleet.Service.SDK.Example</RootNamespace>
+    <RootNamespace>NFleetExample</RootNamespace>
     <AssemblyName>NFleetExample</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -40,10 +40,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NFleet.Service\NFleet.Service.csproj">
-      <Project>{d1edd529-1e15-448d-838f-44921d648455}</Project>
-      <Name>NFleet.Service</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SDK\SDK.csproj">
       <Project>{f392bda6-01f1-40f3-a140-271d0715893c}</Project>
       <Name>SDK</Name>
