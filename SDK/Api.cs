@@ -21,7 +21,6 @@ namespace NFleetSDK
         private string username;
         private string password;
 
-
         public Api( string url, string username, string password )
         {
             baseUrl = url.Remove( 0, url.IndexOf( separator, StringComparison.Ordinal ) + separator.Length );
@@ -36,7 +35,6 @@ namespace NFleetSDK
 
         public T Navigate<T>( Link link, object data = null ) where T : IResponseData, new()
         {
-
             var request = new RestRequest( link.Uri, link.Method.ToMethod() ) { RequestFormat = DataFormat.Json };
 
             if ( link.Method == "POST" && link.Rel == "authenticate" && data == null )
@@ -51,6 +49,20 @@ namespace NFleetSDK
             // when POSTing, if data is null, add an empty object to prevent 500 Internal Server Error due to null payload
             request.AddBody( data == null && link.Method == "POST" ? new Empty() : data );
             var result = client.Execute<T>( request );
+
+            if (result.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                Authenticate(username, password);
+                request = new RestRequest( link.Uri, link.Method.ToMethod() ) { RequestFormat = DataFormat.Json };
+    
+                if ( currentToken != null )
+                    request.AddHeader( "Authorization", currentToken.TokenType + " " + currentToken.AccessToken );
+                    
+                result = client.Execute<T>( request );
+                if ( result.StatusCode == HttpStatusCode.Unauthorized )
+                    throw new IOException( "Invalid username or password." );
+            }
+
             if ( ( result.Content.Length > 0 && result.ResponseStatus != ResponseStatus.Completed ) || result.StatusCode == 0 )
                 throw new IOException( result.ErrorMessage );
             var code = result.StatusCode;
@@ -62,7 +74,7 @@ namespace NFleetSDK
             {
                 var parameter = result.Headers.FirstOrDefault( h => h.Name == "Location" );
 
-                if ( parameter == null || parameter.Value == null ) throw new IOException( "Server response missing Location header." );
+                if ( parameter == null || parameter.Value == null ) throw new IOException( "Server response missing Location header." );    
 
                 var value = parameter.Value.ToString();
                 var entityLocation = value.Remove( 0, value.IndexOf( baseUrl, StringComparison.Ordinal ) + baseUrl.Length );
@@ -77,13 +89,19 @@ namespace NFleetSDK
         public TokenData Authorize( TokenData token )
         {
             currentToken = token;
-            //TODO: authorize
+            
+            return currentToken;
+        }
+
+        public TokenData GetCurrent( TokenData token )
+        {
             return currentToken;
         }
 
         private static void ThrowException<T>( IRestResponse<T> result ) where T : new()
         {
             var code = result.StatusCode;
+
             var errorData = result.Data is ResponseData ? ( (ResponseData)(IResponseData)result.Data ).Items.FirstOrDefault() : null;
             throw new IOException( String.Format( "{0} {1}{2}", (int)code, result.StatusDescription, errorData != null ? ": " + errorData.Message : "" ) );
         }
@@ -101,7 +119,7 @@ namespace NFleetSDK
 
             // request and store the token
             currentToken = RequestToken( tokenLocation );
-        }
+        }                                                                                                                                                                                                                                                                                                                           
 
         private string GetAuthLocation()
         {
@@ -129,7 +147,7 @@ namespace NFleetSDK
         }
 
         private string Authenticate( string username, string password, string authLocation )
-        {
+        {                                                            
             var authorizationRequest = new RestRequest( authLocation, Method.POST ) { RequestFormat = DataFormat.Json };
             authorizationRequest.AddHeader( "Authorization", "Basic " + Convert.ToBase64String( Encoding.UTF8.GetBytes( String.Format( "{0}:{1}", username, password ) ) ) );
             authorizationRequest.AddBody( new AuthenticationRequestData { Scope = "data optimization" } );

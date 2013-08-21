@@ -40,10 +40,10 @@ namespace NFleetExample
 
             // create a new instance of Api and reuse previously received token
             var api2 = new Api( url, username, password );
+
             tokenResponse = api2.Authorize( tokenResponse );
 
-            ApiData apiData = api2.Root;
-            var problems = api2.Navigate<RoutingProblemDataSet>( apiData.GetLink( "list-problems" ) );
+            var problems = api2.Navigate<RoutingProblemDataSet>( new Link { Rel = "list-problems", Uri = "/problems", Method = "GET" } );
             var created = api2.Navigate<ResponseData>( problems.GetLink( "create" ), new RoutingProblemUpdateRequestData { Name = "test" } );
             var problem = api2.Navigate<RoutingProblemData>( created.Location );
 
