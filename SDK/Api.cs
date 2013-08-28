@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -33,7 +34,12 @@ namespace NFleetSDK
             this.password = password;
         }
 
-        public T Navigate<T>( Link link, object data = null ) where T : IResponseData, new()
+        public T Navigate<T>( Link link, Dictionary<string, string> queryParameters ) where T : IResponseData, new()
+        {
+            return Navigate<T>(link, null, queryParameters);
+        }
+
+        public T Navigate<T>( Link link, object data = null, Dictionary<string,string> queryParameters = null ) where T : IResponseData, new()
         {
             var request = new RestRequest( link.Uri, link.Method.ToMethod() ) { RequestFormat = DataFormat.Json };
 
@@ -48,13 +54,31 @@ namespace NFleetSDK
 
             // when POSTing, if data is null, add an empty object to prevent 500 Internal Server Error due to null payload
             request.AddBody( data == null && link.Method == "POST" ? new Empty() : data );
+            
+
+            if (link.Method == "GET" && queryParameters != null)
+            {
+                foreach (var queryParameter in queryParameters)
+                {
+                    request.AddParameter(queryParameter.Key, queryParameter.Value);
+                }
+            }
+                
             var result = client.Execute<T>( request );
 
             if (result.StatusCode == HttpStatusCode.Unauthorized)
             {
                 Authenticate(username, password);
                 request = new RestRequest( link.Uri, link.Method.ToMethod() ) { RequestFormat = DataFormat.Json };
-    
+
+                if ( link.Method == "GET" && queryParameters != null )
+                {
+                    foreach ( var queryParameter in queryParameters )
+                    {
+                        request.AddParameter( queryParameter.Key, queryParameter.Value );
+                    }
+                }
+
                 if ( currentToken != null )
                     request.AddHeader( "Authorization", currentToken.TokenType + " " + currentToken.AccessToken );
                     
