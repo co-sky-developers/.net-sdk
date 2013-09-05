@@ -79,6 +79,7 @@
     <Compile Include="Data\LocationData.cs" />
     <Compile Include="Data\LocationDataSet.cs" />
     <Compile Include="Data\OptimizationData.cs" />
+    <Compile Include="Data\OptimizationUpdateRequestData.cs" />
     <Compile Include="Data\RouteData.cs" />
     <Compile Include="Data\RoutingProblemData.cs" />
     <Compile Include="Data\RoutingProblemDataSet.cs" />

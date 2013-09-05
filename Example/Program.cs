@@ -58,7 +58,7 @@ namespace NFleetExample
 
             created = api2.Navigate<ResponseData>( problem.GetLink( "start-new-optimization" ) );
             var optimization = api2.Navigate<OptimizationData>( created.Location );
-            var res = api2.Navigate<OptimizationData>(optimization.GetLink("start"));
+            var res = api2.Navigate<ResponseData>( optimization.GetLink( "start" ), new OptimizationUpdateRequestData { } );
 
             while ( true )
             {
