@@ -60,31 +60,75 @@ namespace NFleetExample
             var optimization = api2.Navigate<OptimizationData>( created.Location );
             var res = api2.Navigate<ResponseData>( optimization.GetLink( "start" ), new OptimizationUpdateRequestData { } );
 
-            while ( true )
+            // create multiple vehicles
+            for ( int i = 0; i < 20; i++ )
             {
-                Thread.Sleep( 1000 );
-
-                optimization = api2.Navigate<OptimizationData>( optimization.GetLink( "self" ) );
-
-                Console.WriteLine( optimization.State + " (" + optimization.Progress + "%)" );
-
-                if ( optimization.State == "Stopped" )
+                api2.Navigate<ResponseData>( problem.GetLink( "create-vehicle" ), new VehicleUpdateRequestData
                 {
-                    var optimizationResult = api2.Navigate<VehicleDataSet>( optimization.GetLink( "results" ) );
-                    var optimizationResulTasks = api2.Navigate<TaskDataSet>( optimization.GetLink( "resulttasks" ) );
-                    foreach ( var vehicleData in optimizationResult.Items )
+                    Name = "test"+i,
+                    Capacities = new List<CapacityData>
+                {
+                    new CapacityData { Name = "Weight", Amount = 5000 }
+                },
+                    StartLocation = new LocationData
                     {
-                        Console.Write( "Vehicle {0}({1}): ", vehicleData.Id, vehicleData.Name );
-                        foreach ( var point in vehicleData.Route.Items )
+                        Coordinate = new CoordinateData
                         {
-                            TaskEventData data = FindTaskEventData( optimizationResulTasks, point );
-                            Console.Write( "{0}: {1}-{2} ", point, data.PlannedArrivalTime, data.PlannedDepartureTime );
+                            Latitude = 62.244958,
+                            Longitude = 25.747143,
+                            System = "Euclidian"
                         }
-                        Console.WriteLine();
-                    }
-                    break;
-                }
+                    },
+                    EndLocation = new LocationData
+                    {
+                        Coordinate = new CoordinateData
+                        {
+                            Latitude = 62.244958,
+                            Longitude = 25.747143,
+                            System = "Euclidian"
+                        }
+                    },
+                    TimeWindows = { new TimeWindowData { Start = new DateTime( 2013, 5, 14, 8, 0, 0 ), End = new DateTime( 2013, 5, 14, 12, 0, 0 ) } }
+
+                } );
             }
+            var queryParams = new Dictionary<string, string>
+                                  {
+                                      {"limit","3"},
+                                      {"offset","3"}
+                                  };
+            // navigate through vehicles using paging links
+            var vehres = api2.Navigate<VehicleDataSet>( problem.GetLink( "list-vehicles" ), queryParams );
+            var vehres2 = api2.Navigate<VehicleDataSet>( vehres.GetLink( "next" ) );
+            var vehres3 = api2.Navigate<VehicleDataSet>( vehres2.GetLink( "next" ) );
+            var vehres4 = api2.Navigate<VehicleDataSet>( vehres3.GetLink( "next" ) );
+
+
+                while ( true )
+                {
+                    Thread.Sleep( 1000 );
+
+                    optimization = api2.Navigate<OptimizationData>( optimization.GetLink( "self" ) );
+
+                    Console.WriteLine( optimization.State + " (" + optimization.Progress + "%)" );
+
+                    if ( optimization.State == "Stopped" )
+                    {
+                        var optimizationResult = api2.Navigate<VehicleDataSet>( optimization.GetLink( "results" ) );
+                        var optimizationResulTasks = api2.Navigate<TaskDataSet>( optimization.GetLink( "resulttasks" ) );
+                        foreach ( var vehicleData in optimizationResult.Items )
+                        {
+                            Console.Write( "Vehicle {0}({1}): ", vehicleData.Id, vehicleData.Name );
+                            foreach ( var point in vehicleData.Route.Items )
+                            {
+                                TaskEventData data = FindTaskEventData( optimizationResulTasks, point );
+                                Console.Write( "{0}: {1}-{2} ", point, data.PlannedArrivalTime, data.PlannedDepartureTime );
+                            }
+                            Console.WriteLine();
+                        }
+                        break;
+                    }
+                }
         }
 
         private static TaskEventData FindTaskEventData( TaskDataSet set, int id )

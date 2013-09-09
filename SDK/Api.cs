@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using NFleetSDK.Data;
 using RestSharp;
+using RestSharp.Contrib;
 
 
 namespace NFleetSDK
@@ -54,7 +55,8 @@ namespace NFleetSDK
 
             // when POSTing, if data is null, add an empty object to prevent 500 Internal Server Error due to null payload
             request.AddBody( data == null && link.Method == "POST" ? new Empty() : data );
-            
+
+            if ( link.Uri.Contains( "?" ) ) queryParameters = ParseQueryParameters(client.BaseUrl + link.Uri);
 
             if (link.Method == "GET" && queryParameters != null)
             {
@@ -207,6 +209,22 @@ namespace NFleetSDK
             }
 
             return tokenResponse.Data;
+        }
+
+        private Dictionary<string, string> ParseQueryParameters( string url )
+        {
+            var queryParams = new Dictionary<string, string>();
+
+
+            Uri myUri = new Uri( url );
+            var parameters = HttpUtility.ParseQueryString( myUri.Query );
+
+            foreach ( var key in parameters.AllKeys )
+            {
+                queryParams.Add( key, parameters[key] );
+            }
+
+            return queryParams;
         }
 
         public ApiData Root
