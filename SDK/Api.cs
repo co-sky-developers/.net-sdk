@@ -42,7 +42,15 @@ namespace NFleetSDK
 
         public T Navigate<T>( Link link, object data = null, Dictionary<string,string> queryParameters = null ) where T : IResponseData, new()
         {
-            var request = new RestRequest( link.Uri, link.Method.ToMethod() ) { RequestFormat = DataFormat.Json };
+            var uri = link.Uri;
+            if ( uri.Contains( "?" ) )
+            {
+                queryParameters = ParseQueryParameters( client.BaseUrl + uri );
+                uri = uri.Substring( 0, uri.IndexOf( '?' ) );
+            }
+
+
+            var request = new RestRequest( uri, link.Method.ToMethod() ) { RequestFormat = DataFormat.Json };
 
             if ( link.Method == "POST" && link.Rel == "authenticate" && data == null )
             {
@@ -55,8 +63,6 @@ namespace NFleetSDK
 
             // when POSTing, if data is null, add an empty object to prevent 500 Internal Server Error due to null payload
             request.AddBody( data == null && link.Method == "POST" ? new Empty() : data );
-
-            if ( link.Uri.Contains( "?" ) ) queryParameters = ParseQueryParameters(client.BaseUrl + link.Uri);
 
             if (link.Method == "GET" && queryParameters != null)
             {
@@ -176,7 +182,7 @@ namespace NFleetSDK
         {                                                            
             var authorizationRequest = new RestRequest( authLocation, Method.POST ) { RequestFormat = DataFormat.Json };
             authorizationRequest.AddHeader( "Authorization", "Basic " + Convert.ToBase64String( Encoding.UTF8.GetBytes( String.Format( "{0}:{1}", username, password ) ) ) );
-            authorizationRequest.AddBody( new AuthenticationRequestData { Scope = "data optimization" } );
+            authorizationRequest.AddBody( new AuthenticationRequest { Scope = "data optimization" } );
 
             var response = client.Execute<AuthenticationData>( authorizationRequest );
 

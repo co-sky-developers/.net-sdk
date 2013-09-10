@@ -44,7 +44,7 @@ namespace NFleetExample
             tokenResponse = api2.Authorize( tokenResponse );
 
             var problems = api2.Navigate<RoutingProblemDataSet>( new Link { Rel = "list-problems", Uri = "/problems", Method = "GET" } );
-            var created = api2.Navigate<ResponseData>( problems.GetLink( "create" ), new RoutingProblemUpdateRequestData { Name = "test" } );
+            var created = api2.Navigate<ResponseData>( problems.GetLink( "create" ), new RoutingProblemUpdateRequest { Name = "test" } );
             var problem = api2.Navigate<RoutingProblemData>( created.Location );
 
             CreateDemoData( problem, api2 );
@@ -58,12 +58,12 @@ namespace NFleetExample
 
             created = api2.Navigate<ResponseData>( problem.GetLink( "start-new-optimization" ) );
             var optimization = api2.Navigate<OptimizationData>( created.Location );
-            var res = api2.Navigate<ResponseData>( optimization.GetLink( "start" ), new OptimizationUpdateRequestData { } );
+            var res = api2.Navigate<ResponseData>( optimization.GetLink( "start" ), new OptimizationUpdateRequest { } );
 
             // create multiple vehicles
             for ( int i = 0; i < 20; i++ )
             {
-                api2.Navigate<ResponseData>( problem.GetLink( "create-vehicle" ), new VehicleUpdateRequestData
+                api2.Navigate<ResponseData>( problem.GetLink( "create-vehicle" ), new VehicleUpdateRequest
                 {
                     Name = "test"+i,
                     Capacities = new List<CapacityData>
@@ -138,7 +138,7 @@ namespace NFleetExample
 
         private static void CreateDemoData( RoutingProblemData problem, Api api )
         {
-            api.Navigate<ResponseData>( problem.GetLink( "create-vehicle" ), new VehicleUpdateRequestData
+            api.Navigate<ResponseData>( problem.GetLink( "create-vehicle" ), new VehicleUpdateRequest
             {
                 Name = "test",
                 Capacities = new List<CapacityData>
@@ -167,10 +167,10 @@ namespace NFleetExample
 
             } );
 
-            var newTask = new TaskUpdateRequestData { Name = "task" };
+            var newTask = new TaskUpdateRequest { Name = "task" };
             var capacity = new CapacityData { Name = "Weight", Amount = 20 };
 
-            var pickup = new TaskEventUpdateRequestData
+            var pickup = new TaskEventUpdateRequest
             {
                 Type = "Pickup",
                 Location = new LocationData
@@ -187,7 +187,7 @@ namespace NFleetExample
             pickup.Capacities.Add( capacity );
             newTask.TaskEvents.Add( pickup );
 
-            var delivery = new TaskEventUpdateRequestData
+            var delivery = new TaskEventUpdateRequest
             {
                 Type = "Delivery",
                 Location = new LocationData
