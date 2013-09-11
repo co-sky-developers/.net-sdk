@@ -11,188 +11,219 @@ namespace NFleetSDK.UnitTests
     internal class ApiTests
     {
         //TODO: read these from some sane place
-        private string username, password;
+        private string username = "", password = "";
         private Api api;
-
-        [Test]
-        public void AccessingApiTest()
+        private string apiLocation = "http://localhost:4000";
+        private Dictionary<string, object> testObjects = new Dictionary<string, object>();
+        
+        [SetUp]
+        public void SetupApi()
         {
+
             //##BEGIN EXAMPLE accessingapi##
-            api = new Api("https://api.co-sky.fi", username, password);
-            var apiData = api.Root;
+            api = new Api(apiLocation, username, password);
+            var rootLinks = api.Root;
             //##END EXAMPLE##
-        }
 
-        [Test]
-        public void OauthTest()
-        {
             //##BEGIN EXAMPLE oauth##
-            //var tokenResponse = api.Authorize()
+            var tokenResponse = api.Navigate<TokenData>(rootLinks.GetLink("authenticate"));
             //##END EXAMPLE##
+
+            
+
+            testObjects["rootLinks"] = rootLinks;
+            testObjects["tokenResponse"] = tokenResponse;
         }
 
         [Test]
-        public void CreatingProblemTest()
+        public void T01CreatingProblemTest()
         {
+            var rootLinks = (ApiData)testObjects["rootLinks"];
             //##BEGIN EXAMPLE creatingproblem##
-            /*rikki:
-            var problemData = new ProblemData { Name = "Second test" };
-            var result = api.Navigate<ResultData>(problems.GetLink("create"), problemData); */
+            var problems = api.Navigate<RoutingProblemDataSet>(rootLinks.GetLink("list-problems"));
+            var created = api.Navigate<ResponseData>(problems.GetLink("create"));
             //##END EXAMPLE##
+            Assert.AreEqual(created.Location, apiLocation + "/problems/1");
+            testObjects["created"] = created;
+            testObjects["problems"] = problems;
         }
 
         [Test]
-        public void AccessingProblemTest()
+        public void T02AccessingProblemTest()
         {
+            var created = (ResponseData)testObjects["created"];
             //##BEGIN EXAMPLE accessingproblem##
-            var problems =
-                api.Navigate<RoutingProblemDataSet>(new Link {Rel = "list-problems", Uri = "/problems", Method = "GET"});
+            var problem = api.Navigate<RoutingProblemData>(created.Location);
             //##END EXAMPLE##
+            Assert.AreEqual(problem.Id, 1);
+            testObjects["problem"] = problem;
         }
 
         [Test]
-        public void ListingTasksTest()
+        public void T03ListingTasksTest()
         {
+            var problem = (RoutingProblemData) testObjects["problem"];
+            TestData.CreateDemoData(problem, api);
             //##BEGIN EXAMPLE listingtasks##
-            //var tasks = api.Navigate<TaskDataSet>(problem.GetLink("list-tasks")); 
+            var tasks = api.Navigate<TaskDataSet>(problem.GetLink("list-tasks")); 
             //##END EXAMPLE##
+            testObjects["tasks"] = tasks;
         }
 
 
         [Test]
-        public void CreatingTaskTest()
+        public void T04CreatingTaskTest()
         {
+            var tasks = (TaskDataSet) testObjects["tasks"];
             //##BEGIN EXAMPLE creatingtask##
-            /*
             var newTask = new TaskData { Name = "test name" };
-            CapacityData capacity = new CapacityData { Name = "Weight", Amount = 20 };
+            var capacity = new CapacityData { Name = "Weight", Amount = 20 };
 
             var pickup = new TaskEventData
             {
-                Type = EventType.Pickup,
+                Type = "Pickup",
                 Location = new LocationData
                 {
                     Coordinate = new CoordinateData
                     {
-                        Latitude = "62.244958",
-                        Longitude = "25.747143"
+                        Latitude = 62.244958,
+                        Longitude = 25.747143,
+                        System = "Euclidian"
                     }
                 }
             };
             pickup.Capacities.Add(capacity);
-            newTask.Events.Add(pickup);
+            newTask.TaskEvents.Add(pickup);
 
             var delivery = new TaskEventData
             {
-                Type = EventType.Delivery,
+                Type = "Delivery",
                 Location = new LocationData
                 {
                     Coordinate = new CoordinateData
                     {
-                        Latitude = "62.244589",
-                        Longitude = "25.74892"
+                        Latitude = 62.244589,
+                        Longitude = 25.74892,
+                        System = "Euclidian"
                     }
                 }
             };
             delivery.Capacities.Add(capacity);
-            newTask.Events.Add(delivery);
+            newTask.TaskEvents.Add(delivery);
 
-            var taskCreationResult = api.Navigate<ResultData>(tasks.GetLink("create"), newTask); 
-             */
+            var taskCreationResult = api.Navigate<ResponseData>(tasks.GetLink("create"), newTask); 
             //##END EXAMPLE##
+            testObjects["taskCreationResult"] = taskCreationResult;
         }
 
         [Test]
-        public void UpdatingTaskTest()
+        public void T05UpdatingTaskTest()
         {
+            var taskCreationResult = (ResponseData) testObjects["taskCreationResult"];
             //##BEGIN EXAMPLE updatingtask##
-            /*
-            newTask = api.Navigate<TaskData>(taskCreationResult.Location);
+            var newTask = api.Navigate<TaskData>(taskCreationResult.Location);
             newTask.Name = "other name";
-            api.Navigate(newTask.GetLink("update"), newTask); 
-             */
+            api.Navigate<TaskData>(newTask.GetLink("update"), newTask); 
             //##END EXAMPLE##
+            testObjects["newTask"] = newTask;
         }
 
         [Test]
-        public void DeletingTaskTest()
+        public void T06DeletingTaskTest()
         {
+            var newTask = (TaskData) testObjects["newTask"];
             //##BEGIN EXAMPLE deletingtask##
-            //api.Navigate(newTask.GetLink("delete")); 
+            api.Navigate<ResponseData>(newTask.GetLink("delete"));
             //##END EXAMPLE##
         }
 
         [Test]
-        public void ListingVehiclesTest()
+        public void T07ListingVehiclesTest()
         {
+            var problem = (RoutingProblemData)testObjects["problem"];
             //##BEGIN EXAMPLE listingvehicles##
-            //var vehicles = api.Navigate<VehicleDataSet>(problem.GetLink("list-vehicles")); 
+            var vehicles = api.Navigate<VehicleDataSet>(problem.GetLink("list-vehicles")); 
             //##END EXAMPLE##
+            testObjects["vehicles"] = vehicles;
         }
 
         [Test]
-        public void AccessingTaskSeqTest()
+        public void T08AccessingTaskSeqTest()
         {
+            var vehicles = (VehicleDataSet)testObjects["vehicles"];
+            var vehicle = vehicles.Items.First();
             //##BEGIN EXAMPLE accessingtaskseq##
-            //var taskEvents = api.Navigate<TaskEventDataSet>(vehicle.GetLink("list-events")); 
+            var taskEvents = api.Navigate<TaskEventDataSet>(vehicle.GetLink("list-events")); 
             //##END EXAMPLE##
         }
 
-        public void AccessingRouteTest()
+        public void T09AccessingRouteTest()
         {
+            var vehicles = (VehicleDataSet)testObjects["vehicles"];
+            var vehicle = vehicles.Items.First();
             //##BEGIN EXAMPLE accessingroute##
-            //var taskEventIds = api.Navigate<TaskEventIds>(vehicle.GetLink("get-route")); 
+            var taskEvents = api.Navigate<TaskEventDataSet>(vehicle.GetLink("get-route")); 
             //##END EXAMPLE##
+            testObjects["taskEvents"] = taskEvents;
         }
 
         [Test]
-        public void UpdatingRouteTest()
+        public void T10UpdatingRouteTest()
         {
+            var taskEvents = (TaskEventDataSet) testObjects["taskEvents"];
+            
             //##BEGIN EXAMPLE updatingroute##
-            /*var points = { 8, 9, 12, 6 };
-            route.Items = points;
-            api.Navigate(route.GetLink("update"), route); */
+            /*var points =  8, 9, 12, 6 ;
+            taskEvents.Items = points;
+            api.Navigate(route.GetLink("update"), route);*/
             //##END EXAMPLE##
         }
 
         [Test]
-        public void StartingOptTest()
+        public void T11StartingOptTest()
         {
+            var problem = (RoutingProblemData)testObjects["problem"];
             //##BEGIN EXAMPLE startingopt##
-            //var creation = api.navigate<ResultData>(problem.Links["start-new-optimization"]); 
+            var creation = api.Navigate<ResponseData>(problem.GetLink("start-new-optimization")); 
             //##END EXAMPLE##
+            testObjects["creation"] = creation;
         }
 
         [Test]
-        public void AccessingNewOptTest()
+        public void T12AccessingNewOptTest()
         {
+            var creation = (ResponseData) testObjects["creation"];
             //##BEGIN EXAMPLE accessingnewopt##
-            //var optimization = api.Navigate(creation.Location); 
+            var optimization = api.Navigate<OptimizationData>(creation.Location); 
             //##END EXAMPLE##
+            testObjects["optimization"] = optimization;
         }
 
         [Test]
-        public void StoppingOptTest()
+        public void T13StoppingOptTest()
         {
+            var optimization = (OptimizationData) testObjects["optimization"];
             //##BEGIN EXAMPLE stoppingopt##
-            //api.Navigate(optimization.GetLink("stop")); 
+            api.Navigate<ResponseData>(optimization.GetLink("stop")); 
             //##END EXAMPLE##
         }
 
         [Test]
-        public void GetOptStatusTest()
+        public void T14GetOptStatusTest()
         {
+            var optimization = (OptimizationData)testObjects["optimization"];
             //##BEGIN EXAMPLE getoptstatus#
-            //optimization = api.Navigate<OptimizationData>(optimization.GetLink("self")); 
+            optimization = api.Navigate<OptimizationData>(optimization.GetLink("self")); 
             //##END EXAMPLE##
         }
 
         [Test]
-        public void Test()
+        public void T15BadRequestTest()
         {
+            var problems = (RoutingProblemDataSet)testObjects["problems"];
+            
             //##BEGIN EXAMPLE oauth##
-            /*var problemData = new ProblemData();
-            var result = api.Navigate<ResultData>(problems.GetLink("create"), problemData); */
+            var result = api.Navigate<ResponseData>(problems.GetLink("create"));
             //##END EXAMPLE##
         }
     }
