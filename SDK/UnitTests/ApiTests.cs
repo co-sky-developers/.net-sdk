@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using NFleetSDK.Data;
+using Newtonsoft.Json;
 
 namespace NFleetSDK.UnitTests
 {
@@ -11,13 +12,18 @@ namespace NFleetSDK.UnitTests
     internal class ApiTests
     {
         //TODO: read these from some sane place
-        private string username = "", password = "";
+        private string username = (string)Properties.Settings.Default["apiusername"];
+        private string password = (string)Properties.Settings.Default["apipassword"];
+        private string apiLocation = (string)Properties.Settings.Default["apiurl"];
+        private string responsePath =
+            @"C:\Users\Markus Vuorio\Documents\Visual Studio 2010\Projects\DocGen\DocGen\CodeExamples\responses";
+        
         private Api api;
-        private string apiLocation = "http://localhost:4000";
         private Dictionary<string, object> testObjects = new Dictionary<string, object>();
+        private Dictionary<string, Response> responses;
         
         [SetUp]
-        public void SetupApi()
+        public void Setup()
         {
 
             //##BEGIN EXAMPLE accessingapi##
@@ -29,10 +35,18 @@ namespace NFleetSDK.UnitTests
             var tokenResponse = api.Navigate<TokenData>(rootLinks.GetLink("authenticate"));
             //##END EXAMPLE##
 
-            
+            responses = ResponseReader.readResponses(responsePath);
 
             testObjects["rootLinks"] = rootLinks;
             testObjects["tokenResponse"] = tokenResponse;
+        }
+
+        [Test]
+        public void T00RootlinkTest()
+        {
+            var rootLinks = (ApiData) testObjects["rootLinks"];
+            var rootLinksJson = JsonConvert.SerializeObject(rootLinks);
+            Assert.Equals(rootLinksJson, responses["accessingapiresp"].json);
         }
 
         [Test]
@@ -41,7 +55,7 @@ namespace NFleetSDK.UnitTests
             var rootLinks = (ApiData)testObjects["rootLinks"];
             //##BEGIN EXAMPLE creatingproblem##
             var problems = api.Navigate<RoutingProblemDataSet>(rootLinks.GetLink("list-problems"));
-            var created = api.Navigate<ResponseData>(problems.GetLink("create"));
+            var created = api.Navigate<ResponseData>(problems.GetLink("create"), new RoutingProblemUpdateRequest { Name = "test" });
             //##END EXAMPLE##
             Assert.AreEqual(created.Location, apiLocation + "/problems/1");
             testObjects["created"] = created;
@@ -55,7 +69,9 @@ namespace NFleetSDK.UnitTests
             //##BEGIN EXAMPLE accessingproblem##
             var problem = api.Navigate<RoutingProblemData>(created.Location);
             //##END EXAMPLE##
+            var problemjson = JsonConvert.SerializeObject(problem);
             Assert.AreEqual(problem.Id, 1);
+            Assert.AreEqual(problemjson, responses["accessingproblemresp"]);
             testObjects["problem"] = problem;
         }
 

@@ -149,3 +149,6 @@ $RECYCLE.BIN/
 
 # Mac crap
 .DS_Store
+SDK/Properties/Settings.settings
+SDK/app.config
+SDK/Properties/Settings.Designer.cs
