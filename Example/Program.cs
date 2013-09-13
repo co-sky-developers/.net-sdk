@@ -66,7 +66,7 @@ namespace NFleetExample
 
             Console.WriteLine( locations.Items.Count );
 
-            created = api2.Navigate<ResponseData>( problem.GetLink( "start-new-optimization" ) );
+            created = api2.Navigate<ResponseData>( problem.GetLink( "create-new-optimization" ) );
             var optimization = api2.Navigate<OptimizationData>( created.Location );
             var res = api2.Navigate<ResponseData>( optimization.GetLink( "start" ), new OptimizationUpdateRequest { } );
 
