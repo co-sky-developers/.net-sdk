@@ -23,7 +23,8 @@ namespace NFleetSDK.UnitTests
                 string jsontmp = "";
                 foreach (var line in System.IO.File.ReadAllLines(file.FullName))
                 {
-                    if (line.Trim()[0] == '{') json = true;
+                    var trimmedline = line.Trim();
+                    if (trimmedline.Length > 0 && trimmedline[0] == '{') json = true;
                     if (!json)
                     {
                         resp.Headers += line;

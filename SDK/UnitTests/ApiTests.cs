@@ -15,8 +15,7 @@ namespace NFleetSDK.UnitTests
         private string username = (string)Properties.Settings.Default["apiusername"];
         private string password = (string)Properties.Settings.Default["apipassword"];
         private string apiLocation = (string)Properties.Settings.Default["apiurl"];
-        private string responsePath =
-            @"C:\Users\Markus Vuorio\Documents\Visual Studio 2010\Projects\DocGen\DocGen\CodeExamples\responses";
+        private string responsePath = (string) Properties.Settings.Default["responsepath"];
         
         private Api api;
         private Dictionary<string, object> testObjects = new Dictionary<string, object>();
@@ -45,8 +44,10 @@ namespace NFleetSDK.UnitTests
         public void T00RootlinkTest()
         {
             var rootLinks = (ApiData) testObjects["rootLinks"];
-            var rootLinksJson = JsonConvert.SerializeObject(rootLinks);
-            Assert.Equals(rootLinksJson, responses["accessingapiresp"].json);
+
+            //TODO: find out how to compare json objects and use that
+            var rootLinksJson = JsonConvert.SerializeObject(rootLinks).ToString();
+            Assert.AreEqual(rootLinksJson, responses["accessingapiresp"].json);
         }
 
         [Test]
@@ -57,9 +58,9 @@ namespace NFleetSDK.UnitTests
             var problems = api.Navigate<RoutingProblemDataSet>(rootLinks.GetLink("list-problems"));
             var created = api.Navigate<ResponseData>(problems.GetLink("create"), new RoutingProblemUpdateRequest { Name = "test" });
             //##END EXAMPLE##
-            Assert.AreEqual(created.Location, apiLocation + "/problems/1");
             testObjects["created"] = created;
             testObjects["problems"] = problems;
+            Assert.AreEqual(created.Location, apiLocation + "/problems/1");
         }
 
         [Test]
@@ -70,9 +71,9 @@ namespace NFleetSDK.UnitTests
             var problem = api.Navigate<RoutingProblemData>(created.Location);
             //##END EXAMPLE##
             var problemjson = JsonConvert.SerializeObject(problem);
+            testObjects["problem"] = problem;
             Assert.AreEqual(problem.Id, 1);
             Assert.AreEqual(problemjson, responses["accessingproblemresp"]);
-            testObjects["problem"] = problem;
         }
 
         [Test]
