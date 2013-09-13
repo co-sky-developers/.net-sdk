@@ -238,10 +238,16 @@ namespace NFleetSDK.UnitTests
         public void T15BadRequestTest()
         {
             var problems = (RoutingProblemDataSet)testObjects["problems"];
-            
-            //##BEGIN EXAMPLE oauth##
-            var result = api.Navigate<ResponseData>(problems.GetLink("create"));
-            //##END EXAMPLE##
+            try
+            {
+                //##BEGIN EXAMPLE oauth##
+                var result = api.Navigate<ResponseData>(problems.GetLink("create"));
+                //##END EXAMPLE##
+            }
+            catch (System.IO.IOException e)
+            {
+                Assert.IsTrue(e.Message.Contains("400 Bad Request"));
+            }
         }
     }
 }
