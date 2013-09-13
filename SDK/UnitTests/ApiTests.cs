@@ -5,6 +5,8 @@ using System.Text;
 using NUnit.Framework;
 using NFleetSDK.Data;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using RestSharp;
 
 namespace NFleetSDK.UnitTests
 {
@@ -20,6 +22,7 @@ namespace NFleetSDK.UnitTests
         private Api api;
         private Dictionary<string, object> testObjects = new Dictionary<string, object>();
         private Dictionary<string, Response> responses;
+        private RestSharp.Deserializers.JsonDeserializer deserializer;
         
         [SetUp]
         public void Setup()
@@ -35,6 +38,7 @@ namespace NFleetSDK.UnitTests
             //##END EXAMPLE##
 
             responses = ResponseReader.readResponses(responsePath);
+            deserializer = new RestSharp.Deserializers.JsonDeserializer();
 
             testObjects["rootLinks"] = rootLinks;
             testObjects["tokenResponse"] = tokenResponse;
@@ -44,10 +48,8 @@ namespace NFleetSDK.UnitTests
         public void T00RootlinkTest()
         {
             var rootLinks = (ApiData) testObjects["rootLinks"];
-
-            //TODO: find out how to compare json objects and use that
-            var rootLinksJson = JsonConvert.SerializeObject(rootLinks).ToString();
-            Assert.AreEqual(rootLinksJson, responses["accessingapiresp"].json);
+            var mockRootLinks = GetMockResponse<ApiData>(responses["accessingapiresp"].json);
+            CollectionAssert.AreEqual(rootLinks.Meta, mockRootLinks.Meta);
         }
 
         [Test]
@@ -248,6 +250,16 @@ namespace NFleetSDK.UnitTests
             {
                 Assert.IsTrue(e.Message.Contains("400 Bad Request"));
             }
+        }
+
+        private T GetMockResponse<T>(JObject fromJson)
+        {
+            var mockresponse = new RestResponse()
+            {
+                Content = fromJson.ToString(),
+                ContentType = "application/json"
+            };
+            return deserializer.Deserialize<T>(mockresponse);
         }
     }
 }
