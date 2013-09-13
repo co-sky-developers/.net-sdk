@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -10,6 +11,17 @@ namespace NFleetExample
 {
     public static class Program
     {
+        private static string url = "";
+        private static string username = "";
+        private static string password = "";
+
+        static Program()
+        {
+            url = ConfigurationManager.AppSettings["url"];
+            username = ConfigurationManager.AppSettings["username"];
+            password = ConfigurationManager.AppSettings["password"];
+        }
+
         public static void Main()
         {
             try
@@ -29,9 +41,7 @@ namespace NFleetExample
 
         private static void Run()
         {
-            const string url = "some url";
-            const string username = "username";
-            const string password = "password";
+            
 
             var api1 = new Api( url, username, password );
 
