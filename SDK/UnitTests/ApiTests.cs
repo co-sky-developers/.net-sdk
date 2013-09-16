@@ -39,6 +39,7 @@ namespace NFleetSDK.UnitTests
 
             responses = ResponseReader.readResponses(responsePath);
             deserializer = new RestSharp.Deserializers.JsonDeserializer();
+            TestUtils.deserializer = deserializer;
 
             testObjects["rootLinks"] = rootLinks;
             testObjects["tokenResponse"] = tokenResponse;
@@ -48,8 +49,8 @@ namespace NFleetSDK.UnitTests
         public void T00RootlinkTest()
         {
             var rootLinks = (ApiData) testObjects["rootLinks"];
-            var mockRootLinks = GetMockResponse<ApiData>(responses["accessingapiresp"].json);
-            CollectionAssert.AreEqual(rootLinks.Meta, mockRootLinks.Meta);
+            var mockRootLinks = TestUtils.GetMockResponse<ApiData>(responses["accessingapiresp"].json);
+            TestUtils.ListsAreEqual<Link>(rootLinks.Meta, mockRootLinks.Meta, TestUtils.LinksAreEqual);
         }
 
         [Test]
@@ -62,7 +63,12 @@ namespace NFleetSDK.UnitTests
             //##END EXAMPLE##
             testObjects["created"] = created;
             testObjects["problems"] = problems;
-            Assert.AreEqual(created.Location, apiLocation + "/problems/1");
+            
+            var mockProblems = TestUtils.GetMockResponse<RoutingProblemDataSet>(responses["creatingproblemresp"].json);
+            var mockCreated = TestUtils.GetMockResponse<ResponseData>(responses["accessingnewproblemresp"].json);
+            
+            TestUtils.RoutingProblemDataSetsAreEqual(problems, mockProblems);
+            TestUtils.ResponsesAreEqual(created, mockCreated);
         }
 
         [Test]
@@ -72,10 +78,10 @@ namespace NFleetSDK.UnitTests
             //##BEGIN EXAMPLE accessingproblem##
             var problem = api.Navigate<RoutingProblemData>(created.Location);
             //##END EXAMPLE##
-            var problemjson = JsonConvert.SerializeObject(problem);
             testObjects["problem"] = problem;
-            Assert.AreEqual(problem.Id, 1);
-            Assert.AreEqual(problemjson, responses["accessingproblemresp"]);
+
+            var mockProblem = TestUtils.GetMockResponse<RoutingProblemData>(responses["accessingproblemresp"].json);
+            TestUtils.RoutingProblemsAreEqual(problem, mockProblem);
         }
 
         [Test]
@@ -87,6 +93,10 @@ namespace NFleetSDK.UnitTests
             var tasks = api.Navigate<TaskDataSet>(problem.GetLink("list-tasks")); 
             //##END EXAMPLE##
             testObjects["tasks"] = tasks;
+
+            var mockTasks = TestUtils.GetMockResponse<TaskDataSet>(responses["listingtasksresp"].json);
+            CollectionAssert.AreEqual(tasks.Items, mockTasks.Items);
+            CollectionAssert.AreEqual(tasks.Meta, mockTasks.Meta);
         }
 
 
@@ -133,6 +143,10 @@ namespace NFleetSDK.UnitTests
             var taskCreationResult = api.Navigate<ResponseData>(tasks.GetLink("create"), newTask); 
             //##END EXAMPLE##
             testObjects["taskCreationResult"] = taskCreationResult;
+
+            var mockTaskCreationResult = TestUtils.GetMockResponse<ResponseData>(responses["creatingtaskresp"].json);
+
+            TestUtils.ResponsesAreEqual(taskCreationResult, mockTaskCreationResult);
         }
 
         [Test]
@@ -145,6 +159,10 @@ namespace NFleetSDK.UnitTests
             api.Navigate<TaskData>(newTask.GetLink("update"), newTask); 
             //##END EXAMPLE##
             testObjects["newTask"] = newTask;
+
+            var mockNewTask = TestUtils.GetMockResponse<TaskData>(responses["updatingtaskresp"].json);
+
+            TestUtils.TasksAreEqual(newTask, mockNewTask);
         }
 
         [Test]
@@ -152,8 +170,12 @@ namespace NFleetSDK.UnitTests
         {
             var newTask = (TaskData) testObjects["newTask"];
             //##BEGIN EXAMPLE deletingtask##
-            api.Navigate<ResponseData>(newTask.GetLink("delete"));
+            var deleteResponse = api.Navigate<ResponseData>(newTask.GetLink("delete"));
             //##END EXAMPLE##
+
+            var mockDeleteResponse = TestUtils.GetMockResponse<ResponseData>(responses["deletingtaskresp"].json);
+
+            TestUtils.ResponsesAreEqual(deleteResponse, mockDeleteResponse);
         }
 
         [Test]
@@ -164,6 +186,12 @@ namespace NFleetSDK.UnitTests
             var vehicles = api.Navigate<VehicleDataSet>(problem.GetLink("list-vehicles")); 
             //##END EXAMPLE##
             testObjects["vehicles"] = vehicles;
+
+            var mockVehicles = TestUtils.GetMockResponse<VehicleDataSet>(responses["listingvehiclesresp"].json);
+
+            CollectionAssert.AreEqual(vehicles.Meta, mockVehicles.Meta);
+
+            TestUtils.VehicleDataSetsAreEqual(vehicles, mockVehicles);
         }
 
         [Test]
@@ -174,6 +202,8 @@ namespace NFleetSDK.UnitTests
             //##BEGIN EXAMPLE accessingtaskseq##
             var taskEvents = api.Navigate<TaskEventDataSet>(vehicle.GetLink("list-events")); 
             //##END EXAMPLE##
+            var mockTaskEvents = TestUtils.GetMockResponse<TaskEventDataSet>(responses["accessingtaskseqresp"].json);
+            TestUtils.TaskEventDataSetsAreEqual(taskEvents, mockTaskEvents);
         }
 
         public void T09AccessingRouteTest()
@@ -206,6 +236,9 @@ namespace NFleetSDK.UnitTests
             var creation = api.Navigate<ResponseData>(problem.GetLink("start-new-optimization")); 
             //##END EXAMPLE##
             testObjects["creation"] = creation;
+            var mockCreation = TestUtils.GetMockResponse<ResponseData>(responses["startingoptresp"].json);
+
+            TestUtils.ResponsesAreEqual(creation, mockCreation);
         }
 
         [Test]
@@ -216,6 +249,9 @@ namespace NFleetSDK.UnitTests
             var optimization = api.Navigate<OptimizationData>(creation.Location); 
             //##END EXAMPLE##
             testObjects["optimization"] = optimization;
+
+            var mockOptimization = TestUtils.GetMockResponse<OptimizationData>(responses["accessingnewoptresp"].json);
+            TestUtils.OptimizationsAreEqual(optimization, mockOptimization);
         }
 
         [Test]
@@ -223,8 +259,10 @@ namespace NFleetSDK.UnitTests
         {
             var optimization = (OptimizationData) testObjects["optimization"];
             //##BEGIN EXAMPLE stoppingopt##
-            api.Navigate<ResponseData>(optimization.GetLink("stop")); 
+            var response = api.Navigate<ResponseData>(optimization.GetLink("stop")); 
             //##END EXAMPLE##
+            var mockResponse = TestUtils.GetMockResponse<ResponseData>(responses["stoppingoptresp"].json);
+            TestUtils.ResponsesAreEqual(response, mockResponse);
         }
 
         [Test]
@@ -232,8 +270,10 @@ namespace NFleetSDK.UnitTests
         {
             var optimization = (OptimizationData)testObjects["optimization"];
             //##BEGIN EXAMPLE getoptstatus#
-            optimization = api.Navigate<OptimizationData>(optimization.GetLink("self")); 
+            var optimizationResult = api.Navigate<OptimizationData>(optimization.GetLink("self")); 
             //##END EXAMPLE##
+            var mockOptimizationResult = TestUtils.GetMockResponse<OptimizationData>(responses["getoptstatusresp"].json);
+            TestUtils.OptimizationsAreEqual(optimizationResult, mockOptimizationResult);
         }
 
         [Test]
@@ -250,16 +290,6 @@ namespace NFleetSDK.UnitTests
             {
                 Assert.IsTrue(e.Message.Contains("400 Bad Request"));
             }
-        }
-
-        private T GetMockResponse<T>(JObject fromJson)
-        {
-            var mockresponse = new RestResponse()
-            {
-                Content = fromJson.ToString(),
-                ContentType = "application/json"
-            };
-            return deserializer.Deserialize<T>(mockresponse);
         }
     }
 }
