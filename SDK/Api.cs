@@ -22,6 +22,7 @@ namespace NFleetSDK
 
         private string username;
         private string password;
+        private static int counter = 0;
 
         public Api( string url, string username, string password )
         {
@@ -91,6 +92,8 @@ namespace NFleetSDK
                     request.AddHeader( "Authorization", currentToken.TokenType + " " + currentToken.AccessToken );
                     
                 result = client.Execute<T>( request );
+                
+
                 if ( result.StatusCode == HttpStatusCode.Unauthorized )
                     throw new IOException( "Invalid username or password." );
             }
@@ -115,6 +118,7 @@ namespace NFleetSDK
                 responseData.Meta.Add( new Link { Method = "GET", Rel = "location", Uri = entityLocation } );
                 return (T)(IResponseData)responseData;
             }
+            File.WriteAllText("C:\\Users\\Markus Vuorio\\Documents\\Visual Studio 2010\\Projects\\DocGen\\DocGen\\CodeExamples\\responses\\print\\" + counter++.ToString(), result.Content);
             return result.Data;
         }
 

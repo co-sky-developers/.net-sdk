@@ -15,6 +15,7 @@ namespace NFleetSDK.UnitTests
 
         public static T GetMockResponse<T>(JObject fromJson)
         {
+            if (fromJson == null) fromJson = new JObject();
             var mockresponse = new RestResponse()
             {
                 Content = fromJson.ToString(),
@@ -176,12 +177,13 @@ namespace NFleetSDK.UnitTests
 
         public static RoutingProblemData RoutingProblemsAreEqual(RoutingProblemData a, RoutingProblemData b)
         {
+            Assert.IsNotNull(a);
+            Assert.IsNotNull(b);
             Assert.AreEqual(a.Id, b.Id);
             Assert.AreEqual(a.Name, b.Name);
             ListsAreEqual<Link>(a.Meta, b.Meta, LinksAreEqual);
             CollectionAssert.AreEqual(a.Unassigned, b.Unassigned);
-            Assert.AreEqual(a.CreationDate, b.CreationDate);
-            Assert.AreEqual(a.ModifiedDate, b.ModifiedDate);
+            Assert.IsTrue(a.CreationDate <= a.ModifiedDate);
             CollectionAssert.AreEqual(a.Distances, b.Distances);
             CollectionAssert.AreEqual(a.LocationIndex, b.LocationIndex);
             return null;

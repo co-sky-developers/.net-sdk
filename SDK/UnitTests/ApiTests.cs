@@ -30,11 +30,12 @@ namespace NFleetSDK.UnitTests
 
             //##BEGIN EXAMPLE accessingapi##
             api = new Api(apiLocation, username, password);
+            var tokenResponse = api.Authenticate();
             var rootLinks = api.Root;
             //##END EXAMPLE##
 
             //##BEGIN EXAMPLE oauth##
-            var tokenResponse = api.Navigate<TokenData>(rootLinks.GetLink("authenticate"));
+            //Fail
             //##END EXAMPLE##
 
             responses = ResponseReader.readResponses(responsePath);
