@@ -61,15 +61,14 @@ namespace NFleetSDK.UnitTests
             //##BEGIN EXAMPLE creatingproblem##
             var problems = api.Navigate<RoutingProblemDataSet>(rootLinks.GetLink("list-problems"));
             var created = api.Navigate<ResponseData>(problems.GetLink("create"), new RoutingProblemUpdateRequest { Name = "test" });
+            var createdProblemData = api.Navigate<RoutingProblemData>(created.Location);
             //##END EXAMPLE##
             testObjects["created"] = created;
             testObjects["problems"] = problems;
             
-            var mockProblems = TestUtils.GetMockResponse<RoutingProblemDataSet>(responses["creatingproblemresp"].json);
-            var mockCreated = TestUtils.GetMockResponse<ResponseData>(responses["accessingnewproblemresp"].json);
+            var mockCreated = TestUtils.GetMockResponse<RoutingProblemData>(responses["accessingnewproblemresp"].json);
             
-            TestUtils.RoutingProblemDataSetsAreEqual(problems, mockProblems);
-            TestUtils.ResponsesAreEqual(created, mockCreated);
+            TestUtils.RoutingProblemsAreEqual(createdProblemData, mockCreated);
         }
 
         [Test]
@@ -190,7 +189,8 @@ namespace NFleetSDK.UnitTests
 
             var mockVehicles = TestUtils.GetMockResponse<VehicleDataSet>(responses["listingvehiclesresp"].json);
 
-            CollectionAssert.AreEqual(vehicles.Meta, mockVehicles.Meta);
+            //CollectionAssert.AreEqual(vehicles.Meta, mockVehicles.Meta);
+            TestUtils.ListsAreEqual(vehicles.Meta, mockVehicles.Meta, TestUtils.LinksAreEqual);
 
             TestUtils.VehicleDataSetsAreEqual(vehicles, mockVehicles);
         }
