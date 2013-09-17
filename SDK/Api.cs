@@ -237,6 +237,12 @@ namespace NFleetSDK
         {
             get { return Navigate<ApiData>( new Link { Method = "GET", Uri = "" } ); }
         }
+
+        public TokenData Authenticate()
+        {
+            Authenticate( username, password );
+            return currentToken;
+        }
     }
 
     internal class Empty
