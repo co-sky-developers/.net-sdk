@@ -95,8 +95,7 @@ namespace NFleetSDK.UnitTests
             testObjects["tasks"] = tasks;
 
             var mockTasks = TestUtils.GetMockResponse<TaskDataSet>(responses["listingtasksresp"].json);
-            CollectionAssert.AreEqual(tasks.Items, mockTasks.Items);
-            CollectionAssert.AreEqual(tasks.Meta, mockTasks.Meta);
+            TestUtils.TaskDataSetsAreEqual(tasks, mockTasks);
         }
 
 
@@ -188,10 +187,7 @@ namespace NFleetSDK.UnitTests
             testObjects["vehicles"] = vehicles;
 
             var mockVehicles = TestUtils.GetMockResponse<VehicleDataSet>(responses["listingvehiclesresp"].json);
-
-            //CollectionAssert.AreEqual(vehicles.Meta, mockVehicles.Meta);
             TestUtils.ListsAreEqual(vehicles.Meta, mockVehicles.Meta, TestUtils.LinksAreEqual);
-
             TestUtils.VehicleDataSetsAreEqual(vehicles, mockVehicles);
         }
 
