@@ -60,12 +60,6 @@ namespace NFleetSDK
 
             var request = new RestRequest( uri, link.Method.ToMethod() ) { RequestFormat = DataFormat.Json };
 
-            if ( link.Method == "POST" && link.Rel == "authenticate" && data == null )
-            {
-                Authenticate( username, password );
-                return (T)(IResponseData)currentToken;
-            }
-
             if ( currentToken != null )
                 request.AddHeader( "Authorization", currentToken.TokenType + " " + currentToken.AccessToken );
 
@@ -79,7 +73,7 @@ namespace NFleetSDK
                     request.AddParameter(queryParameter.Key, queryParameter.Value);
                 }
             }
-                
+            
             var result = client.Execute<T>( request );
 
             if (result.StatusCode == HttpStatusCode.Unauthorized)
