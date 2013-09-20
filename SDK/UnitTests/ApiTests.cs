@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
@@ -51,6 +52,7 @@ namespace NFleetSDK.UnitTests
         {
             var rootLinks = (ApiData) testObjects["rootLinks"];
             var mockRootLinks = TestUtils.GetMockResponse<ApiData>(responses["accessingapiresp"].json);
+            Trace.Write(JsonConvert.SerializeObject(rootLinks));
             TestUtils.ListsAreEqual<Link>(rootLinks.Meta, mockRootLinks.Meta, TestUtils.LinksAreEqual);
         }
 
@@ -68,6 +70,8 @@ namespace NFleetSDK.UnitTests
             
             var mockCreated = TestUtils.GetMockResponse<RoutingProblemData>(responses["accessingnewproblemresp"].json);
             
+            Trace.Write(JsonConvert.SerializeObject(created));
+
             TestUtils.RoutingProblemsAreEqual(createdProblemData, mockCreated);
         }
 
@@ -81,6 +85,7 @@ namespace NFleetSDK.UnitTests
             testObjects["problem"] = problem;
 
             var mockProblem = TestUtils.GetMockResponse<RoutingProblemData>(responses["accessingproblemresp"].json);
+            Trace.Write(JsonConvert.SerializeObject(problem));
             TestUtils.RoutingProblemsAreEqual(problem, mockProblem);
         }
 
@@ -95,6 +100,7 @@ namespace NFleetSDK.UnitTests
             testObjects["tasks"] = tasks;
 
             var mockTasks = TestUtils.GetMockResponse<TaskDataSet>(responses["listingtasksresp"].json);
+            Trace.Write(JsonConvert.SerializeObject(tasks));
             TestUtils.TaskDataSetsAreEqual(tasks, mockTasks);
         }
 
@@ -146,6 +152,7 @@ namespace NFleetSDK.UnitTests
             var mockTaskCreationResult = TestUtils.GetMockResponse<ResponseData>(responses["creatingtaskresp"].json);
 
             TestUtils.ResponsesAreEqual(taskCreationResult, mockTaskCreationResult);
+            Trace.Write(JsonConvert.SerializeObject(taskCreationResult));
         }
 
         [Test]
@@ -155,12 +162,12 @@ namespace NFleetSDK.UnitTests
             //##BEGIN EXAMPLE updatingtask##
             var newTask = api.Navigate<TaskData>(taskCreationResult.Location);
             newTask.Name = "other name";
-            api.Navigate<TaskData>(newTask.GetLink("update"), newTask); 
+            api.Navigate<ResponseData>(newTask.GetLink("update"), newTask); 
             //##END EXAMPLE##
             testObjects["newTask"] = newTask;
 
             var mockNewTask = TestUtils.GetMockResponse<TaskData>(responses["updatingtaskresp"].json);
-
+            Trace.Write(JsonConvert.SerializeObject(newTask));
             TestUtils.TasksAreEqual(newTask, mockNewTask);
         }
 
@@ -173,7 +180,7 @@ namespace NFleetSDK.UnitTests
             //##END EXAMPLE##
 
             var mockDeleteResponse = TestUtils.GetMockResponse<ResponseData>(responses["deletingtaskresp"].json);
-
+            Trace.Write(JsonConvert.SerializeObject(deleteResponse));
             TestUtils.ResponsesAreEqual(deleteResponse, mockDeleteResponse);
         }
 
@@ -187,7 +194,7 @@ namespace NFleetSDK.UnitTests
             testObjects["vehicles"] = vehicles;
 
             var mockVehicles = TestUtils.GetMockResponse<VehicleDataSet>(responses["listingvehiclesresp"].json);
-            TestUtils.ListsAreEqual(vehicles.Meta, mockVehicles.Meta, TestUtils.LinksAreEqual);
+            Trace.Write(JsonConvert.SerializeObject(vehicles));
             TestUtils.VehicleDataSetsAreEqual(vehicles, mockVehicles);
         }
 
@@ -200,6 +207,7 @@ namespace NFleetSDK.UnitTests
             var taskEvents = api.Navigate<TaskEventDataSet>(vehicle.GetLink("list-events")); 
             //##END EXAMPLE##
             var mockTaskEvents = TestUtils.GetMockResponse<TaskEventDataSet>(responses["accessingtaskseqresp"].json);
+            Trace.Write(JsonConvert.SerializeObject(taskEvents));
             TestUtils.TaskEventDataSetsAreEqual(taskEvents, mockTaskEvents);
         }
 
@@ -210,6 +218,7 @@ namespace NFleetSDK.UnitTests
             //##BEGIN EXAMPLE accessingroute##
             var taskEvents = api.Navigate<TaskEventDataSet>(vehicle.GetLink("get-route")); 
             //##END EXAMPLE##
+            Trace.Write(JsonConvert.SerializeObject(taskEvents));
             testObjects["taskEvents"] = taskEvents;
         }
 
@@ -234,7 +243,7 @@ namespace NFleetSDK.UnitTests
             //##END EXAMPLE##
             testObjects["creation"] = creation;
             var mockCreation = TestUtils.GetMockResponse<ResponseData>(responses["startingoptresp"].json);
-
+            Trace.Write(JsonConvert.SerializeObject(creation));
             TestUtils.ResponsesAreEqual(creation, mockCreation);
         }
 
@@ -248,6 +257,7 @@ namespace NFleetSDK.UnitTests
             testObjects["optimization"] = optimization;
 
             var mockOptimization = TestUtils.GetMockResponse<OptimizationData>(responses["accessingnewoptresp"].json);
+            Trace.Write(JsonConvert.SerializeObject(optimization));
             TestUtils.OptimizationsAreEqual(optimization, mockOptimization);
         }
 
@@ -259,6 +269,7 @@ namespace NFleetSDK.UnitTests
             var response = api.Navigate<ResponseData>(optimization.GetLink("stop")); 
             //##END EXAMPLE##
             var mockResponse = TestUtils.GetMockResponse<ResponseData>(responses["stoppingoptresp"].json);
+            Trace.Write(JsonConvert.SerializeObject(response));
             TestUtils.ResponsesAreEqual(response, mockResponse);
         }
 
@@ -270,6 +281,7 @@ namespace NFleetSDK.UnitTests
             var optimizationResult = api.Navigate<OptimizationData>(optimization.GetLink("self")); 
             //##END EXAMPLE##
             var mockOptimizationResult = TestUtils.GetMockResponse<OptimizationData>(responses["getoptstatusresp"].json);
+            Trace.Write(JsonConvert.SerializeObject(optimizationResult));
             TestUtils.OptimizationsAreEqual(optimizationResult, mockOptimizationResult);
         }
 
