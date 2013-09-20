@@ -7,6 +7,7 @@ using System.Text;
 using NFleetSDK.Data;
 using RestSharp;
 using RestSharp.Contrib;
+using RestSharp.Deserializers;
 
 
 namespace NFleetSDK
@@ -22,14 +23,21 @@ namespace NFleetSDK
 
         private string username;
         private string password;
+        private int counter = 0;
 
         public Api( string url, string username, string password )
         {
             baseUrl = url.Remove( 0, url.IndexOf( separator, StringComparison.Ordinal ) + separator.Length );
             baseUrl = baseUrl.Replace( "81", "82" );
             client = new RestClient( url ) { FollowRedirects = false };
+            client.AddHandler("application/json", new JsonDeserializer()
+            {
+                DateFormat =
+                    "yyyy-MM-ddTHH:mm:ss.fffffffzzz"
+            });
 #if DEBUG
             client.Timeout = Int32.MaxValue;
+
 #endif
             this.username = username;
             this.password = password;
