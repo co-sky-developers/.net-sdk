@@ -112,11 +112,10 @@ namespace NFleetSDK.UnitTests
         {
             var tasks = (TaskDataSet) testObjects["tasks"];
             //##BEGIN EXAMPLE creatingtask##
-            var newTask = new TaskData { Name = "test name" };
+            var newTask = new TaskUpdateRequest { Name = "test name" };
             var capacity = new CapacityData { Name = "Weight", Amount = 20 };
 
-            var pickup = new TaskEventData
-            {
+            var pickup = new TaskEventUpdateRequest{
                 Type = "Pickup",
                 Location = new LocationData
                 {
@@ -131,7 +130,7 @@ namespace NFleetSDK.UnitTests
             pickup.Capacities.Add(capacity);
             newTask.TaskEvents.Add(pickup);
 
-            var delivery = new TaskEventData
+            var delivery = new TaskEventUpdateRequest
             {
                 Type = "Delivery",
                 Location = new LocationData

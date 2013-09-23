@@ -10,9 +10,10 @@ namespace NFleetSDK
         public ResponseData()
         {
             Meta = new List<Link>();
+            Items = new List<ErrorData>();
         }
 
-        public List<Link> Meta { get; private set; }
-        public List<ErrorData> Items { get; private set; }
+        public List<Link> Meta { get; set; }
+        public List<ErrorData> Items { get; set; }
     }
 }
