@@ -21,8 +21,10 @@ namespace NFleetSDK.UnitTests
             var mockresponse = new RestResponse()
             {
                 Content = fromJson.ToString(),
-                ContentType = "application/json"
+                ContentType = "application/json",
             };
+
+            
             return deserializer.Deserialize<T>(mockresponse);
         }
 
@@ -142,8 +144,9 @@ namespace NFleetSDK.UnitTests
 
         public static Link LinksAreEqual(Link a, Link b)
         {
-            Assert.IsNotNull(a);
-            Assert.IsNotNull(b);
+            if (a == null && b == null) return null;
+            Assert.NotNull(a);
+            Assert.NotNull(b);
             
             UrisAreEqualEnough(a.Uri, b.Uri);
             Assert.AreEqual(a.Rel, b.Rel);
@@ -153,6 +156,9 @@ namespace NFleetSDK.UnitTests
 
         public static void UrisAreEqualEnough(string a, string b)
         {
+            Assert.NotNull(a);
+            Assert.NotNull(b);
+
             //TODO: It might be more clever to implement this with some tokens in example code
             string pattern = "/problems/\\d+(\\S*)";
             var amatch = Regex.Match(a, pattern);

@@ -71,10 +71,15 @@ namespace NFleetSDK.UnitTests
             testObjects["problems"] = problems;
             
             var mockCreated = TestUtils.GetMockResponse<RoutingProblemData>(responses["accessingnewproblemresp"].json);
+<<<<<<< HEAD
+
+            TestUtils.RoutingProblemsAreEqual( mockCreated, createdProblemData );
+=======
             
             Trace.Write(JsonConvert.SerializeObject(created));
 
-            TestUtils.RoutingProblemsAreEqual( mockCreated, createdProblemData );
+            TestUtils.RoutingProblemsAreEqual(createdProblemData, mockCreated);
+>>>>>>> f555c0a22d3d068e93da4aff8ee6be1ae2f08cdb
         }
 
         [Test]
@@ -87,8 +92,12 @@ namespace NFleetSDK.UnitTests
             testObjects["problem"] = problem;
 
             var mockProblem = TestUtils.GetMockResponse<RoutingProblemData>(responses["accessingproblemresp"].json);
+<<<<<<< HEAD
+            TestUtils.RoutingProblemsAreEqual(mockProblem, problem);
+=======
             Trace.Write(JsonConvert.SerializeObject(problem));
-            TestUtils.RoutingProblemsAreEqual(mockProblem, problem );
+            TestUtils.RoutingProblemsAreEqual(problem, mockProblem);
+>>>>>>> f555c0a22d3d068e93da4aff8ee6be1ae2f08cdb
         }
 
         [Test]

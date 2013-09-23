@@ -27,7 +27,7 @@ namespace NFleetSDK.UnitTests
                     if (trimmedline.Length > 0 && trimmedline[0] == '{') json = true;
                     if (!json)
                     {
-                        resp.Headers += line;
+                        addHeader(line, resp.headers);
                     }
                     else
                     {
@@ -35,16 +35,30 @@ namespace NFleetSDK.UnitTests
                     }
                 }
                 resp.json = JsonConvert.DeserializeObject<JObject>(jsontmp);
-                responses.Add(key, resp);
+
+                if (key != null)
+                {
+                    responses.Add(key, resp);
+                }
             }
             return responses;
         }
 
+        public static void addHeader(string headerLine, Dictionary<string, string> headerDict)
+        {
+            var splitIndex = headerLine.IndexOf(':');
+            if (splitIndex > 0)
+            {
+                var key = headerLine.Substring(0, splitIndex);
+                var value = headerLine.Substring(splitIndex).Trim();
+                headerDict.Add(key, value);
+            }
+        }
     }
 
     class Response
     {
-        public string Headers = "";
+        public Dictionary<string, string> headers = new Dictionary<string, string>();
         public JObject json;
     }
 }
