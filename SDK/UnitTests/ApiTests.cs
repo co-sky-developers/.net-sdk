@@ -67,8 +67,8 @@ namespace NFleetSDK.UnitTests
             testObjects["problems"] = problems;
             
             var mockCreated = TestUtils.GetMockResponse<RoutingProblemData>(responses["accessingnewproblemresp"].json);
-            
-            TestUtils.RoutingProblemsAreEqual(createdProblemData, mockCreated);
+
+            TestUtils.RoutingProblemsAreEqual( mockCreated, createdProblemData );
         }
 
         [Test]
@@ -81,7 +81,7 @@ namespace NFleetSDK.UnitTests
             testObjects["problem"] = problem;
 
             var mockProblem = TestUtils.GetMockResponse<RoutingProblemData>(responses["accessingproblemresp"].json);
-            TestUtils.RoutingProblemsAreEqual(problem, mockProblem);
+            TestUtils.RoutingProblemsAreEqual(mockProblem, problem);
         }
 
         [Test]
