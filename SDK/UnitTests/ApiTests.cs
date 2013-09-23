@@ -103,7 +103,7 @@ namespace NFleetSDK.UnitTests
 
             var mockTasks = TestUtils.GetMockResponse<TaskDataSet>(responses["listingtasksresp"].json);
             Trace.Write(JsonConvert.SerializeObject(tasks));
-            TestUtils.TaskDataSetsAreEqual(tasks, mockTasks);
+            TestUtils.TaskDataSetsAreEqual( mockTasks, tasks );
         }
 
 
@@ -153,7 +153,7 @@ namespace NFleetSDK.UnitTests
 
             var mockTaskCreationResult = TestUtils.GetMockResponse<ResponseData>(responses["creatingtaskresp"].json);
 
-            TestUtils.ResponsesAreEqual(taskCreationResult, mockTaskCreationResult);
+            TestUtils.ResponsesAreEqual( mockTaskCreationResult, taskCreationResult );
             Trace.Write(JsonConvert.SerializeObject(taskCreationResult));
         }
 
@@ -170,7 +170,7 @@ namespace NFleetSDK.UnitTests
 
             var mockNewTask = TestUtils.GetMockResponse<TaskData>(responses["updatingtaskresp"].json);
             Trace.Write(JsonConvert.SerializeObject(newTask));
-            TestUtils.TasksAreEqual(newTask, mockNewTask);
+            TestUtils.TasksAreEqual( mockNewTask, newTask );
         }
 
         [Test]
@@ -183,7 +183,7 @@ namespace NFleetSDK.UnitTests
 
             var mockDeleteResponse = TestUtils.GetMockResponse<ResponseData>(responses["deletingtaskresp"].json);
             Trace.Write(JsonConvert.SerializeObject(deleteResponse));
-            TestUtils.ResponsesAreEqual(deleteResponse, mockDeleteResponse);
+            TestUtils.ResponsesAreEqual( mockDeleteResponse, deleteResponse );
         }
 
         [Test]
@@ -197,7 +197,7 @@ namespace NFleetSDK.UnitTests
 
             var mockVehicles = TestUtils.GetMockResponse<VehicleDataSet>(responses["listingvehiclesresp"].json);
             Trace.Write(JsonConvert.SerializeObject(vehicles));
-            TestUtils.VehicleDataSetsAreEqual(vehicles, mockVehicles);
+            TestUtils.VehicleDataSetsAreEqual( mockVehicles, vehicles );
         }
 
         [Test]
@@ -210,7 +210,7 @@ namespace NFleetSDK.UnitTests
             //##END EXAMPLE##
             var mockTaskEvents = TestUtils.GetMockResponse<TaskEventDataSet>(responses["accessingtaskseqresp"].json);
             Trace.Write(JsonConvert.SerializeObject(taskEvents));
-            TestUtils.TaskEventDataSetsAreEqual(taskEvents, mockTaskEvents);
+            TestUtils.TaskEventDataSetsAreEqual( mockTaskEvents, taskEvents );
         }
 
         [Test]
@@ -223,7 +223,7 @@ namespace NFleetSDK.UnitTests
             //##END EXAMPLE##
             Trace.Write(JsonConvert.SerializeObject(taskEvents));
             var mockTaskEvents = TestUtils.GetMockResponse<TaskEventDataSet>(responses["acessingrouteresp"].json);
-            TestUtils.TaskEventDataSetsAreEqual(taskEvents, mockTaskEvents);
+            TestUtils.TaskEventDataSetsAreEqual( mockTaskEvents, taskEvents );
             testObjects["taskEvents"] = taskEvents;
         }
 
@@ -249,7 +249,7 @@ namespace NFleetSDK.UnitTests
             testObjects["creation"] = creation;
             var mockCreation = TestUtils.GetMockResponse<ResponseData>(responses["startingoptresp"].json);
             Trace.Write(JsonConvert.SerializeObject(creation));
-            TestUtils.ResponsesAreEqual(creation, mockCreation);
+            TestUtils.ResponsesAreEqual( mockCreation, creation );
         }
 
         [Test]
@@ -263,7 +263,7 @@ namespace NFleetSDK.UnitTests
 
             var mockOptimization = TestUtils.GetMockResponse<OptimizationData>(responses["accessingnewoptresp"].json);
             Trace.Write(JsonConvert.SerializeObject(optimization));
-            TestUtils.OptimizationsAreEqual(optimization, mockOptimization);
+            TestUtils.OptimizationsAreEqual( mockOptimization, optimization );
         }
 
         [Test]
@@ -275,7 +275,7 @@ namespace NFleetSDK.UnitTests
             //##END EXAMPLE##
             var mockResponse = TestUtils.GetMockResponse<ResponseData>(responses["stoppingoptresp"].json);
             Trace.Write(JsonConvert.SerializeObject(response));
-            TestUtils.ResponsesAreEqual(response, mockResponse);
+            TestUtils.ResponsesAreEqual( mockResponse, response );
         }
 
         [Test]
@@ -287,7 +287,7 @@ namespace NFleetSDK.UnitTests
             //##END EXAMPLE##
             var mockOptimizationResult = TestUtils.GetMockResponse<OptimizationData>(responses["getoptstatusresp"].json);
             Trace.Write(JsonConvert.SerializeObject(optimizationResult));
-            TestUtils.OptimizationsAreEqual(optimizationResult, mockOptimizationResult);
+            TestUtils.OptimizationsAreEqual( mockOptimizationResult, optimizationResult );
         }
 
         [Test]
