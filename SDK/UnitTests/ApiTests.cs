@@ -160,29 +160,57 @@ namespace NFleetSDK.UnitTests
         public void T05UpdatingTaskTest()
         {
             var taskCreationResult = (ResponseData) testObjects["taskCreationResult"];
+            var t = api.Navigate<TaskData>(taskCreationResult.Location);
+            var oldTaskEvents = new List<TaskEventUpdateRequest>();
+
+            foreach (var te in t.TaskEvents)
+            {
+                var teReq = new TaskEventUpdateRequest
+                                {
+                                    Capacities = te.Capacities,
+                                    Location = te.Location,
+                                    PlannedArrivalTime = te.PlannedArrivalTime,
+                                    PlannedDepartureTime = te.PlannedDepartureTime,
+                                    ServiceTime = te.ServiceTime,
+                                    TaskEventId = te.Id,
+                                    TimeWindows = te.TimeWindows,
+                                    Type = te.Type
+
+                                };
+                oldTaskEvents.Add( teReq );
+            }
+
             //##BEGIN EXAMPLE updatingtask##
-            var newTask = api.Navigate<TaskData>(taskCreationResult.Location);
-            newTask.Name = "other name";
-            api.Navigate<ResponseData>(newTask.GetLink("update"), newTask); 
+            var oldTask = api.Navigate<TaskData>(taskCreationResult.Location);
+            var newTaskRequest = new TaskUpdateRequest
+                                     {
+                                         Info = oldTask.Info,
+                                         Name = "Other name",
+                                         TaskEvents = oldTaskEvents,
+                                         TaskId = oldTask.Id,
+                                     };
+            var newTaskLocation = api.Navigate<ResponseData>( oldTask.GetLink( "update" ), newTaskRequest ); 
             //##END EXAMPLE##
+            var newTask = api.Navigate<TaskData>( newTaskLocation.Location );
             testObjects["newTask"] = newTask;
 
             var mockNewTask = TestUtils.GetMockResponse<TaskData>(responses["updatingtaskresp"].json);
-            Trace.Write(JsonConvert.SerializeObject(newTask));
+            Trace.Write( JsonConvert.SerializeObject( newTask ) );
             TestUtils.TasksAreEqual( mockNewTask, newTask );
         }
 
         [Test]
         public void T06DeletingTaskTest()
         {
-            var newTask = (TaskData) testObjects["newTask"];
+            Assert.True(false); 
+            /*var newTask = (TaskData) testObjects["newTask"];
             //##BEGIN EXAMPLE deletingtask##
             var deleteResponse = api.Navigate<ResponseData>(newTask.GetLink("delete"));
             //##END EXAMPLE##
 
             var mockDeleteResponse = TestUtils.GetMockResponse<ResponseData>(responses["deletingtaskresp"].json);
             Trace.Write(JsonConvert.SerializeObject(deleteResponse));
-            TestUtils.ResponsesAreEqual( mockDeleteResponse, deleteResponse );
+            TestUtils.ResponsesAreEqual( mockDeleteResponse, deleteResponse );*/
         }
 
         [Test]

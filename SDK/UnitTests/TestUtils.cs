@@ -96,6 +96,7 @@ namespace NFleetSDK.UnitTests
 
         public static LocationData LocationsAreEqual(LocationData a, LocationData b)
         {
+            if ( a == null && b == null ) return null;
             if (!ignoreIds) Assert.AreEqual(a.Id, b.Id);
             CoordinatesAreEqual(a.Coordinate, b.Coordinate);
             AddressesAreEqual(a.Address, b.Address);
@@ -104,6 +105,7 @@ namespace NFleetSDK.UnitTests
 
         public static void CoordinatesAreEqual(CoordinateData a, CoordinateData b)
         {
+            if ( a == null && b == null ) return;
             Assert.AreEqual(a.System, b.System);
             Assert.AreEqual(a.Latitude, a.Latitude);
             Assert.AreEqual(a.Longitude, b.Longitude);
