@@ -28,7 +28,9 @@ namespace NFleetSDK.UnitTests
         [SetUp]
         public void Setup()
         {
-
+            Assert.IsNotNullOrEmpty(username);
+            Assert.IsNotNullOrEmpty(password);
+            Assert.IsNotNullOrEmpty(apiLocation);
             //##BEGIN EXAMPLE accessingapi##
             api = new Api(apiLocation, username, password);
             var tokenResponse = api.Authenticate();
@@ -211,6 +213,7 @@ namespace NFleetSDK.UnitTests
             TestUtils.TaskEventDataSetsAreEqual(taskEvents, mockTaskEvents);
         }
 
+        [Test]
         public void T09AccessingRouteTest()
         {
             var vehicles = (VehicleDataSet)testObjects["vehicles"];
@@ -219,6 +222,8 @@ namespace NFleetSDK.UnitTests
             var taskEvents = api.Navigate<TaskEventDataSet>(vehicle.GetLink("get-route")); 
             //##END EXAMPLE##
             Trace.Write(JsonConvert.SerializeObject(taskEvents));
+            var mockTaskEvents = TestUtils.GetMockResponse<TaskEventDataSet>(responses["acessingrouteresp"].json);
+            TestUtils.TaskEventDataSetsAreEqual(taskEvents, mockTaskEvents);
             testObjects["taskEvents"] = taskEvents;
         }
 
