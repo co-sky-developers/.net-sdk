@@ -285,21 +285,28 @@ namespace NFleetSDK.UnitTests
             var route = api.Navigate<RouteData>(vehicle.GetLink("get-route")); 
             //##END EXAMPLE##
             Trace.Write(JsonConvert.SerializeObject(route));
-            var mockTaskEvents = TestUtils.GetMockResponse<RouteData>(responses["accessingrouteresp"].json);
-            TestUtils.RoutesAreEqual( mockTaskEvents, route );
+            var mockRoute = TestUtils.GetMockResponse<RouteData>(responses["accessingrouteresp"].json);
+            TestUtils.RoutesAreEqual( mockRoute, route );
             testObjects["route"] = route;
         }
 
         [Test]
         public void T10UpdatingRouteTest()
         {
-            var taskEvents = (TaskEventDataSet) testObjects["taskEvents"];
-            
+            var vehicles = (VehicleDataSet)testObjects["vehicles"];
+            var vehicle = vehicles.Items.Find( v => v.Id == 1 );
+
             //##BEGIN EXAMPLE updatingroute##
-            /*var points =  8, 9, 12, 6 ;
-            taskEvents.Items = points;
-            api.Navigate(route.GetLink("update"), route);*/
+            var routeReq = new RouteUpdateRequest
+            {
+                Sequence = new[] { 11, 21, 12, 22 }
+            };
+            api.Navigate<ResponseData>( vehicle.GetLink( "set-route" ), routeReq );
             //##END EXAMPLE##
+            var route = api.Navigate<RouteData>( vehicle.GetLink( "get-route" ) );
+            Trace.Write( JsonConvert.SerializeObject( route ) );
+            var mockRoute = TestUtils.GetMockResponse<RouteData>( responses["updatingrouteresp"].json );
+            TestUtils.RoutesAreEqual( mockRoute, route );
         }
 
         [Test]
