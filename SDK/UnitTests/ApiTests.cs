@@ -282,12 +282,12 @@ namespace NFleetSDK.UnitTests
            
             
             //##BEGIN EXAMPLE accessingroute##
-            var taskEvents = api.Navigate<TaskEventDataSet>(vehicle.GetLink("get-route")); 
+            var route = api.Navigate<RouteData>(vehicle.GetLink("get-route")); 
             //##END EXAMPLE##
-            Trace.Write(JsonConvert.SerializeObject(taskEvents));
-            var mockTaskEvents = TestUtils.GetMockResponse<TaskEventDataSet>(responses["acessingrouteresp"].json);
-            TestUtils.TaskEventDataSetsAreEqual( mockTaskEvents, taskEvents );
-            testObjects["taskEvents"] = taskEvents;
+            Trace.Write(JsonConvert.SerializeObject(route));
+            var mockTaskEvents = TestUtils.GetMockResponse<RouteData>(responses["accessingrouteresp"].json);
+            TestUtils.RoutesAreEqual( mockTaskEvents, route );
+            testObjects["route"] = route;
         }
 
         [Test]

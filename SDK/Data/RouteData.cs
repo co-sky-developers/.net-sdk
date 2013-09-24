@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace NFleetSDK.Data
 {
-    public class RouteData
+    public class RouteData : IResponseData
     {
         public List<int> Items { get; set; }
         public List<Link> Meta { get; set; }
