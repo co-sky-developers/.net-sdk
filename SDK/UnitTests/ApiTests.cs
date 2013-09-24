@@ -260,7 +260,12 @@ namespace NFleetSDK.UnitTests
         public void T08AccessingTaskSeqTest()
         {
             var vehicles = (VehicleDataSet)testObjects["vehicles"];
-            var vehicle = vehicles.Items.First();
+            var vehicle = vehicles.Items.Find( v => v.Id == 1 );
+            var routeReq = new RouteUpdateRequest
+            {
+                Sequence = new[] { 11, 12 }
+            };
+            api.Navigate<ResponseData>( vehicle.GetLink( "set-route" ), routeReq );
             //##BEGIN EXAMPLE accessingtaskseq##
             var taskEvents = api.Navigate<TaskEventDataSet>(vehicle.GetLink("list-events")); 
             //##END EXAMPLE##
@@ -273,7 +278,9 @@ namespace NFleetSDK.UnitTests
         public void T09AccessingRouteTest()
         {
             var vehicles = (VehicleDataSet)testObjects["vehicles"];
-            var vehicle = vehicles.Items.First();
+            var vehicle = vehicles.Items.Find( v => v.Id == 1);
+           
+            
             //##BEGIN EXAMPLE accessingroute##
             var taskEvents = api.Navigate<TaskEventDataSet>(vehicle.GetLink("get-route")); 
             //##END EXAMPLE##
