@@ -217,6 +217,35 @@ namespace NFleetSDK.UnitTests
         public void T07ListingVehiclesTest()
         {
             var problem = (RoutingProblemData)testObjects["problem"];
+            var vehicle = new VehicleUpdateRequest
+            {
+                Name = "vehicle 2",
+                Capacities = new List<CapacityData>
+                {
+                    new CapacityData { Name = "Weight", Amount = 3500 }
+                },
+                StartLocation = new LocationData
+                {
+                    Coordinate = new CoordinateData
+                    {
+                        Latitude = 61.244958,
+                        Longitude = 20.747143,
+                        System = "Euclidian"
+                    }
+                },
+                EndLocation = new LocationData
+                {
+                    Coordinate = new CoordinateData
+                    {
+                        Latitude = 62.244958,
+                        Longitude = 25.747143,
+                        System = "Euclidian"
+                    }
+                },
+                TimeWindows = { new TimeWindowData { Start = new DateTime(2013, 5, 14, 8, 0, 0), End = new DateTime(2013, 5, 14, 12, 0, 0) } }
+
+            };
+            api.Navigate<ResponseData>( problem.GetLink( "create-vehicle" ), vehicle );
             //##BEGIN EXAMPLE listingvehicles##
             var vehicles = api.Navigate<VehicleDataSet>(problem.GetLink("list-vehicles")); 
             //##END EXAMPLE##
