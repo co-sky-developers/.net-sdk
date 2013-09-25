@@ -314,7 +314,9 @@ namespace NFleetSDK.UnitTests
         {
             var problem = (RoutingProblemData)testObjects["problem"];
             //##BEGIN EXAMPLE startingopt##
-            var creation = api.Navigate<ResponseData>(problem.GetLink("start-new-optimization")); 
+            var creation = api.Navigate<ResponseData>(problem.GetLink("create-new-optimization"));
+            var optimization = api.Navigate<OptimizationData>(creation.Location);
+            var response = api.Navigate<ResponseData>(optimization.GetLink("start"), new OptimizationUpdateRequest());
             //##END EXAMPLE##
             testObjects["creation"] = creation;
             var mockCreation = TestUtils.GetMockResponse<ResponseData>(responses["startingoptresp"].json);
@@ -325,8 +327,10 @@ namespace NFleetSDK.UnitTests
         [Test]
         public void T12AccessingNewOptTest()
         {
-            var creation = (ResponseData) testObjects["creation"];
+            var problem = (RoutingProblemData)testObjects["problem"];
+            
             //##BEGIN EXAMPLE accessingnewopt##
+            var creation = api.Navigate<ResponseData>( problem.GetLink( "create-new-optimization" ) );
             var optimization = api.Navigate<OptimizationData>(creation.Location); 
             //##END EXAMPLE##
             testObjects["optimization"] = optimization;

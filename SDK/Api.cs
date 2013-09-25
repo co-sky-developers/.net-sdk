@@ -23,7 +23,6 @@ namespace NFleetSDK
 
         private string username;
         private string password;
-        private int counter = 0;
 
         public Api( string url, string username, string password )
         {

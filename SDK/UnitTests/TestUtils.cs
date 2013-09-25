@@ -30,6 +30,7 @@ namespace NFleetSDK.UnitTests
 
         public static void VehicleDataSetsAreEqual(VehicleDataSet a, VehicleDataSet b)
         {
+            if ( a == null && b == null ) return;
             ListsAreEqual(a.Items, b.Items, VehiclesAreEqual);
             ListsAreEqual(a.Meta, b.Meta, LinksAreEqual);
         }
@@ -90,6 +91,7 @@ namespace NFleetSDK.UnitTests
 
         public static void LocationDataSetsAreEqual(LocationDataSet a, LocationDataSet b)
         {
+            if ( a == null && b == null ) return;
             ListsAreEqual(a.Meta, b.Meta, LinksAreEqual);
             ListsAreEqual(a.Items, b.Items, LocationsAreEqual);
         }
@@ -231,6 +233,7 @@ namespace NFleetSDK.UnitTests
 
         public static void TaskDataSetsAreEqual(TaskDataSet a, TaskDataSet b)
         {
+            if ( a == null && b == null ) return;
             ListsAreEqual(a.Meta, b.Meta, LinksAreEqual);    
             ListsAreEqual(a.Items, b.Items, TasksAreEqual);
         }
