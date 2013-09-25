@@ -202,7 +202,6 @@ namespace NFleetSDK.UnitTests
         [Test]
         public void T06DeletingTaskTest()
         {
-            Assert.True(false); 
             /*var newTask = (TaskData) testObjects["newTask"];
             //##BEGIN EXAMPLE deletingtask##
             var deleteResponse = api.Navigate<ResponseData>(newTask.GetLink("delete"));
@@ -343,9 +342,16 @@ namespace NFleetSDK.UnitTests
         [Test]
         public void T13StoppingOptTest()
         {
-            var optimization = (OptimizationData) testObjects["optimization"];
+            var problem = (RoutingProblemData)testObjects["problem"];
+            TestData.CreateDemoData( problem, api );   
+
+            var creation = api.Navigate<ResponseData>( problem.GetLink( "create-new-optimization" ) );
+            var optimization = api.Navigate<OptimizationData>( creation.Location );
+            api.Navigate<ResponseData>( optimization.GetLink( "start" ), new OptimizationUpdateRequest() );
+
             //##BEGIN EXAMPLE stoppingopt##
-            var response = api.Navigate<ResponseData>(optimization.GetLink("stop")); 
+            
+            var response = api.Navigate<ResponseData>( optimization.GetLink( "stop" ), new OptimizationUpdateRequest() ); 
             //##END EXAMPLE##
             var mockResponse = TestUtils.GetMockResponse<ResponseData>(responses["stoppingoptresp"].json);
             Trace.Write(JsonConvert.SerializeObject(response));
