@@ -164,7 +164,7 @@ namespace NFleetSDK.UnitTests
             Assert.NotNull(b);
 
             //TODO: It might be more clever to implement this with some tokens in example code
-            string pattern = "/problems/\\d+(\\S*)";
+            string pattern = "/users/1/problems/\\d+(\\S*)";
             var amatch = Regex.Match(a, pattern);
             var bmatch = Regex.Match(b, pattern);
             if (amatch.Success)
