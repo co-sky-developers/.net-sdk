@@ -51,8 +51,9 @@ namespace NFleetExample
             var api2 = new Api( url, username, password );
 
             tokenResponse = api2.Authorize( tokenResponse );
-
-            var problems = api2.Navigate<RoutingProblemDataSet>( apiData.GetLink("list-problems") );
+            var users = api2.Navigate<UserDataSet>( apiData.GetLink( "list-users" ), new UserSetRequest() );
+            var user = users.Items.Find( u => u.Id == 1 );
+            var problems = api2.Navigate<RoutingProblemDataSet>( user.GetLink( "list-problems" ) );
             var created = api2.Navigate<ResponseData>( problems.GetLink( "create" ), new RoutingProblemUpdateRequest { Name = "test" } );
             var problem = api2.Navigate<RoutingProblemData>( created.Location );
 
