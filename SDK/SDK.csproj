@@ -99,6 +99,9 @@
     <Compile Include="Data\TaskUpdateRequest.cs" />
     <Compile Include="Data\TimeWindowData.cs" />
     <Compile Include="Data\TokenData.cs" />
+    <Compile Include="Data\UserData.cs" />
+    <Compile Include="Data\UserDataSet.cs" />
+    <Compile Include="Data\UserSetRequest.cs" />
     <Compile Include="Data\VehicleData.cs" />
     <Compile Include="Data\VehicleDataSet.cs" />
     <Compile Include="Data\VehicleUpdateRequest.cs" />

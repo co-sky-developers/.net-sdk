@@ -62,8 +62,11 @@ namespace NFleetSDK.UnitTests
         public void T01CreatingProblemTest()
         {
             var rootLinks = (ApiData)testObjects["rootLinks"];
+            var users = api.Navigate<UserDataSet>(rootLinks.GetLink("list-users"), new UserSetRequest());
+            var user = users.Items.Find(u => u.Id == 1); 
             //##BEGIN EXAMPLE creatingproblem##
-            var problems = api.Navigate<RoutingProblemDataSet>(rootLinks.GetLink("list-problems"));
+
+            var problems = api.Navigate<RoutingProblemDataSet>( user.GetLink( "list-problems" ) );
             var created = api.Navigate<ResponseData>(problems.GetLink("create"), new RoutingProblemUpdateRequest { Name = "test" });
             var createdProblemData = api.Navigate<RoutingProblemData>(created.Location);
             //##END EXAMPLE##
