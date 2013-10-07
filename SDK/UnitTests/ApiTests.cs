@@ -316,17 +316,15 @@ namespace NFleetSDK.UnitTests
         {
             var problem = (RoutingProblemData)testObjects["problem"];
             //##BEGIN EXAMPLE startingopt##
-            var creation = api.Navigate<ResponseData>(problem.GetLink("create-new-optimization"));
-            var optimization = api.Navigate<OptimizationData>(creation.Location);
-            var response = api.Navigate<ResponseData>(optimization.GetLink("start"), new OptimizationUpdateRequest());
+            var res = api.Navigate<ResponseData>( problem.GetLink("update"), new RoutingProblemUpdateRequest {Name = problem.Name, State = "Running" } );
             //##END EXAMPLE##
-            testObjects["creation"] = creation;
+
             var mockCreation = TestUtils.GetMockResponse<ResponseData>(responses["startingoptresp"].json);
-            Trace.Write(JsonConvert.SerializeObject(creation));
-            TestUtils.ResponsesAreEqual( mockCreation, creation );
+            Trace.Write( JsonConvert.SerializeObject( res ) );
+            TestUtils.ResponsesAreEqual( mockCreation, res );
         }
 
-        [Test]
+        /*[Test]
         public void T12AccessingNewOptTest()
         {
             var problem = (RoutingProblemData)testObjects["problem"];
@@ -340,27 +338,22 @@ namespace NFleetSDK.UnitTests
             var mockOptimization = TestUtils.GetMockResponse<OptimizationData>(responses["accessingnewoptresp"].json);
             Trace.Write(JsonConvert.SerializeObject(optimization));
             TestUtils.OptimizationsAreEqual( mockOptimization, optimization );
-        }
+        }*/
 
         [Test]
         public void T13StoppingOptTest()
         {
             var problem = (RoutingProblemData)testObjects["problem"];
-            TestData.CreateDemoData( problem, api );   
-
-            var creation = api.Navigate<ResponseData>( problem.GetLink( "create-new-optimization" ) );
-            var optimization = api.Navigate<OptimizationData>( creation.Location );
-            api.Navigate<ResponseData>( optimization.GetLink( "start" ), new OptimizationUpdateRequest() );
+            TestData.CreateDemoData( problem, api );
 
             //##BEGIN EXAMPLE stoppingopt##
-            
-            var response = api.Navigate<ResponseData>( optimization.GetLink( "stop" ), new OptimizationUpdateRequest() ); 
+            var res = api.Navigate<ResponseData>( problem.GetLink( "update" ), new RoutingProblemUpdateRequest { Name = problem.Name, State = "Stopped" } );
             //##END EXAMPLE##
             var mockResponse = TestUtils.GetMockResponse<ResponseData>(responses["stoppingoptresp"].json);
-            Trace.Write(JsonConvert.SerializeObject(response));
-            TestUtils.ResponsesAreEqual( mockResponse, response );
+            Trace.Write( JsonConvert.SerializeObject( res ) );
+            TestUtils.ResponsesAreEqual( mockResponse, res );
         }
-
+        /*
         [Test]
         public void T14GetOptStatusTest()
         {
@@ -371,7 +364,7 @@ namespace NFleetSDK.UnitTests
             var mockOptimizationResult = TestUtils.GetMockResponse<OptimizationData>(responses["getoptstatusresp"].json);
             Trace.Write(JsonConvert.SerializeObject(optimizationResult));
             TestUtils.OptimizationsAreEqual( mockOptimizationResult, optimizationResult );
-        }
+        }*/
 
         [Test]
         public void T15BadRequestTest()

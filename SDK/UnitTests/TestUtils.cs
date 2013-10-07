@@ -250,7 +250,7 @@ namespace NFleetSDK.UnitTests
             return null;
         }
 
-        public static void OptimizationsAreEqual(OptimizationData a, OptimizationData b)
+        /*public static void OptimizationsAreEqual(OptimizationData a, OptimizationData b)
         {
             if (!ignoreIds) Assert.AreEqual(a.Id, b.Id);
             Assert.AreEqual(a.State, b.State);
@@ -261,6 +261,6 @@ namespace NFleetSDK.UnitTests
             VehicleDataSetsAreEqual(a.Vehicles, b.Vehicles);
             TaskDataSetsAreEqual(a.Tasks, b.Tasks);
             LocationDataSetsAreEqual(a.Locations, b.Locations);
-        }
+        }*/
     }
 }
