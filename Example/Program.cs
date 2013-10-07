@@ -73,9 +73,27 @@ namespace NFleetExample
                 {
                     Thread.Sleep( 1000 );
 
+                    int start = 0;
+                    int end = 1;
                     var routingProblem = api2.Navigate<RoutingProblemData>( problem.GetLink( "self" ) );
+                    var queryParameters = new Dictionary<string, string>
+                                              {
+                                                  {"Start", start.ToString()},
+                                                  {"End", end.ToString()}
+                                              };
+                    var objectiveValues = api2.Navigate<ObjectiveValueDataSet>( problem.GetLink( "objective-values" ), queryParameters );
+
+
 
                     Console.WriteLine( routingProblem.State + " (" + routingProblem.Progress + "%)" );
+                    Console.WriteLine("---------------");
+                    foreach ( var obj in objectiveValues.Items )
+                    {
+                        
+                        Console.WriteLine( "Objective values from {0} to {1}: [{2}] {3}", start, end, obj.TimeStamp, obj.Value);
+                    }
+                    Console.WriteLine( "---------------" );
+
 
                     if ( routingProblem.State == "Stopped" )
                     {
