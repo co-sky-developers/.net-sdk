@@ -18,6 +18,10 @@ namespace NFleetSDK.Data
         public List<Link> Meta { get; set; }
         public List<int> Unassigned { get; set; }
 
+        public string State { get; set; }
+
+        public int Progress { get; set; }
+
         public double[,] Distances { get; set; }
         public int[] LocationIndex { get; set; }
     }

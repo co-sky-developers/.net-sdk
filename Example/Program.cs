@@ -66,72 +66,28 @@ namespace NFleetExample
 
             Console.WriteLine( locations.Items.Count );
 
-            created = api2.Navigate<ResponseData>( problem.GetLink( "create-new-optimization" ) );
-            var optimization = api2.Navigate<OptimizationData>( created.Location );
-            var res = api2.Navigate<ResponseData>( optimization.GetLink( "start" ), new OptimizationUpdateRequest { } );
-
-            // create multiple vehicles
-            for ( int i = 0; i < 20; i++ )
-            {
-                api2.Navigate<ResponseData>( problem.GetLink( "create-vehicle" ), new VehicleUpdateRequest
-                {
-                    Name = "test"+i,
-                    Capacities = new List<CapacityData>
-                {
-                    new CapacityData { Name = "Weight", Amount = 5000 }
-                },
-                    StartLocation = new LocationData
-                    {
-                        Coordinate = new CoordinateData
-                        {
-                            Latitude = 62.244958,
-                            Longitude = 25.747143,
-                            System = "Euclidian"
-                        }
-                    },
-                    EndLocation = new LocationData
-                    {
-                        Coordinate = new CoordinateData
-                        {
-                            Latitude = 62.244958,
-                            Longitude = 25.747143,
-                            System = "Euclidian"
-                        }
-                    },
-                    TimeWindows = { new TimeWindowData { Start = new DateTime( 2013, 5, 14, 8, 0, 0 ), End = new DateTime( 2013, 5, 14, 12, 0, 0 ) } }
-
-                } );
-            }
-            var queryParams = new Dictionary<string, string>
-                                  {
-                                      {"limit","3"},
-                                      {"offset","3"}
-                                  };
-            // navigate through vehicles using paging links
-            var vehres = api2.Navigate<VehicleDataSet>( problem.GetLink( "list-vehicles" ), queryParams );
-            var vehres2 = api2.Navigate<VehicleDataSet>( vehres.GetLink( "next" ) );
-            var vehres3 = api2.Navigate<VehicleDataSet>( vehres2.GetLink( "next" ) );
-            var vehres4 = api2.Navigate<VehicleDataSet>( vehres3.GetLink( "next" ) );
+            var res = api2.Navigate<ResponseData>(problem.GetLink("update"), new RoutingProblemUpdateRequest {Name = problem.Name, State = "Running" } );
 
 
                 while ( true )
                 {
                     Thread.Sleep( 1000 );
 
-                    optimization = api2.Navigate<OptimizationData>( optimization.GetLink( "self" ) );
+                    var routingProblem = api2.Navigate<RoutingProblemData>( problem.GetLink( "self" ) );
 
-                    Console.WriteLine( optimization.State + " (" + optimization.Progress + "%)" );
+                    Console.WriteLine( routingProblem.State + " (" + routingProblem.Progress + "%)" );
 
-                    if ( optimization.State == "Stopped" )
+                    if ( routingProblem.State == "Stopped" )
                     {
-                        var optimizationResult = api2.Navigate<VehicleDataSet>( optimization.GetLink( "results" ) );
-                        var optimizationResulTasks = api2.Navigate<TaskDataSet>( optimization.GetLink( "resulttasks" ) );
-                        foreach ( var vehicleData in optimizationResult.Items )
+                        var resultVehicles = api2.Navigate<VehicleDataSet>( routingProblem.GetLink( "list-vehicles" ) );
+                        var resultTasks = api2.Navigate<TaskDataSet>( routingProblem.GetLink( "list-tasks" ) );
+
+                        foreach ( var vehicleData in resultVehicles.Items )
                         {
                             Console.Write( "Vehicle {0}({1}): ", vehicleData.Id, vehicleData.Name );
                             foreach ( var point in vehicleData.Route.Items )
                             {
-                                TaskEventData data = FindTaskEventData( optimizationResulTasks, point );
+                                TaskEventData data = FindTaskEventData( resultTasks, point );
                                 Console.Write( "{0}: {1}-{2} ", point, data.PlannedArrivalTime, data.PlannedDepartureTime );
                             }
                             Console.WriteLine();
