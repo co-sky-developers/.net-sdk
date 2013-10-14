@@ -186,8 +186,6 @@ namespace NFleetSDK.UnitTests
 
         public static TimeWindowData TimeWindowsAreEqual(TimeWindowData a, TimeWindowData b)
         {
-            return null;
-            //TODO: Nämä päälle kun eivät enää heitä kolmella tunnilla
             Assert.AreEqual(a.Start, b.Start);
             Assert.AreEqual(a.End, b.End);
             return null;
@@ -249,18 +247,5 @@ namespace NFleetSDK.UnitTests
             
             return null;
         }
-
-        /*public static void OptimizationsAreEqual(OptimizationData a, OptimizationData b)
-        {
-            if (!ignoreIds) Assert.AreEqual(a.Id, b.Id);
-            Assert.AreEqual(a.State, b.State);
-            Assert.AreEqual(a.Progress, b.Progress);
-            Assert.AreEqual(a.Value, b.Value);
-
-            ListsAreEqual(a.Meta, b.Meta, LinksAreEqual);
-            VehicleDataSetsAreEqual(a.Vehicles, b.Vehicles);
-            TaskDataSetsAreEqual(a.Tasks, b.Tasks);
-            LocationDataSetsAreEqual(a.Locations, b.Locations);
-        }*/
     }
 }

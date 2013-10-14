@@ -5,9 +5,12 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using NFleetSDK.Data;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using RestSharp;
 using RestSharp.Contrib;
 using RestSharp.Deserializers;
+using RestSharp.Serializers;
 
 
 namespace NFleetSDK
@@ -29,11 +32,7 @@ namespace NFleetSDK
             baseUrl = url.Remove( 0, url.IndexOf( separator, StringComparison.Ordinal ) + separator.Length );
             baseUrl = baseUrl.Replace( "81", "82" );
             client = new RestClient( url ) { FollowRedirects = false };
-            client.AddHandler("application/json", new JsonDeserializer()
-            {
-                DateFormat =
-                    "yyyy-MM-ddTHH:mm:ss.fffffffzzz"
-            });
+
 #if DEBUG
             client.Timeout = Int32.MaxValue;
 
@@ -58,6 +57,7 @@ namespace NFleetSDK
 
 
             var request = new RestRequest( uri, link.Method.ToMethod() ) { RequestFormat = DataFormat.Json };
+            request.JsonSerializer = new CustomConverter { ContentType = "application/json" };
 
             if ( currentToken != null )
                 request.AddHeader( "Authorization", currentToken.TokenType + " " + currentToken.AccessToken );
@@ -79,6 +79,7 @@ namespace NFleetSDK
             {
                 Authenticate(username, password);
                 request = new RestRequest( link.Uri, link.Method.ToMethod() ) { RequestFormat = DataFormat.Json };
+                request.JsonSerializer = new CustomConverter { ContentType = "application/json" };
 
                 if ( link.Method == "GET" && queryParameters != null )
                 {
@@ -116,7 +117,8 @@ namespace NFleetSDK
                 responseData.Meta.Add( new Link { Method = "GET", Rel = "location", Uri = entityLocation } );
                 return (T)(IResponseData)responseData;
             }
-            return result.Data;
+            //return result.Data;
+            return JsonConvert.DeserializeObject<T>(result.Content);
         }
 
         public TokenData Authorize( TokenData token )
@@ -248,5 +250,41 @@ namespace NFleetSDK
 
     internal class Empty
     {
+
+    }
+
+    internal class CustomConverter : ISerializer, IDeserializer
+    {
+        private static readonly JsonSerializerSettings SerializerSettings;
+
+        static CustomConverter()
+        {
+            SerializerSettings = new JsonSerializerSettings
+            {
+                DateTimeZoneHandling = DateTimeZoneHandling.Utc,
+                Converters = new List<JsonConverter> { new IsoDateTimeConverter() },
+                NullValueHandling = NullValueHandling.Ignore
+            };
+        }
+
+        public string Serialize( object obj )
+        {
+            return JsonConvert.SerializeObject( obj, Formatting.None, SerializerSettings );
+        }
+
+        public T Deserialize<T>( IRestResponse response )
+        {
+            var type = typeof( T );
+
+            return (T)JsonConvert.DeserializeObject( response.Content, type, SerializerSettings );
+        }
+
+        string IDeserializer.RootElement { get; set; }
+        string IDeserializer.Namespace { get; set; }
+        string IDeserializer.DateFormat { get; set; }
+        string ISerializer.RootElement { get; set; }
+        string ISerializer.Namespace { get; set; }
+        string ISerializer.DateFormat { get; set; }
+        public string ContentType { get; set; }
     }
 }
