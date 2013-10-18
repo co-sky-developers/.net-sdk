@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -18,6 +19,7 @@ namespace NFleetSDK
     public sealed class Api
     {
         private const string separator = "://";
+        private const string ETag = "ENTITY_VERSION_NUMBER";
 
         private readonly RestClient client;
         private readonly string baseUrl;
@@ -58,6 +60,12 @@ namespace NFleetSDK
 
             var request = new RestRequest( uri, link.Method.ToMethod() ) { RequestFormat = DataFormat.Json };
             request.JsonSerializer = new CustomConverter { ContentType = "application/json" };
+            
+            if (data != null && (data as IVersioned) != null)
+            {
+                var d = data as IVersioned;
+                request.AddHeader(ETag, d.VersionNumber.ToString(CultureInfo.InvariantCulture));
+            }
 
             if ( currentToken != null )
                 request.AddHeader( "Authorization", currentToken.TokenType + " " + currentToken.AccessToken );
@@ -80,6 +88,11 @@ namespace NFleetSDK
                 Authenticate(username, password);
                 request = new RestRequest( link.Uri, link.Method.ToMethod() ) { RequestFormat = DataFormat.Json };
                 request.JsonSerializer = new CustomConverter { ContentType = "application/json" };
+                if ( data != null && ( data as IVersioned ) != null )
+                {
+                    var d = data as IVersioned;
+                    request.AddHeader( ETag, d.VersionNumber.ToString( CultureInfo.InvariantCulture ) );
+                }
 
                 if ( link.Method == "GET" && queryParameters != null )
                 {
@@ -107,7 +120,8 @@ namespace NFleetSDK
             if ( code == HttpStatusCode.Created || code == HttpStatusCode.SeeOther )
             {
                 var parameter = result.Headers.FirstOrDefault( h => h.Name == "Location" );
-
+                var etag = result.Headers.FirstOrDefault(h => h.Name == "ETag");
+                var version = etag != null ? Int32.Parse(etag.Value.ToString()) : 0;
                 if ( parameter == null || parameter.Value == null ) throw new IOException( "Server response missing Location header." );    
 
                 var value = parameter.Value.ToString();
@@ -115,10 +129,12 @@ namespace NFleetSDK
 
                 var responseData = new ResponseData();
                 responseData.Meta.Add( new Link { Method = "GET", Rel = "location", Uri = entityLocation } );
+                var response = (IResponseData) responseData;
+                response.VersionNumber = version;
                 return (T)(IResponseData)responseData;
             }
-            //return result.Data;
-            return JsonConvert.DeserializeObject<T>(result.Content);
+
+            return result.Data;
         }
 
         public TokenData Authorize( TokenData token )

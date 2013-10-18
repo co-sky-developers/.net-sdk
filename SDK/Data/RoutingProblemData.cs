@@ -11,6 +11,7 @@ namespace NFleetSDK.Data
             Unassigned = new List<int>();
         }
 
+        public int VersionNumber { get; set; }
         public int Id { get; set; }
         public string Name { get; set; }
         public DateTime CreationDate { get; set; }

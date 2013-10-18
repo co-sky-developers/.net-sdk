@@ -62,11 +62,11 @@ namespace NFleetExample
             // refresh to get up to date set of operations
             problem = api2.Navigate<RoutingProblemData>( problem.GetLink( "self" ) );
 
-            var locations = api2.Navigate<LocationDataSet>( problem.GetLink( "list-locations" ) );
+            //var locations = api2.Navigate<LocationDataSet>( problem.GetLink( "list-locations" ) );
 
-            Console.WriteLine( locations.Items.Count );
+            //Console.WriteLine( locations.Items.Count );
 
-            var res = api2.Navigate<ResponseData>(problem.GetLink("update"), new RoutingProblemUpdateRequest {Name = problem.Name, State = "Running" } );
+            var res = api2.Navigate<ResponseData>(problem.GetLink("update"), new RoutingProblemUpdateRequest { Name = problem.Name, State = "Running", VersionNumber = problem.VersionNumber } );
 
 
                 while ( true )

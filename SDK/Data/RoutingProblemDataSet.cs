@@ -4,6 +4,7 @@ namespace NFleetSDK.Data
 {
     public class RoutingProblemDataSet : IResponseData
     {
+        public int VersionNumber { get; set; }
         public List<RoutingProblemData> Items { get; set; }
         public List<Link> Meta { get; private set; }
 

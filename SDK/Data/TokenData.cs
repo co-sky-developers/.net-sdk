@@ -14,5 +14,11 @@ namespace NFleetSDK.Data
         {
             Meta = new List<Link>();
         }
+
+        #region Implementation of IVersioned
+
+        public int VersionNumber { get; set; }
+
+        #endregion
     }
 }

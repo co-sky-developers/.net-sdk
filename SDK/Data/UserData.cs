@@ -5,6 +5,7 @@ namespace NFleetSDK.Data
 {
     public class UserData : IResponseData
     {
+        public int VersionNumber { get; set; }
         public int Id { get; set; }
 
         #region Implementation of IResponseData

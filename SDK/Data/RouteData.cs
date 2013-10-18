@@ -5,6 +5,7 @@ namespace NFleetSDK.Data
 {
     public class RouteData : IResponseData
     {
+        public int VersionNumber { get; set; }
         public List<int> Items { get; set; }
         public List<Link> Meta { get; set; }
         public DateTime? ActualStartTime { get; set; }

@@ -15,5 +15,11 @@ namespace NFleetSDK
 
         public List<Link> Meta { get; set; }
         public List<ErrorData> Items { get; set; }
+
+        #region Implementation of IVersioned
+
+        public int VersionNumber { get; set; }
+
+        #endregion
     }
 }

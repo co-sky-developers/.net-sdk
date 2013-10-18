@@ -4,6 +4,7 @@ namespace NFleetSDK.Data
 {
     public class LocationDataSet : IResponseData
     {
+        public int VersionNumber { get; set; }
         public List<Link> Meta { get; set; }
         public List<LocationData> Items { get; set; }
 

@@ -4,6 +4,7 @@ namespace NFleetSDK.Data
 {
     public class TaskData : IResponseData
     {
+        public int VersionNumber { get; set; }
         public int Id { get; set; }
         public string Name { get; set; }
         public string Info { get; set; }

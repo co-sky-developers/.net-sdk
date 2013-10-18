@@ -10,6 +10,7 @@ namespace NFleetSDK.Data
 
         #endregion
 
+        public int VersionNumber { get; set; }
         public List<UserData> Items { get; set; }
     }
 }

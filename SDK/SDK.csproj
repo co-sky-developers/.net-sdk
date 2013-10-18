@@ -81,6 +81,7 @@
     <Compile Include="Data\CoordinateData.cs" />
     <Compile Include="Data\ErrorData.cs" />
     <Compile Include="Data\IResponseData.cs" />
+    <Compile Include="Data\IVersioned.cs" />
     <Compile Include="Data\Link.cs" />
     <Compile Include="Data\LocationData.cs" />
     <Compile Include="Data\LocationDataSet.cs" />

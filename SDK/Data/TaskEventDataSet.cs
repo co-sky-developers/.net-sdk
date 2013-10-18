@@ -4,6 +4,7 @@ namespace NFleetSDK.Data
 {
     public class TaskEventDataSet : IResponseData
     {
+        public int VersionNumber { get; set; }
         public List<TaskEventData> Items { get; set; }
         public List<Link> Meta { get; set; }
 

@@ -5,6 +5,7 @@ namespace NFleetSDK.Data
 {
     public class VehicleData : IResponseData
     {
+        public int VersionNumber { get; set; }
         public int Id { get; set; }
         public string Name { get; set; }
         public List<CapacityData> Capacities { get; set; }
