@@ -346,9 +346,9 @@ namespace NFleetSDK.UnitTests
         public void T13StoppingOptTest()
         {
             var problem = (RoutingProblemData)testObjects["problem"];
+            
+            //TestData.CreateDemoData( problem, api );
             problem = api.Navigate<RoutingProblemData>( problem.GetLink( "self" ) );
-            TestData.CreateDemoData( problem, api );
-
             //##BEGIN EXAMPLE stoppingopt##
             var res = api.Navigate<ResponseData>( problem.GetLink( "toggle-optimization" ), new RoutingProblemUpdateRequest { Name = problem.Name, State = "Stopped", VersionNumber = problem.VersionNumber} );
             //##END EXAMPLE##
