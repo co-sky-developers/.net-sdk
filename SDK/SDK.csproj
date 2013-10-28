@@ -89,6 +89,9 @@
     <Compile Include="Data\ObjectiveValueDataSet.cs" />
     <Compile Include="Data\ObjectiveValuesRequest.cs" />
     <Compile Include="Data\RouteData.cs" />
+    <Compile Include="Data\RouteEventData.cs" />
+    <Compile Include="Data\RouteEventDataSet.cs" />
+    <Compile Include="Data\RouteEventSetRequest.cs" />
     <Compile Include="Data\RouteUpdateRequest.cs" />
     <Compile Include="Data\RoutingProblemData.cs" />
     <Compile Include="Data\RoutingProblemDataSet.cs" />

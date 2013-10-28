@@ -19,7 +19,7 @@ namespace NFleetSDK
     public sealed class Api
     {
         private const string separator = "://";
-        private const string ETag = "ENTITY_VERSION_NUMBER";
+        private const string VersionNumberHeader = "If-None-Match";
 
         private readonly RestClient client;
         private readonly string baseUrl;
@@ -64,7 +64,7 @@ namespace NFleetSDK
             if (data != null && (data as IVersioned) != null)
             {
                 var d = data as IVersioned;
-                request.AddHeader(ETag, d.VersionNumber.ToString(CultureInfo.InvariantCulture));
+                request.AddHeader(VersionNumberHeader, d.VersionNumber.ToString(CultureInfo.InvariantCulture));
             }
 
             if ( currentToken != null )
@@ -91,7 +91,7 @@ namespace NFleetSDK
                 if ( data != null && ( data as IVersioned ) != null )
                 {
                     var d = data as IVersioned;
-                    request.AddHeader( ETag, d.VersionNumber.ToString( CultureInfo.InvariantCulture ) );
+                    request.AddHeader( VersionNumberHeader, d.VersionNumber.ToString( CultureInfo.InvariantCulture ) );
                 }
 
                 if ( link.Method == "GET" && queryParameters != null )
@@ -132,6 +132,15 @@ namespace NFleetSDK
                 var response = (IResponseData) responseData;
                 response.VersionNumber = version;
                 return (T)(IResponseData)responseData;
+            }
+
+            if (result.Data is IVersioned)
+            {
+                var etag = result.Headers.FirstOrDefault(h => h.Name == "ETag");
+                var version = etag != null ? Int32.Parse(etag.Value.ToString()) : 0;
+                var resp = result.Data;
+                resp.VersionNumber = version;
+                return resp;
             }
 
             return result.Data;

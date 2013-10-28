@@ -62,12 +62,15 @@ namespace NFleetExample
             // refresh to get up to date set of operations
             problem = api2.Navigate<RoutingProblemData>( problem.GetLink( "self" ) );
 
-            //var locations = api2.Navigate<LocationDataSet>( problem.GetLink( "list-locations" ) );
-
-            //Console.WriteLine( locations.Items.Count );
-
             var res = api2.Navigate<ResponseData>(problem.GetLink("update"), new RoutingProblemUpdateRequest { Name = problem.Name, State = "Running", VersionNumber = problem.VersionNumber } );
-
+            RoutingProblemData rb = null;
+            while (true)
+            {
+                Thread.Sleep( 1000 );
+                rb = api2.Navigate<RoutingProblemData>( problem.GetLink( "self" ) );
+                Console.WriteLine("State: {0}", rb.State);
+                if ( rb.State == "Running" || rb.Progress == 100 ) break;
+            } 
 
                 while ( true )
                 {
@@ -78,8 +81,8 @@ namespace NFleetExample
                     var routingProblem = api2.Navigate<RoutingProblemData>( problem.GetLink( "self" ) );
                     var queryParameters = new Dictionary<string, string>
                                               {
-                                                  {"Start", start.ToString()},
-                                                  {"End", end.ToString()}
+                                                  {"Start", start.ToString() },
+                                                  {"End", end.ToString() }
                                               };
                     var objectiveValues = api2.Navigate<ObjectiveValueDataSet>( problem.GetLink( "objective-values" ), queryParameters );
 
@@ -102,11 +105,20 @@ namespace NFleetExample
 
                         foreach ( var vehicleData in resultVehicles.Items )
                         {
+                            var veh = api2.Navigate<VehicleData>(vehicleData.GetLink("self"));
                             Console.Write( "Vehicle {0}({1}): ", vehicleData.Id, vehicleData.Name );
-                            foreach ( var point in vehicleData.Route.Items )
+                            var routeEvents = api2.Navigate<RouteEventDataSet>(veh.GetLink("list-events"));
+                            var sequence = api2.Navigate<RouteData>( veh.GetLink( "get-route" ) );
+
+                            sequence.Items.Insert(0, veh.StartLocation.Id);
+                            sequence.Items.Add( veh.EndLocation.Id );
+
+                            for ( int i = 0; i < routeEvents.Items.Count; i++ )
                             {
-                                TaskEventData data = FindTaskEventData( resultTasks, point );
-                                Console.Write( "{0}: {1}-{2} ", point, data.PlannedArrivalTime, data.PlannedDepartureTime );
+                                var point = sequence.Items[i];
+                                var routeEvent = routeEvents.Items[i];
+
+                                Console.Write( "{0}: {1}-{2} ", point, routeEvent.PlannedArrivalTime, routeEvent.PlannedDepartureTime );
                             }
                             Console.WriteLine();
                         }
@@ -127,14 +139,14 @@ namespace NFleetExample
                 Name = "test",
                 Capacities = new List<CapacityData>
                 {
-                    new CapacityData { Name = "Weight", Amount = 5000 }
+                    new CapacityData { Name = "Weight", Amount = 100000 }
                 },
                 StartLocation = new LocationData
                 {
                     Coordinate = new CoordinateData
                     {
-                        Latitude = 62.244958,
-                        Longitude = 25.747143,
+                        Latitude = 62.244588,
+                        Longitude = 25.742683,
                         System = "Euclidian"
                     }
                 },
@@ -142,17 +154,17 @@ namespace NFleetExample
                 {
                     Coordinate = new CoordinateData
                     {
-                        Latitude = 62.244958,
-                        Longitude = 25.747143,
+                        Latitude = 62.244588,
+                        Longitude = 25.742683,
                         System = "Euclidian"
                     }
                 },
-                TimeWindows = { new TimeWindowData { Start = new DateTime( 2013, 5, 14, 8, 0, 0 ), End = new DateTime( 2013, 5, 14, 12, 0, 0 ) } }
+                TimeWindows = { new TimeWindowData { Start = new DateTime( 2013, 5, 14, 7, 0, 0 ), End = new DateTime( 2013, 5, 14, 16, 0, 0 ) } }
 
             } );
 
             var newTask = new TaskUpdateRequest { Name = "task" };
-            var capacity = new CapacityData { Name = "Weight", Amount = 20 };
+            var capacity = new CapacityData { Name = "Weight", Amount = 1 };
 
             var pickup = new TaskEventUpdateRequest
             {
@@ -161,12 +173,12 @@ namespace NFleetExample
                 {
                     Coordinate = new CoordinateData
                     {
-                        Latitude = 62.282617,
-                        Longitude = 25.797272,
+                        Latitude = 62.247906,
+                        Longitude = 25.867395,
                         System = "Euclidian"
                     }
                 },
-                TimeWindows = { new TimeWindowData { Start = new DateTime( 2013, 5, 14, 8, 0, 0 ), End = new DateTime( 2013, 5, 14, 12, 0, 0 ) } }
+                TimeWindows = { new TimeWindowData { Start = new DateTime( 2013, 5, 14, 7, 0, 0 ), End = new DateTime( 2013, 5, 14, 16, 0, 0 ) } }
             };
             pickup.Capacities.Add( capacity );
             newTask.TaskEvents.Add( pickup );
@@ -178,12 +190,12 @@ namespace NFleetExample
                 {
                     Coordinate = new CoordinateData
                     {
-                        Latitude = 62.373658,
-                        Longitude = 25.885506,
+                        Latitude = 61.386909,
+                        Longitude = 24.654106,
                         System = "Euclidian"
                     }
                 },
-                TimeWindows = { new TimeWindowData { Start = new DateTime( 2013, 5, 14, 8, 0, 0 ), End = new DateTime( 2013, 5, 14, 12, 0, 0 ) } }
+                TimeWindows = { new TimeWindowData { Start = new DateTime( 2013, 5, 14, 7, 0, 0 ), End = new DateTime( 2013, 5, 14, 16, 0, 0 ) } }
             };
             delivery.Capacities.Add( capacity );
             newTask.TaskEvents.Add( delivery );

@@ -39,14 +39,8 @@ namespace NFleetSDK.UnitTests
         {
             if (!ignoreIds) Assert.AreEqual(a.Id, b.Id);
             Assert.AreEqual(a.Name, b.Name);
-            Assert.AreEqual(a.IsActive, b.IsActive);
             
-            Assert.AreEqual(a.ActualArrivalTime, b.ActualArrivalTime);
-            Assert.AreEqual(a.ActualDepartureTime, b.ActualDepartureTime);
-            Assert.AreEqual(a.PlannedArrivalTime, b.PlannedArrivalTime);
-            Assert.AreEqual(a.PlannedDepartureTime, b.PlannedDepartureTime);
-            Assert.AreEqual(a.ArrivalTimeState, b.ArrivalTimeState);
-            Assert.AreEqual(a.DepartureTimeState, b.DepartureTimeState);
+
             
             LocationsAreEqual(a.StartLocation, b.StartLocation);
             LocationsAreEqual(a.EndLocation, b.EndLocation);
