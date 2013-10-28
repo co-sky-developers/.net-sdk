@@ -10,7 +10,7 @@ namespace NFleetSDK.Data
         public string Info { get; set; }
         public List<TaskEventData> TaskEvents { get; set; }
         public List<Link> Meta { get; set; }
-        public bool IsActive { get; set; }
+        public string State { get; set; }
 
         public TaskData()
         {

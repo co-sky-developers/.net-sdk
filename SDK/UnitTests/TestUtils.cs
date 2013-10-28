@@ -118,13 +118,13 @@ namespace NFleetSDK.UnitTests
 
         public static void RoutesAreEqual(RouteData a, RouteData b)
         {
-            Assert.AreEqual(a.ActualStartTime, b.ActualStartTime);
+            /*Assert.AreEqual(a.ActualStartTime, b.ActualStartTime);
             Assert.AreEqual(a.ActualEndTime, b.ActualEndTime);
             Assert.AreEqual(a.PlannedEndTime, b.PlannedEndTime);
             Assert.AreEqual(a.PlannedStartTime, b.PlannedStartTime);
             Assert.AreEqual(a.ArrivalTimeState, b.ArrivalTimeState);
-            Assert.AreEqual(a.DepartureTimeState, b.DepartureTimeState);
-            CollectionAssert.AreEqual(a.Items, b.Items);
+            Assert.AreEqual(a.DepartureTimeState, b.DepartureTimeState);*/
+            CollectionAssert.AreEqual(a.Items, b.Items, "Route sequence mismatch.");
         }
 
 
@@ -207,6 +207,7 @@ namespace NFleetSDK.UnitTests
             Assert.IsNotNull(b);
             if (!ignoreIds) Assert.AreEqual(a.Id, b.Id);
             Assert.AreEqual(a.Name, b.Name);
+            Assert.AreEqual(a.VersionNumber, b.VersionNumber);
             ListsAreEqual<Link>(a.Meta, b.Meta, LinksAreEqual);
             CollectionAssert.AreEqual(a.Unassigned, b.Unassigned);
             Assert.IsTrue(a.CreationDate <= a.ModifiedDate);
@@ -230,14 +231,15 @@ namespace NFleetSDK.UnitTests
             ListsAreEqual(a.Items, b.Items, TasksAreEqual);
         }
 
-        public static TaskData TasksAreEqual(TaskData newTask, TaskData mockNewTask)
+        public static TaskData TasksAreEqual(TaskData expected, TaskData actual)
         {
-            if (!ignoreIds) Assert.AreEqual(newTask.Id, mockNewTask.Id);
-            Assert.AreEqual(newTask.Info, mockNewTask.Info);
-            Assert.AreEqual(newTask.Name, mockNewTask.Name);
-            Assert.AreEqual(newTask.IsActive, mockNewTask.IsActive);
-            ListsAreEqual(newTask.TaskEvents, mockNewTask.TaskEvents, TaskEventsAreEqual);
-            ListsAreEqual(newTask.Meta, mockNewTask.Meta, LinksAreEqual);
+            if ( !ignoreIds ) Assert.AreEqual( expected.Id, actual.Id );
+            Assert.AreEqual( expected.VersionNumber, actual.VersionNumber, "Task version number mismatch");
+            Assert.AreEqual( expected.Info, actual.Info, "Task info mismatch" );
+            Assert.AreEqual( expected.Name, actual.Name, "Task name mismatch" );
+            Assert.AreEqual( expected.State, actual.State, "Task state mismatch" );
+            ListsAreEqual( expected.TaskEvents, actual.TaskEvents, TaskEventsAreEqual );
+            ListsAreEqual( expected.Meta, actual.Meta, LinksAreEqual );
             
             return null;
         }
