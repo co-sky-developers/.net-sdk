@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using NFleetSDK.Data;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using RestSharp;
+
 
 namespace NFleetSDK.UnitTests
 {
@@ -21,7 +18,6 @@ namespace NFleetSDK.UnitTests
         private string responsePath = (string) Properties.Settings.Default["responsepath"];
         
         private Api api;
-        private Dictionary<string, object> testObjects = new Dictionary<string, object>();
         private Dictionary<string, Response> responses;
         private RestSharp.Deserializers.JsonDeserializer deserializer;
         
@@ -45,14 +41,13 @@ namespace NFleetSDK.UnitTests
             deserializer = new RestSharp.Deserializers.JsonDeserializer();
             TestUtils.deserializer = deserializer;
 
-            testObjects["rootLinks"] = rootLinks;
-            testObjects["tokenResponse"] = tokenResponse;
         }
 
         [Test]
         public void T00RootlinkTest()
         {
-            var rootLinks = (ApiData) testObjects["rootLinks"];
+            var api = TestHelper.Authenticate();
+            var rootLinks = api.Root;
             var mockRootLinks = TestUtils.GetMockResponse<ApiData>(responses["accessingapiresp"].json);
             Trace.Write(JsonConvert.SerializeObject(rootLinks));
             TestUtils.ListsAreEqual<Link>(rootLinks.Meta, mockRootLinks.Meta, TestUtils.LinksAreEqual);
@@ -61,17 +56,14 @@ namespace NFleetSDK.UnitTests
         [Test]
         public void T01CreatingProblemTest()
         {
-            var rootLinks = (ApiData)testObjects["rootLinks"];
-            var users = api.Navigate<UserDataSet>(rootLinks.GetLink("list-users"), new UserSetRequest());
-            var user = users.Items.Find(u => u.Id == 1); 
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetUser( api );
             //##BEGIN EXAMPLE creatingproblem##
 
             var problems = api.Navigate<RoutingProblemDataSet>( user.GetLink( "list-problems" ) );
             var created = api.Navigate<ResponseData>(problems.GetLink("create"), new RoutingProblemUpdateRequest { Name = "test" });
             var createdProblemData = api.Navigate<RoutingProblemData>(created.Location);
             //##END EXAMPLE##
-            testObjects["created"] = created;
-            testObjects["problems"] = problems;
             
             var mockCreated = TestUtils.GetMockResponse<RoutingProblemData>(responses["accessingnewproblemresp"].json);
             
@@ -83,11 +75,13 @@ namespace NFleetSDK.UnitTests
         [Test]
         public void T02AccessingProblemTest()
         {
-            var created = (ResponseData)testObjects["created"];
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetUser( api );
+            var problems = api.Navigate<RoutingProblemDataSet>( user.GetLink( "list-problems" ) );
+            var created = api.Navigate<ResponseData>( problems.GetLink( "create" ), new RoutingProblemUpdateRequest { Name = "test" } );
             //##BEGIN EXAMPLE accessingproblem##
             var problem = api.Navigate<RoutingProblemData>(created.Location);
             //##END EXAMPLE##
-            testObjects["problem"] = problem;
 
             var mockProblem = TestUtils.GetMockResponse<RoutingProblemData>(responses["accessingproblemresp"].json);
             Trace.Write(JsonConvert.SerializeObject(problem));
@@ -97,12 +91,13 @@ namespace NFleetSDK.UnitTests
         [Test]
         public void T03ListingTasksTest()
         {
-            var problem = (RoutingProblemData) testObjects["problem"];
-            TestData.CreateDemoData(problem, api);
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetUser( api );
+            var problem = TestHelper.CreateProblemWithDemoData( api, user );
+
             //##BEGIN EXAMPLE listingtasks##
             var tasks = api.Navigate<TaskDataSet>(problem.GetLink("list-tasks")); 
             //##END EXAMPLE##
-            testObjects["tasks"] = tasks;
 
             var mockTasks = TestUtils.GetMockResponse<TaskDataSet>(responses["listingtasksresp"].json);
             Trace.Write(JsonConvert.SerializeObject(tasks));
@@ -113,7 +108,10 @@ namespace NFleetSDK.UnitTests
         [Test]
         public void T04CreatingTaskTest()
         {
-            var tasks = (TaskDataSet) testObjects["tasks"];
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetUser( api );
+            var problem = TestHelper.CreateProblemWithDemoData( api, user );
+            var tasks = api.Navigate<TaskDataSet>( problem.GetLink( "list-tasks" ) ); 
             //##BEGIN EXAMPLE creatingtask##
             var newTask = new TaskUpdateRequest { Name = "test name" };
             var capacity = new CapacityData { Name = "Weight", Amount = 20 };
@@ -151,7 +149,6 @@ namespace NFleetSDK.UnitTests
 
             var taskCreationResult = api.Navigate<ResponseData>(tasks.GetLink("create"), newTask); 
             //##END EXAMPLE##
-            testObjects["taskCreationResult"] = taskCreationResult;
 
             var mockTaskCreationResult = TestUtils.GetMockResponse<ResponseData>(responses["creatingtaskresp"].json);
 
@@ -162,11 +159,13 @@ namespace NFleetSDK.UnitTests
         [Test]
         public void T05UpdatingTaskTest()
         {
-            var taskCreationResult = (ResponseData) testObjects["taskCreationResult"];
-            var t = api.Navigate<TaskData>(taskCreationResult.Location);
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetUser( api );
+            var problem = TestHelper.CreateProblemWithDemoData( api, user );
+            var task = TestHelper.GetTask(api, problem);
             var oldTaskEvents = new List<TaskEventUpdateRequest>();
 
-            foreach (var te in t.TaskEvents)
+            foreach ( var te in task.TaskEvents )
             {
                 var teReq = new TaskEventUpdateRequest
                                 {
@@ -184,19 +183,17 @@ namespace NFleetSDK.UnitTests
             }
 
             //##BEGIN EXAMPLE updatingtask##
-            var oldTask = api.Navigate<TaskData>(taskCreationResult.Location);
             var newTaskRequest = new TaskUpdateRequest
                                      {
-                                         Info = oldTask.Info,
+                                         Info = task.Info,
                                          Name = "Other name",
                                          TaskEvents = oldTaskEvents,
-                                         TaskId = oldTask.Id,
-                                         VersionNumber = oldTask.VersionNumber,
+                                         TaskId = task.Id,
+                                         VersionNumber = task.VersionNumber,
                                      };
-            var newTaskLocation = api.Navigate<ResponseData>( oldTask.GetLink( "update" ), newTaskRequest ); 
+            var newTaskLocation = api.Navigate<ResponseData>( task.GetLink( "update" ), newTaskRequest ); 
             //##END EXAMPLE##
             var newTask = api.Navigate<TaskData>( newTaskLocation.Location );
-            testObjects["newTask"] = newTask;
 
             var mockNewTask = TestUtils.GetMockResponse<TaskData>(responses["updatingtaskresp"].json);
             Trace.Write( JsonConvert.SerializeObject( newTask ) );
@@ -219,7 +216,10 @@ namespace NFleetSDK.UnitTests
         [Test]
         public void T07ListingVehiclesTest()
         {
-            var problem = (RoutingProblemData)testObjects["problem"];
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetUser( api );
+            var problem = TestHelper.CreateProblemWithDemoData( api, user );
+
             var vehicle = new VehicleUpdateRequest
             {
                 Name = "vehicle 2",
@@ -252,7 +252,6 @@ namespace NFleetSDK.UnitTests
             //##BEGIN EXAMPLE listingvehicles##
             var vehicles = api.Navigate<VehicleDataSet>(problem.GetLink("list-vehicles")); 
             //##END EXAMPLE##
-            testObjects["vehicles"] = vehicles;
 
             var mockVehicles = TestUtils.GetMockResponse<VehicleDataSet>(responses["listingvehiclesresp"].json);
             Trace.Write(JsonConvert.SerializeObject(vehicles));
@@ -262,8 +261,11 @@ namespace NFleetSDK.UnitTests
         [Test]
         public void T08AccessingTaskSeqTest()
         {
-            var vehicles = (VehicleDataSet)testObjects["vehicles"];
-            var vehicle = vehicles.Items.Find( v => v.Id == 1 );
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetUser( api );
+            var problem = TestHelper.CreateProblemWithDemoData( api, user );
+            var vehicle = TestHelper.GetVehicle( api, user, problem );
+
             var routeReq = new RouteUpdateRequest
             {
                 Sequence = new[] { 11, 12 }
@@ -280,9 +282,15 @@ namespace NFleetSDK.UnitTests
         [Test]
         public void T09AccessingRouteTest()
         {
-            var vehicles = (VehicleDataSet)testObjects["vehicles"];
-            var vehicle = vehicles.Items.Find( v => v.Id == 1);
-           
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetUser( api );
+            var problem = TestHelper.CreateProblemWithDemoData( api, user );
+            var vehicle = TestHelper.GetVehicle( api, user, problem );
+            var routeReq = new RouteUpdateRequest
+            {
+                Sequence = new[] { 11, 12 }
+            };
+            api.Navigate<ResponseData>( vehicle.GetLink( "set-route" ), routeReq );
             
             //##BEGIN EXAMPLE accessingroute##
             var route = api.Navigate<RouteData>(vehicle.GetLink("get-route")); 
@@ -290,14 +298,15 @@ namespace NFleetSDK.UnitTests
             Trace.Write(JsonConvert.SerializeObject(route));
             var mockRoute = TestUtils.GetMockResponse<RouteData>(responses["accessingrouteresp"].json);
             TestUtils.RoutesAreEqual( mockRoute, route );
-            testObjects["route"] = route;
         }
 
         [Test]
         public void T10UpdatingRouteTest()
         {
-            var vehicles = (VehicleDataSet)testObjects["vehicles"];
-            var vehicle = vehicles.Items.Find( v => v.Id == 1 );
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetUser( api );
+            var problem = TestHelper.CreateProblemWithDemoData( api, user );
+            var vehicle = TestHelper.GetVehicle(api, user, problem);
 
             //##BEGIN EXAMPLE updatingroute##
             var routeReq = new RouteUpdateRequest
@@ -379,7 +388,9 @@ namespace NFleetSDK.UnitTests
         [Test]
         public void T15BadRequestTest()
         {
-            var problems = (RoutingProblemDataSet)testObjects["problems"];
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetUser( api );
+            var problems = api.Navigate<RoutingProblemDataSet>( user.GetLink( "list-problems" ) );
             try
             {
                 //##BEGIN EXAMPLE oauth##
