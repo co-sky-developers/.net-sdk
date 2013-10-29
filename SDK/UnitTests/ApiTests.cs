@@ -399,7 +399,7 @@ namespace NFleetSDK.UnitTests
             }
             catch (System.IO.IOException e)
             {
-                Assert.IsTrue(e.Message.Contains("400 Bad Request"));
+                Assert.IsTrue(e.Message.Contains("400 Bad Request") || e.Message.Contains("400 BadRequest"));
             }
         }
 
@@ -431,7 +431,7 @@ namespace NFleetSDK.UnitTests
                                                     } );
             } catch(System.IO.IOException ioe)
             {
-                Assert.AreEqual( "412 Precondition Failed", ioe.Message );
+                Assert.IsTrue("412 Precondition Failed".Equals(ioe.Message) || "412 PreconditionFailed".Equals(ioe.Message));
             }
             
             //##END EXAMPLE##
