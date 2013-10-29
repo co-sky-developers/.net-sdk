@@ -59,12 +59,8 @@ namespace NFleetSDK
 
             var request = new RestRequest( uri, link.Method.ToMethod() ) { RequestFormat = DataFormat.Json };
             request.JsonSerializer = new CustomConverter { ContentType = "application/json" };
-            
-            if (data != null && (data as IVersioned) != null)
-            {
-                var d = data as IVersioned;
-                request.AddHeader(VersionNumberHeader, d.VersionNumber.ToString(CultureInfo.InvariantCulture));
-            }
+
+            InsertIfNoneMatchHeader(ref request, data);
 
             if ( currentToken != null )
                 request.AddHeader( "Authorization", currentToken.TokenType + " " + currentToken.AccessToken );
@@ -87,11 +83,7 @@ namespace NFleetSDK
                 Authenticate(username, password);
                 request = new RestRequest( link.Uri, link.Method.ToMethod() ) { RequestFormat = DataFormat.Json };
                 request.JsonSerializer = new CustomConverter { ContentType = "application/json" };
-                if ( data != null && ( data as IVersioned ) != null )
-                {
-                    var d = data as IVersioned;
-                    request.AddHeader( VersionNumberHeader, d.VersionNumber.ToString( CultureInfo.InvariantCulture ) );
-                }
+                InsertIfNoneMatchHeader( ref request, data );
 
                 if ( link.Method == "GET" && queryParameters != null )
                 {
@@ -140,6 +132,15 @@ namespace NFleetSDK
             }
 
             return result.Data;
+        }
+
+        private void InsertIfNoneMatchHeader(ref RestRequest request, object data)
+        {
+            if ( data != null && ( data as IVersioned ) != null )
+            {
+                var d = data as IVersioned;
+                request.AddHeader( VersionNumberHeader, d.VersionNumber.ToString( CultureInfo.InvariantCulture ) );
+            }
         }
 
         public TokenData Authorize( TokenData token )
