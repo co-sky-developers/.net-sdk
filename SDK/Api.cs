@@ -37,7 +37,6 @@ namespace NFleetSDK
 
 #if DEBUG
             client.Timeout = Int32.MaxValue;
-
 #endif
             this.username = username;
             this.password = password;
@@ -117,11 +116,18 @@ namespace NFleetSDK
             {
                 ThrowException( result );
             }
+
+            if ( result.Data is IVersioned )
+            {
+                var etag = result.Headers.FirstOrDefault( h => h.Name == "ETag" );
+                var version = etag != null ? Int32.Parse( etag.Value.ToString() ) : 0;
+                result.Data.VersionNumber = version;
+            }
+
             if ( code == HttpStatusCode.Created || code == HttpStatusCode.SeeOther )
             {
                 var parameter = result.Headers.FirstOrDefault( h => h.Name == "Location" );
-                var etag = result.Headers.FirstOrDefault(h => h.Name == "ETag");
-                var version = etag != null ? Int32.Parse(etag.Value.ToString()) : 0;
+
                 if ( parameter == null || parameter.Value == null ) throw new IOException( "Server response missing Location header." );    
 
                 var value = parameter.Value.ToString();
@@ -129,18 +135,8 @@ namespace NFleetSDK
 
                 var responseData = new ResponseData();
                 responseData.Meta.Add( new Link { Method = "GET", Rel = "location", Uri = entityLocation } );
-                var response = (IResponseData) responseData;
-                response.VersionNumber = version;
-                return (T)(IResponseData)responseData;
-            }
 
-            if (result.Data is IVersioned)
-            {
-                var etag = result.Headers.FirstOrDefault(h => h.Name == "ETag");
-                var version = etag != null ? Int32.Parse(etag.Value.ToString()) : 0;
-                var resp = result.Data;
-                resp.VersionNumber = version;
-                return resp;
+                return (T)(IResponseData)responseData;
             }
 
             return result.Data;
