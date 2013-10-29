@@ -316,9 +316,9 @@ namespace NFleetSDK.UnitTests
         public void T11StartingOptTest()
         {
             var problem = (RoutingProblemData)testObjects["problem"];
-            problem = api.Navigate<RoutingProblemData>( problem.GetLink("self") ); //(RoutingProblemData)testObjects["problem"];
+            problem = api.Navigate<RoutingProblemData>( problem.GetLink("self") );
             //##BEGIN EXAMPLE startingopt##
-            var res = api.Navigate<ResponseData>( problem.GetLink("update"), new RoutingProblemUpdateRequest {Name = problem.Name, State = "Running", VersionNumber = problem.VersionNumber} );
+            var res = api.Navigate<ResponseData>( problem.GetLink("update"), new RoutingProblemUpdateRequest { Name = problem.Name, State = "Running", VersionNumber = problem.VersionNumber} );
             //##END EXAMPLE##
 
             var mockCreation = TestUtils.GetMockResponse<ResponseData>(responses["startingoptresp"].json);
@@ -383,6 +383,41 @@ namespace NFleetSDK.UnitTests
             {
                 Assert.IsTrue(e.Message.Contains("400 Bad Request"));
             }
+        }
+
+        [Test]  
+        public void T16InvalidVersionNumber()
+        {
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetUser(api);
+            var problem = TestHelper.CreateProblem( api, user);
+
+            //##BEGIN EXAMPLE invalidversionnumber##
+
+            var result = api.Navigate<ResponseData>( problem.GetLink( "toggle-optimization" ),
+                                                    new RoutingProblemUpdateRequest
+                                                        {
+                                                            Name = problem.Name,
+                                                            State = "Running",
+                                                            VersionNumber = problem.VersionNumber
+                                                        });
+
+            try
+            {
+                var result2 = api.Navigate<ResponseData>( problem.GetLink( "toggle-optimization" ),
+                                                    new RoutingProblemUpdateRequest
+                                                    {
+                                                        Name = problem.Name,
+                                                        State = "Running",
+                                                        VersionNumber = problem.VersionNumber
+                                                    } );
+            } catch(System.IO.IOException ioe)
+            {
+                Assert.AreEqual( "412 Precondition Failed", ioe.Message );
+            }
+            
+            //##END EXAMPLE##
+
         }
     }
 }

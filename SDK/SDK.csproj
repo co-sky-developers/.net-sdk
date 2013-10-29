@@ -120,6 +120,7 @@
     <Compile Include="UnitTests\ApiTests.cs" />
     <Compile Include="UnitTests\ResponseReader.cs" />
     <Compile Include="UnitTests\TestData.cs" />
+    <Compile Include="UnitTests\TestHelper.cs" />
     <Compile Include="UnitTests\TestUtils.cs" />
   </ItemGroup>
   <ItemGroup>
