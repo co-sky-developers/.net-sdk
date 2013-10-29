@@ -49,52 +49,22 @@ namespace NFleetSDK
 
         public T Navigate<T>( Link link, object data = null, Dictionary<string,string> queryParameters = null ) where T : IResponseData, new()
         {
-            var uri = link.Uri;
-            if ( uri.Contains( "?" ) )
-            {
-                queryParameters = ParseQueryParameters( client.BaseUrl + uri );
-                uri = uri.Substring( 0, uri.IndexOf( '?' ) );
-            }
-
-
-            var request = new RestRequest( uri, link.Method.ToMethod() ) { RequestFormat = DataFormat.Json };
-            request.JsonSerializer = new CustomConverter { ContentType = "application/json" };
+            var request = InitializeRequest( link, queryParameters );
 
             InsertIfNoneMatchHeader(ref request, data);
-
-            if ( currentToken != null )
-                request.AddHeader( "Authorization", currentToken.TokenType + " " + currentToken.AccessToken );
+            InsertAuthorizationHeader( ref request, currentToken );
 
             // when POSTing, if data is null, add an empty object to prevent 500 Internal Server Error due to null payload
             request.AddBody( data == null && link.Method == "POST" ? new Empty() : data );
-
-            if (link.Method == "GET" && queryParameters != null)
-            {
-                foreach (var queryParameter in queryParameters)
-                {
-                    request.AddParameter(queryParameter.Key, queryParameter.Value);
-                }
-            }
             
             var result = client.Execute<T>( request );
 
             if (result.StatusCode == HttpStatusCode.Unauthorized)
             {
                 Authenticate(username, password);
-                request = new RestRequest( link.Uri, link.Method.ToMethod() ) { RequestFormat = DataFormat.Json };
-                request.JsonSerializer = new CustomConverter { ContentType = "application/json" };
+                request = InitializeRequest( link, queryParameters );
                 InsertIfNoneMatchHeader( ref request, data );
-
-                if ( link.Method == "GET" && queryParameters != null )
-                {
-                    foreach ( var queryParameter in queryParameters )
-                    {
-                        request.AddParameter( queryParameter.Key, queryParameter.Value );
-                    }
-                }
-
-                if ( currentToken != null )
-                    request.AddHeader( "Authorization", currentToken.TokenType + " " + currentToken.AccessToken );
+                InsertAuthorizationHeader(ref request, currentToken);
                     
                 result = client.Execute<T>( request );
                 if ( result.StatusCode == HttpStatusCode.Unauthorized )
@@ -134,15 +104,6 @@ namespace NFleetSDK
             return result.Data;
         }
 
-        private void InsertIfNoneMatchHeader(ref RestRequest request, object data)
-        {
-            if ( data != null && ( data as IVersioned ) != null )
-            {
-                var d = data as IVersioned;
-                request.AddHeader( VersionNumberHeader, d.VersionNumber.ToString( CultureInfo.InvariantCulture ) );
-            }
-        }
-
         public TokenData Authorize( TokenData token )
         {
             currentToken = token;
@@ -153,6 +114,44 @@ namespace NFleetSDK
         public TokenData GetCurrent( TokenData token )
         {
             return currentToken;
+        }
+
+        private RestRequest InitializeRequest( Link link, Dictionary<string, string> queryParameters )
+        {
+            var uri = link.Uri;
+            if ( uri.Contains( "?" ) )
+            {
+                queryParameters = ParseQueryParameters( client.BaseUrl + uri );
+                uri = uri.Substring( 0, uri.IndexOf( '?' ) );
+            }
+
+            var request = new RestRequest( uri, link.Method.ToMethod() ) { RequestFormat = DataFormat.Json };
+            request.JsonSerializer = new CustomConverter { ContentType = "application/json" };
+
+            if ( link.Method == "GET" && queryParameters != null )
+            {
+                foreach ( var queryParameter in queryParameters )
+                {
+                    request.AddParameter( queryParameter.Key, queryParameter.Value );
+                }
+            }
+
+            return request;
+        }
+
+        private static void InsertAuthorizationHeader(ref RestRequest request, TokenData token)
+        {
+            if ( token != null )
+                request.AddHeader( "Authorization", token.TokenType + " " + token.AccessToken );
+        }
+
+        private static void InsertIfNoneMatchHeader( ref RestRequest request, object data )
+        {
+            if ( data != null && ( data as IVersioned ) != null )
+            {
+                var d = data as IVersioned;
+                request.AddHeader( VersionNumberHeader, d.VersionNumber.ToString( CultureInfo.InvariantCulture ) );
+            }
         }
 
         private static void ThrowException<T>( IRestResponse<T> result ) where T : new()
