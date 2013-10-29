@@ -315,10 +315,13 @@ namespace NFleetSDK.UnitTests
         [Test]
         public void T11StartingOptTest()
         {
-            var problem = (RoutingProblemData)testObjects["problem"];
-            problem = api.Navigate<RoutingProblemData>( problem.GetLink("self") );
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetUser( api );
+            var problem = TestHelper.CreateProblemWithDemoData( api, user );
+            problem = api.Navigate<RoutingProblemData>(problem.GetLink("self"));
             //##BEGIN EXAMPLE startingopt##
-            var res = api.Navigate<ResponseData>( problem.GetLink("update"), new RoutingProblemUpdateRequest { Name = problem.Name, State = "Running", VersionNumber = problem.VersionNumber} );
+            var res = api.Navigate<ResponseData>( problem.GetLink("toggle-optimization"), 
+                new RoutingProblemUpdateRequest { Name = problem.Name, State = "Running", VersionNumber = problem.VersionNumber} );
             //##END EXAMPLE##
 
             var mockCreation = TestUtils.GetMockResponse<ResponseData>(responses["startingoptresp"].json);
@@ -345,12 +348,16 @@ namespace NFleetSDK.UnitTests
         [Test]
         public void T13StoppingOptTest()
         {
-            var problem = (RoutingProblemData)testObjects["problem"];
-            
-            //TestData.CreateDemoData( problem, api );
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetUser( api );
+            var problem = TestHelper.CreateProblemWithDemoData( api, user );
+            problem = api.Navigate<RoutingProblemData>( problem.GetLink( "self" ) );
+            var res = api.Navigate<ResponseData>( problem.GetLink( "toggle-optimization" ),
+                new RoutingProblemUpdateRequest { Name = problem.Name, State = "Running", VersionNumber = problem.VersionNumber } );
+
             problem = api.Navigate<RoutingProblemData>( problem.GetLink( "self" ) );
             //##BEGIN EXAMPLE stoppingopt##
-            var res = api.Navigate<ResponseData>( problem.GetLink( "toggle-optimization" ), new RoutingProblemUpdateRequest { Name = problem.Name, State = "Stopped", VersionNumber = problem.VersionNumber} );
+            res = api.Navigate<ResponseData>( problem.GetLink( "toggle-optimization" ), new RoutingProblemUpdateRequest { Name = problem.Name, State = "Stopped", VersionNumber = problem.VersionNumber} );
             //##END EXAMPLE##
             var mockResponse = TestUtils.GetMockResponse<ResponseData>(responses["stoppingoptresp"].json);
             Trace.Write( JsonConvert.SerializeObject( res ) );
