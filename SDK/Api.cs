@@ -18,6 +18,8 @@ namespace NFleetSDK
 {
     public sealed class Api
     {
+        private Dictionary<string, object> CACHE = new Dictionary<string, object>();
+ 
         private const string separator = "://";
         private const string VersionNumberHeader = "If-None-Match";
 
@@ -51,7 +53,7 @@ namespace NFleetSDK
         {
             var request = InitializeRequest( link, queryParameters );
 
-            InsertIfNoneMatchHeader(ref request, data);
+            InsertIfNoneMatchHeader(ref request, data, CACHE);
             InsertAuthorizationHeader( ref request, currentToken );
 
             // when POSTing, if data is null, add an empty object to prevent 500 Internal Server Error due to null payload
@@ -63,7 +65,7 @@ namespace NFleetSDK
             {
                 Authenticate(username, password);
                 request = InitializeRequest( link, queryParameters );
-                InsertIfNoneMatchHeader( ref request, data );
+                InsertIfNoneMatchHeader( ref request, data, CACHE );
                 InsertAuthorizationHeader(ref request, currentToken);
                     
                 result = client.Execute<T>( request );
@@ -86,6 +88,13 @@ namespace NFleetSDK
                 result.Data.VersionNumber = version;
             }
 
+            if ( result.StatusCode == HttpStatusCode.NotModified )
+            {
+                var res = (T)CACHE[request.Resource];
+                Console.WriteLine( "Returned entity from cache: {0}", request.Resource );
+                return res;
+            }
+
             if ( code == HttpStatusCode.Created || code == HttpStatusCode.SeeOther )
             {
                 var parameter = result.Headers.FirstOrDefault( h => h.Name == "Location" );
@@ -98,8 +107,19 @@ namespace NFleetSDK
                 var responseData = new ResponseData();
                 responseData.Meta.Add( new Link { Method = "GET", Rel = "location", Uri = entityLocation } );
 
+                //CACHE.Add( request.Resource, responseData );
+                //Console.WriteLine( "Cached entity: {0}", request.Resource );
                 return (T)(IResponseData)responseData;
             }
+
+            if ( result.Data != null && !string.IsNullOrEmpty( request.Resource ) )
+            {
+                CACHE[request.Resource] = result.Data;
+                //CACHE.Add( request.Resource, result.Data );
+                Console.WriteLine( "Cached entity: {0}", request.Resource );
+            }
+            
+            
 
             return result.Data;
         }
@@ -145,13 +165,20 @@ namespace NFleetSDK
                 request.AddHeader( "Authorization", token.TokenType + " " + token.AccessToken );
         }
 
-        private static void InsertIfNoneMatchHeader( ref RestRequest request, object data )
+        private static void InsertIfNoneMatchHeader( ref RestRequest request, object data, Dictionary<string, object> cache )
         {
             if ( data != null && ( data as IVersioned ) != null )
             {
                 var d = data as IVersioned;
                 request.AddHeader( VersionNumberHeader, d.VersionNumber.ToString( CultureInfo.InvariantCulture ) );
+            } 
+            else if ( cache.ContainsKey( request.Resource ) && cache[request.Resource] is IVersioned )
+            {
+                var d = cache[request.Resource] as IVersioned;
+                request.AddHeader( VersionNumberHeader, d.VersionNumber.ToString( CultureInfo.InvariantCulture ) ); 
+                Console.WriteLine( "Fetched version number from cache" );
             }
+            
         }
 
         private static void ThrowException<T>( IRestResponse<T> result ) where T : new()

@@ -56,7 +56,7 @@ namespace NFleetExample
             var problems = api2.Navigate<RoutingProblemDataSet>( user.GetLink( "list-problems" ) );
             var created = api2.Navigate<ResponseData>( problems.GetLink( "create" ), new RoutingProblemUpdateRequest { Name = "test" } );
             var problem = api2.Navigate<RoutingProblemData>( created.Location );
-
+            var problem2 = api2.Navigate<RoutingProblemData>( created.Location);
             CreateDemoData( problem, api2 );
 
             // refresh to get up to date set of operations
@@ -108,6 +108,7 @@ namespace NFleetExample
                             var veh = api2.Navigate<VehicleData>(vehicleData.GetLink("self"));
                             Console.Write( "Vehicle {0}({1}): ", vehicleData.Id, vehicleData.Name );
                             var routeEvents = api2.Navigate<RouteEventDataSet>(veh.GetLink("list-events"));
+                            var routeEvents2 = api2.Navigate<RouteEventDataSet>( veh.GetLink( "list-events" ) );
                             var sequence = api2.Navigate<RouteData>( veh.GetLink( "get-route" ) );
 
                             sequence.Items.Insert(0, veh.StartLocation.Id);
