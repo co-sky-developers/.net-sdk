@@ -5,240 +5,216 @@ using NFleet.Data;
 using NUnit.Framework;
 using Newtonsoft.Json.Linq;
 using RestSharp;
+using RestSharp.Deserializers;
 
 namespace NFleet.Tests
 {
-    class TestUtils
+    public static class TestUtils
     {
-        public static RestSharp.Deserializers.JsonDeserializer deserializer { get; set; }
-        private const bool ignoreIds = true;
+        public static JsonDeserializer Deserializer { private get; set; }
 
-        public static T GetMockResponse<T>(JObject fromJson)
+        public static T GetMockResponse<T>( JObject fromJson )
         {
-            if (fromJson == null) fromJson = new JObject();
-            var mockresponse = new RestResponse()
+            if ( fromJson == null )
+                fromJson = new JObject();
+
+            var mockresponse = new RestResponse
             {
                 Content = fromJson.ToString(),
                 ContentType = "application/json",
             };
 
-            
-            return deserializer.Deserialize<T>(mockresponse);
+            return Deserializer.Deserialize<T>( mockresponse );
         }
 
-        public static void VehicleDataSetsAreEqual(VehicleDataSet a, VehicleDataSet b)
+        public static void VehicleDataSetsAreEqual( VehicleDataSet a, VehicleDataSet b )
         {
             if ( a == null && b == null ) return;
-            ListsAreEqual(a.Items, b.Items, VehiclesAreEqual);
-            ListsAreEqual(a.Meta, b.Meta, LinksAreEqual);
+            Assert.NotNull( a );
+            Assert.NotNull( b );
+            ListsAreEqual( a.Items, b.Items, VehiclesAreEqual );
+            ListsAreEqual( a.Meta, b.Meta, LinksAreEqual );
         }
 
-        public static VehicleData VehiclesAreEqual(VehicleData a, VehicleData b)
+        private static VehicleData VehiclesAreEqual( VehicleData a, VehicleData b )
         {
-            if (!ignoreIds) Assert.AreEqual(a.Id, b.Id);
-            Assert.AreEqual(a.Name, b.Name);
-            
+            Assert.AreEqual( a.Name, b.Name );
+            LocationsAreEqual( a.StartLocation, b.StartLocation );
+            LocationsAreEqual( a.EndLocation, b.EndLocation );
+            ListsAreEqual( a.Meta, b.Meta, LinksAreEqual );
+            ListsAreEqual( a.Capacities, b.Capacities, CapacitiesAreEqual );
+            ListsAreEqual( a.TimeWindows, b.TimeWindows, TimeWindowsAreEqual );
+            return null;
+        }
 
-            
-            LocationsAreEqual(a.StartLocation, b.StartLocation);
-            LocationsAreEqual(a.EndLocation, b.EndLocation);
-            ListsAreEqual<Link>(a.Meta, b.Meta, LinksAreEqual);
-            ListsAreEqual<CapacityData>(a.Capacities, b.Capacities, CapacitiesAreEqual);
-            ListsAreEqual<TimeWindowData>(a.TimeWindows, b.TimeWindows, TimeWindowsAreEqual);
+        private static TaskEventData TaskEventsAreEqual( TaskEventData a, TaskEventData b )
+        {
+            Assert.AreEqual( a.Name, b.Name );
+            Assert.AreEqual( a.Info, b.Info );
+            Assert.AreEqual( a.Type, b.Type );
+            Assert.AreEqual( a.State, b.State );
+            Assert.AreEqual( a.LockState, b.LockState );
+            Assert.AreEqual( a.TimeState, b.TimeState );
+            Assert.AreEqual( a.ServiceTime, b.ServiceTime );
+            Assert.AreEqual( a.WaitingTime, b.WaitingTime );
+            Assert.AreEqual( a.ActualArrivalTime, b.ActualArrivalTime );
+            Assert.AreEqual( a.ActualDepartureTime, b.ActualDepartureTime );
+            Assert.AreEqual( a.PlannedArrivalTime, b.PlannedArrivalTime );
+            Assert.AreEqual( a.PlannedDepartureTime, b.PlannedDepartureTime );
+            Assert.AreEqual( a.OriginalServiceTime, b.OriginalServiceTime );
+
+            LocationsAreEqual( a.Location, b.Location );
+            ListsAreEqual( a.Capacities, b.Capacities, CapacitiesAreEqual );
+            ListsAreEqual( a.TimeWindows, b.TimeWindows, TimeWindowsAreEqual );
+            ListsAreEqual( a.Meta, b.Meta, LinksAreEqual );
 
             return null;
         }
 
-        public static TaskEventData TaskEventsAreEqual(TaskEventData a, TaskEventData b)
+        public static void TaskEventDataSetsAreEqual( TaskEventDataSet a, TaskEventDataSet b )
         {
-            if (!ignoreIds) Assert.AreEqual(a.Id, b.Id);
-            Assert.AreEqual(a.Name, b.Name);
-            Assert.AreEqual(a.Info, b.Info);
-            Assert.AreEqual(a.Type, b.Type);
-            Assert.AreEqual(a.State, b.State);
-            Assert.AreEqual(a.LockState, b.LockState);
-            Assert.AreEqual(a.TimeState, b.TimeState);
-            Assert.AreEqual(a.ServiceTime, b.ServiceTime);
-            Assert.AreEqual(a.WaitingTime, b.WaitingTime);
-            Assert.AreEqual(a.ActualArrivalTime, b.ActualArrivalTime);
-            Assert.AreEqual(a.ActualDepartureTime, b.ActualDepartureTime);
-            Assert.AreEqual(a.PlannedArrivalTime, b.PlannedArrivalTime);
-            Assert.AreEqual(a.PlannedDepartureTime, b.PlannedDepartureTime);
-            Assert.AreEqual(a.OriginalServiceTime, b.OriginalServiceTime);
-
-            LocationsAreEqual(a.Location, b.Location);
-            ListsAreEqual(a.Capacities, b.Capacities, CapacitiesAreEqual);
-            ListsAreEqual(a.TimeWindows, b.TimeWindows, TimeWindowsAreEqual);
-            ListsAreEqual(a.Meta, b.Meta, LinksAreEqual);
-
-            return null;
+            ListsAreEqual( a.Items, b.Items, TaskEventsAreEqual );
+            ListsAreEqual( a.Meta, b.Meta, LinksAreEqual );
         }
 
-        public static TaskEventDataSet TaskEventDataSetsAreEqual(TaskEventDataSet a, TaskEventDataSet b)
-        {
-            ListsAreEqual(a.Items, b.Items, TaskEventsAreEqual);
-            ListsAreEqual(a.Meta, b.Meta, LinksAreEqual);
-            return null;
-        }
-
-        public static void LocationDataSetsAreEqual(LocationDataSet a, LocationDataSet b)
+        private static void LocationsAreEqual( LocationData a, LocationData b )
         {
             if ( a == null && b == null ) return;
-            ListsAreEqual(a.Meta, b.Meta, LinksAreEqual);
-            ListsAreEqual(a.Items, b.Items, LocationsAreEqual);
+            Assert.NotNull( a );
+            Assert.NotNull( b );
+            CoordinatesAreEqual( a.Coordinate, b.Coordinate );
+            AddressesAreEqual( a.Address, b.Address );
         }
 
-        public static LocationData LocationsAreEqual(LocationData a, LocationData b)
-        {
-            if ( a == null && b == null ) return null;
-            if (!ignoreIds) Assert.AreEqual(a.Id, b.Id);
-            CoordinatesAreEqual(a.Coordinate, b.Coordinate);
-            AddressesAreEqual(a.Address, b.Address);
-            return null;
-        }
-
-        public static void CoordinatesAreEqual(CoordinateData a, CoordinateData b)
+        private static void CoordinatesAreEqual( CoordinateData a, CoordinateData b )
         {
             if ( a == null && b == null ) return;
-            Assert.AreEqual(a.System, b.System);
-            Assert.AreEqual(a.Latitude, a.Latitude);
-            Assert.AreEqual(a.Longitude, b.Longitude);
+            Assert.NotNull( a );
+            Assert.NotNull( b );
+            Assert.AreEqual( a.System, b.System );
+            Assert.AreEqual( a.Latitude, a.Latitude );
+            Assert.AreEqual( a.Longitude, b.Longitude );
         }
 
-        public static void AddressesAreEqual(AddressData a, AddressData b)
+        private static void AddressesAreEqual( AddressData a, AddressData b )
         {
-            if (a == null && b == null) return;
-            Assert.AreEqual(a.Country, b.Country);
-            Assert.AreEqual(a.City, b.City);
-            Assert.AreEqual(a.PostalCode, b.PostalCode);
-            Assert.AreEqual(a.StreetAddress, b.StreetAddress);
+            if ( a == null && b == null ) return;
+            Assert.NotNull( a );
+            Assert.NotNull( b );
+            Assert.AreEqual( a.Country, b.Country );
+            Assert.AreEqual( a.City, b.City );
+            Assert.AreEqual( a.PostalCode, b.PostalCode );
+            Assert.AreEqual( a.StreetAddress, b.StreetAddress );
         }
 
-        public static void RoutesAreEqual(RouteData a, RouteData b)
+        public static void RoutesAreEqual( RouteData a, RouteData b )
         {
-            /*Assert.AreEqual(a.ActualStartTime, b.ActualStartTime);
-            Assert.AreEqual(a.ActualEndTime, b.ActualEndTime);
-            Assert.AreEqual(a.PlannedEndTime, b.PlannedEndTime);
-            Assert.AreEqual(a.PlannedStartTime, b.PlannedStartTime);
-            Assert.AreEqual(a.ArrivalTimeState, b.ArrivalTimeState);
-            Assert.AreEqual(a.DepartureTimeState, b.DepartureTimeState);*/
-            CollectionAssert.AreEqual(a.Items, b.Items, "Route sequence mismatch.");
+            CollectionAssert.AreEqual( a.Items, b.Items, "Route sequence mismatch." );
         }
 
-
-        public static void ListsAreEqual<T>(List<T> a, List<T> b, Func<T, T, T> comparator)
+        public static void ListsAreEqual<T>( IEnumerable<T> a, List<T> b, Func<T, T, T> comparator )
         {
             var bEnumerator = b.GetEnumerator();
             bEnumerator.MoveNext();
 
-            foreach (var aItem in a)
+            foreach ( var aItem in a )
             {
-                comparator(aItem, bEnumerator.Current);
+                comparator( aItem, bEnumerator.Current );
                 bEnumerator.MoveNext();
             }
         }
 
-        public static Link LinksAreEqual(Link a, Link b)
+        public static Link LinksAreEqual( Link a, Link b )
         {
-            if (a == null && b == null) return null;
-            Assert.NotNull(a);
-            Assert.NotNull(b);
-            
-            UrisAreEqualEnough(a.Uri, b.Uri);
-            Assert.AreEqual(a.Rel, b.Rel);
-            Assert.AreEqual(a.Method, b.Method);
+            if ( a == null && b == null ) return null;
+            Assert.NotNull( a );
+            Assert.NotNull( b );
+
+            UrisAreEqualEnough( a.Uri, b.Uri );
+            Assert.AreEqual( a.Rel, b.Rel );
+            Assert.AreEqual( a.Method, b.Method );
             return null;
         }
 
-        public static void UrisAreEqualEnough(string a, string b)
+        private static void UrisAreEqualEnough( string a, string b )
         {
-            Assert.NotNull(a);
-            Assert.NotNull(b);
+            Assert.NotNull( a );
+            Assert.NotNull( b );
 
             //TODO: It might be more clever to implement this with some tokens in example code
-            string pattern = "/users/1/problems/\\d+(\\S*)";
-            var amatch = Regex.Match(a, pattern);
-            var bmatch = Regex.Match(b, pattern);
-            if (amatch.Success)
+            const string pattern = "/users/1/problems/\\d+(\\S*)";
+            var amatch = Regex.Match( a, pattern );
+            var bmatch = Regex.Match( b, pattern );
+            if ( amatch.Success )
             {
-                Assert.AreEqual(amatch.Groups[1].Value, bmatch.Groups[1].Value);
+                Assert.AreEqual( amatch.Groups[1].Value, bmatch.Groups[1].Value );
             }
             else
             {
-                Assert.AreEqual(a, b);
+                Assert.AreEqual( a, b );
             }
         }
 
-        public static CapacityData CapacitiesAreEqual(CapacityData a, CapacityData b)
+        private static CapacityData CapacitiesAreEqual( CapacityData a, CapacityData b )
         {
-            Assert.AreEqual(a.Amount, b.Amount);
-            Assert.AreEqual(a.Name, b.Name);
+            Assert.AreEqual( a.Amount, b.Amount );
+            Assert.AreEqual( a.Name, b.Name );
             return null;
         }
 
-        public static TimeWindowData TimeWindowsAreEqual(TimeWindowData a, TimeWindowData b)
+        private static TimeWindowData TimeWindowsAreEqual( TimeWindowData a, TimeWindowData b )
         {
-            Assert.AreEqual(a.Start, b.Start);
-            Assert.AreEqual(a.End, b.End);
+            Assert.AreEqual( a.Start, b.Start );
+            Assert.AreEqual( a.End, b.End );
             return null;
         }
 
-        public static ResponseData ResponsesAreEqual(ResponseData a, ResponseData b)
+        public static void ResponsesAreEqual( ResponseData a, ResponseData b )
         {
-            ListsAreEqual(a.Meta, b.Meta, LinksAreEqual);
-            ListsAreEqual(a.Items, b.Items, ErrorsAreEqual);
-            LinksAreEqual(a.Location, b.Location);
+            ListsAreEqual( a.Meta, b.Meta, LinksAreEqual );
+            ListsAreEqual( a.Items, b.Items, ErrorsAreEqual );
+            LinksAreEqual( a.Location, b.Location );
+        }
+
+        private static ErrorData ErrorsAreEqual( ErrorData a, ErrorData b )
+        {
+            ListsAreEqual( a.Meta, b.Meta, LinksAreEqual );
+            Assert.AreEqual( a.Code, b.Code );
+            Assert.AreEqual( a.Message, b.Message );
             return null;
         }
 
-        public static ErrorData ErrorsAreEqual(ErrorData a, ErrorData b)
+        public static void RoutingProblemsAreEqual(RoutingProblemData a, RoutingProblemData b)
         {
-            ListsAreEqual<Link>(a.Meta, b.Meta, LinksAreEqual);
-            Assert.AreEqual(a.Code, b.Code);
-            Assert.AreEqual(a.Message, b.Message);
-            return null;
+            Assert.IsNotNull( a );
+            Assert.IsNotNull( b );
+            Assert.AreEqual( a.Name, b.Name );
+            Assert.AreEqual( a.VersionNumber, b.VersionNumber );
+            ListsAreEqual( a.Meta, b.Meta, LinksAreEqual );
+            CollectionAssert.AreEqual( a.Unassigned, b.Unassigned );
+            Assert.IsTrue( a.CreationDate <= a.ModifiedDate );
+            CollectionAssert.AreEqual( a.Distances, b.Distances );
+            CollectionAssert.AreEqual( a.LocationIndex, b.LocationIndex );
         }
 
-        public static RoutingProblemData RoutingProblemsAreEqual(RoutingProblemData a, RoutingProblemData b)
-        {
-            Assert.IsNotNull(a);
-            Assert.IsNotNull(b);
-            if (!ignoreIds) Assert.AreEqual(a.Id, b.Id);
-            Assert.AreEqual(a.Name, b.Name);
-            Assert.AreEqual(a.VersionNumber, b.VersionNumber);
-            ListsAreEqual<Link>(a.Meta, b.Meta, LinksAreEqual);
-            CollectionAssert.AreEqual(a.Unassigned, b.Unassigned);
-            Assert.IsTrue(a.CreationDate <= a.ModifiedDate);
-            CollectionAssert.AreEqual(a.Distances, b.Distances);
-            CollectionAssert.AreEqual(a.LocationIndex, b.LocationIndex);
-            return null;
-        }
-
-        public static RoutingProblemDataSet RoutingProblemDataSetsAreEqual(RoutingProblemDataSet a,
-                                                                           RoutingProblemDataSet b)
-        {
-            ListsAreEqual(a.Items, b.Items, RoutingProblemsAreEqual);
-            ListsAreEqual(a.Meta, b.Meta, LinksAreEqual);
-            return null;
-        }
-
-        public static void TaskDataSetsAreEqual(TaskDataSet a, TaskDataSet b)
+        public static void TaskDataSetsAreEqual( TaskDataSet a, TaskDataSet b )
         {
             if ( a == null && b == null ) return;
-            ListsAreEqual(a.Meta, b.Meta, LinksAreEqual);    
-            ListsAreEqual(a.Items, b.Items, TasksAreEqual);
+            Assert.NotNull( a );
+            Assert.NotNull( b );
+            ListsAreEqual( a.Meta, b.Meta, LinksAreEqual );
+            ListsAreEqual( a.Items, b.Items, TasksAreEqual );
         }
 
-        public static TaskData TasksAreEqual(TaskData expected, TaskData actual)
+        public static TaskData TasksAreEqual( TaskData expected, TaskData actual )
         {
-            if ( !ignoreIds ) Assert.AreEqual( expected.Id, actual.Id );
-            Assert.AreEqual( expected.VersionNumber, actual.VersionNumber, "Task version number mismatch");
+            Assert.AreEqual( expected.VersionNumber, actual.VersionNumber, "Task version number mismatch" );
             Assert.AreEqual( expected.Info, actual.Info, "Task info mismatch" );
             Assert.AreEqual( expected.Name, actual.Name, "Task name mismatch" );
             Assert.AreEqual( expected.State, actual.State, "Task state mismatch" );
             ListsAreEqual( expected.TaskEvents, actual.TaskEvents, TaskEventsAreEqual );
             ListsAreEqual( expected.Meta, actual.Meta, LinksAreEqual );
-            
+
             return null;
         }
     }

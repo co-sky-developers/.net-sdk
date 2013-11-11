@@ -1,0 +1,26 @@
+﻿HTTP/1.1 400 Bad Request
+Content-Type: application/json 
+{
+   "Items":[
+      {
+         "Code":"3401",
+         "Message":"Routing problem name is missing.",
+         "Meta":[
+            {
+               "Uri":"https://developer.co-sky.fi/help/#3401",
+               "Rel":"help",
+               "Method":"GET",
+               "Enabled":false
+            }
+         ]
+      }
+   ],
+   "Meta":[
+      {
+         "Uri":"https://developer.co-sky.fi/help/#400",
+         "Rel":"help",
+         "Method":"GET",
+         "Enabled":false
+      }
+   ]
+}

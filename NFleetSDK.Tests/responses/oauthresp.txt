@@ -1,0 +1,2 @@
+﻿HTTP/1.1 201 Created
+Location: https://api.co-sky.fi/tokens/zotj6IcjAO3tmEnI2g-mW8ksfDk9amG

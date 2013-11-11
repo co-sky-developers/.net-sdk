@@ -1,0 +1,8 @@
+﻿HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+{
+  "AccessToken": "otj6IcjAO3tmEnI2g-mW8ksfDk9amG",
+  "ExpirationIn": 3418,
+  "TokenType": "Bearer",
+  "Scope": "data optimization"
+}

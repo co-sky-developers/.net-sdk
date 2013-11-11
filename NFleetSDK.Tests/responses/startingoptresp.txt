@@ -1,0 +1,22 @@
+﻿HTTP/1.1 200 OK
+Content-Type: application/json 
+Content-Length: 0 
+{
+  "Location":{
+    "Uri":"/users/1/problems/1",
+    "Rel":"location",
+    "Method":"GET",
+    "Enabled":false
+  },
+  "Meta":[
+    {
+      "Uri":"/users/1/problems/1",
+      "Rel":"location",
+      "Method":"GET",
+      "Enabled":false
+    }
+  ],
+  "Items":[
+
+  ]
+}

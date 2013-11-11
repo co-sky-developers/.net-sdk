@@ -1,0 +1,20 @@
+﻿{
+  "Location":{
+    "Uri":"/users/1/problems/28",
+    "Rel":"location",
+    "Method":"GET",
+    "Enabled":false
+  },
+  "Meta":[
+    {
+      "Uri":"/users/1/problems/28",
+      "Rel":"location",
+      "Method":"GET",
+      "Enabled":false
+    }
+  ],
+  "Items":[
+
+  ],
+  "VersionNumber":0
+}

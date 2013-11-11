@@ -1,0 +1,24 @@
+﻿HTTP/1.1 200 OK 
+Content-Type: application/json 
+{
+  "Items":[
+    11,
+    21,
+    12,
+    22
+  ],
+  "Meta":[
+    {
+      "Uri":"/users/1/problems/1/vehicles/1/route",
+      "Rel":"self",
+      "Method":"GET",
+      "Enabled":"True"
+    }
+  ],
+  "ActualStartTime":null,
+  "ActualEndTime":null,
+  "PlannedStartTime":null,
+  "PlannedEndTime":null,
+  "ArrivalTimeState":"None",
+  "DepartureTimeState":"None"
+}

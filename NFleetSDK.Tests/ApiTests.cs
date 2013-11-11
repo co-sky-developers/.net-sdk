@@ -5,15 +5,15 @@ using System.Diagnostics;
 using NFleet.Data;
 using NUnit.Framework;
 using Newtonsoft.Json;
+using RestSharp.Deserializers;
 
 namespace NFleet.Tests
 {
     [TestFixture]
     internal class ApiTests
     {
-        private Api api;
         private Dictionary<string, Response> responses;
-        private RestSharp.Deserializers.JsonDeserializer deserializer;
+        private JsonDeserializer deserializer;
 
         [SetUp]
         public void Setup()
@@ -26,19 +26,21 @@ namespace NFleet.Tests
             Assert.IsNotNullOrEmpty( clientKey );
             Assert.IsNotNullOrEmpty( clientSecret );
             Assert.IsNotNullOrEmpty( url );
+            // ReSharper disable UnusedVariable
             //##BEGIN EXAMPLE accessingapi##
-            api = new Api( url, clientKey, clientSecret );
+            var api = new Api( url, clientKey, clientSecret );
             var tokenResponse = api.Authenticate();
             var rootLinks = api.Root;
             //##END EXAMPLE##
+            // ReSharper restore UnusedVariable
 
             //##BEGIN EXAMPLE oauth##
             //Fail
             //##END EXAMPLE##
 
             responses = ResponseReader.readResponses( responsePath );
-            deserializer = new RestSharp.Deserializers.JsonDeserializer();
-            TestUtils.deserializer = deserializer;
+            deserializer = new JsonDeserializer();
+            TestUtils.Deserializer = deserializer;
         }
 
         [Test]
@@ -55,28 +57,25 @@ namespace NFleet.Tests
         public void T01CreatingProblemTest()
         {
             var api = TestHelper.Authenticate();
-            var user = TestHelper.GetUser( api );
+            var user = TestHelper.GetOrCreateUser( api );
             //##BEGIN EXAMPLE creatingproblem##
-
-            var problems = api.Navigate<RoutingProblemDataSet>( user.GetLink( "list-problems" ) );
-            var created = api.Navigate<ResponseData>( problems.GetLink( "create" ), new RoutingProblemUpdateRequest { Name = "test" } );
-            var createdProblemData = api.Navigate<RoutingProblemData>( created.Location );
+            var created = api.Navigate( user.GetLink( "create-problem" ), new RoutingProblemUpdateRequest { Name = "test" } );
+            var problem = api.Navigate<RoutingProblemData>( created.Location );
             //##END EXAMPLE##
 
             var mockCreated = TestUtils.GetMockResponse<RoutingProblemData>( responses["accessingnewproblemresp"].json );
 
             Trace.Write( JsonConvert.SerializeObject( created ) );
 
-            TestUtils.RoutingProblemsAreEqual( mockCreated, createdProblemData );
+            TestUtils.RoutingProblemsAreEqual( mockCreated, problem );
         }
 
         [Test]
         public void T02AccessingProblemTest()
         {
             var api = TestHelper.Authenticate();
-            var user = TestHelper.GetUser( api );
-            var problems = api.Navigate<RoutingProblemDataSet>( user.GetLink( "list-problems" ) );
-            var created = api.Navigate<ResponseData>( problems.GetLink( "create" ), new RoutingProblemUpdateRequest { Name = "test" } );
+            var user = TestHelper.GetOrCreateUser( api );
+            var created = api.Navigate( user.GetLink( "create-problem" ), new RoutingProblemUpdateRequest { Name = "test" } );
             //##BEGIN EXAMPLE accessingproblem##
             var problem = api.Navigate<RoutingProblemData>( created.Location );
             //##END EXAMPLE##
@@ -90,7 +89,7 @@ namespace NFleet.Tests
         public void T03ListingTasksTest()
         {
             var api = TestHelper.Authenticate();
-            var user = TestHelper.GetUser( api );
+            var user = TestHelper.GetOrCreateUser( api );
             var problem = TestHelper.CreateProblemWithDemoData( api, user );
 
             //##BEGIN EXAMPLE listingtasks##
@@ -107,7 +106,7 @@ namespace NFleet.Tests
         public void T04CreatingTaskTest()
         {
             var api = TestHelper.Authenticate();
-            var user = TestHelper.GetUser( api );
+            var user = TestHelper.GetOrCreateUser( api );
             var problem = TestHelper.CreateProblemWithDemoData( api, user );
             var tasks = api.Navigate<TaskDataSet>( problem.GetLink( "list-tasks" ) );
             //##BEGIN EXAMPLE creatingtask##
@@ -146,7 +145,7 @@ namespace NFleet.Tests
             delivery.Capacities.Add( capacity );
             newTask.TaskEvents.Add( delivery );
 
-            var taskCreationResult = api.Navigate<ResponseData>( tasks.GetLink( "create" ), newTask );
+            var taskCreationResult = api.Navigate<ResponseData>( problem.GetLink( "create-task" ), newTask );
             //##END EXAMPLE##
 
             var mockTaskCreationResult = TestUtils.GetMockResponse<ResponseData>( responses["creatingtaskresp"].json );
@@ -159,7 +158,7 @@ namespace NFleet.Tests
         public void T05UpdatingTaskTest()
         {
             var api = TestHelper.Authenticate();
-            var user = TestHelper.GetUser( api );
+            var user = TestHelper.GetOrCreateUser( api );
             var problem = TestHelper.CreateProblemWithDemoData( api, user );
             var task = TestHelper.GetTask( api, problem );
             var oldTaskEvents = new List<TaskEventUpdateRequest>();
@@ -216,7 +215,7 @@ namespace NFleet.Tests
         public void T07ListingVehiclesTest()
         {
             var api = TestHelper.Authenticate();
-            var user = TestHelper.GetUser( api );
+            var user = TestHelper.GetOrCreateUser( api );
             var problem = TestHelper.CreateProblemWithDemoData( api, user );
 
             var vehicle = new VehicleUpdateRequest
@@ -261,7 +260,7 @@ namespace NFleet.Tests
         public void T08AccessingTaskSeqTest()
         {
             var api = TestHelper.Authenticate();
-            var user = TestHelper.GetUser( api );
+            var user = TestHelper.GetOrCreateUser( api );
             var problem = TestHelper.CreateProblemWithDemoData( api, user );
             var vehicle = TestHelper.GetVehicle( api, user, problem );
 
@@ -282,7 +281,7 @@ namespace NFleet.Tests
         public void T09AccessingRouteTest()
         {
             var api = TestHelper.Authenticate();
-            var user = TestHelper.GetUser( api );
+            var user = TestHelper.GetOrCreateUser( api );
             var problem = TestHelper.CreateProblemWithDemoData( api, user );
             var vehicle = TestHelper.GetVehicle( api, user, problem );
             var routeReq = new RouteUpdateRequest
@@ -303,7 +302,7 @@ namespace NFleet.Tests
         public void T10UpdatingRouteTest()
         {
             var api = TestHelper.Authenticate();
-            var user = TestHelper.GetUser( api );
+            var user = TestHelper.GetOrCreateUser( api );
             var problem = TestHelper.CreateProblemWithDemoData( api, user );
             var vehicle = TestHelper.GetVehicle( api, user, problem );
 
@@ -324,7 +323,7 @@ namespace NFleet.Tests
         public void T11StartingOptTest()
         {
             var api = TestHelper.Authenticate();
-            var user = TestHelper.GetUser( api );
+            var user = TestHelper.GetOrCreateUser( api );
             var problem = TestHelper.CreateProblemWithDemoData( api, user );
             problem = api.Navigate<RoutingProblemData>( problem.GetLink( "self" ) );
             //##BEGIN EXAMPLE startingopt##
@@ -357,7 +356,7 @@ namespace NFleet.Tests
         public void T13StoppingOptTest()
         {
             var api = TestHelper.Authenticate();
-            var user = TestHelper.GetUser( api );
+            var user = TestHelper.GetOrCreateUser( api );
             var problem = TestHelper.CreateProblemWithDemoData( api, user );
             problem = api.Navigate<RoutingProblemData>( problem.GetLink( "self" ) );
             var res = api.Navigate<ResponseData>( problem.GetLink( "toggle-optimization" ),
@@ -388,12 +387,11 @@ namespace NFleet.Tests
         public void T15BadRequestTest()
         {
             var api = TestHelper.Authenticate();
-            var user = TestHelper.GetUser( api );
-            var problems = api.Navigate<RoutingProblemDataSet>( user.GetLink( "list-problems" ) );
+            var user = TestHelper.GetOrCreateUser( api );
             try
             {
                 //##BEGIN EXAMPLE oauth##
-                var result = api.Navigate<ResponseData>( problems.GetLink( "create" ) );
+                var result = api.Navigate<ResponseData>( user.GetLink( "create-problem" ) );
                 //##END EXAMPLE##
             }
             catch ( System.IO.IOException e )
@@ -406,7 +404,7 @@ namespace NFleet.Tests
         public void T16InvalidVersionNumber()
         {
             var api = TestHelper.Authenticate();
-            var user = TestHelper.GetUser( api );
+            var user = TestHelper.GetOrCreateUser( api );
             var problem = TestHelper.CreateProblem( api, user );
 
             //##BEGIN EXAMPLE invalidversionnumber##

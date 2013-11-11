@@ -1,48 +1,51 @@
-﻿using NFleet.Data;
+﻿using System.Configuration;
+using NFleet.Data;
 
 namespace NFleet.Tests
 {
-    public class TestHelper
+    public static class TestHelper
     {
-        private static string username = (string)Properties.Settings.Default["apiusername"];
-        private static string password = (string)Properties.Settings.Default["apipassword"];
-        private static string apiLocation = (string)Properties.Settings.Default["apiurl"];
+        private static readonly string url = ConfigurationManager.AppSettings["url"];
+        private static readonly string clientKey = ConfigurationManager.AppSettings["client-key"];
+        private static readonly string clientSecret = ConfigurationManager.AppSettings["client-secret"];
 
         internal static Api Authenticate()
         {
-            var api = new Api( apiLocation, username, password );
-            var tokenResponse = api.Authenticate();
-
+            var api = new Api( url, clientKey, clientSecret );
+            api.Authenticate();
             return api;
         }
 
-        internal static UserData GetUser( Api api )
+        internal static UserData GetOrCreateUser( Api api )
         {
-            var rootLinks = api.Root;
-            var users = api.Navigate<UserDataSet>( rootLinks.GetLink( "list-users" ), new UserSetRequest() );
+            var users = api.Navigate<UserDataSet>( api.Root.GetLink( "list-users" ) );
             var user = users.Items.Find( u => u.Id == 1 );
+            if ( user == null )
+            {
+                var createdUser = api.Navigate( api.Root.GetLink( "create-user" ), new UserData() );
+                user = api.Navigate<UserData>( createdUser.Location );
+            }            
             return user;
         }
 
-        public static RoutingProblemData CreateProblem(Api api, UserData user)
+        public static RoutingProblemData CreateProblem( Api api, UserData user )
         {
-            var problems = api.Navigate<RoutingProblemDataSet>( user.GetLink( "list-problems" ) );
-            var created = api.Navigate<ResponseData>( problems.GetLink( "create" ), new RoutingProblemUpdateRequest { Name = "test" } );
+            var created = api.Navigate( user.GetLink( "create-problem" ), new RoutingProblemUpdateRequest { Name = "test" } );
             var problem = api.Navigate<RoutingProblemData>( created.Location );
             return problem;
         }
 
         public static RoutingProblemData CreateProblemWithDemoData( Api api, UserData user )
         {
-            var p = CreateProblem(api, user);
-            TestData.CreateDemoData(p, api);
+            var p = CreateProblem( api, user );
+            TestData.CreateDemoData( p, api );
             return p;
         }
 
-        public static VehicleData GetVehicle(Api api, UserData user, RoutingProblemData problem)
+        public static VehicleData GetVehicle( Api api, UserData user, RoutingProblemData problem )
         {
             TestData.CreateDemoData( problem, api );
-            var vehicles = api.Navigate<VehicleDataSet>( problem.GetLink( "list-vehicles" ) ); 
+            var vehicles = api.Navigate<VehicleDataSet>( problem.GetLink( "list-vehicles" ) );
             var vehicle = vehicles.Items.Find( v => v.Id == 1 );
 
             return vehicle;
@@ -86,7 +89,7 @@ namespace NFleet.Tests
             delivery.Capacities.Add( capacity );
             newTask.TaskEvents.Add( delivery );
 
-            var taskCreationResult = api.Navigate<ResponseData>( tasks.GetLink( "create" ), newTask );
+            var taskCreationResult = api.Navigate<ResponseData>( problem.GetLink( "create-task" ), newTask );
             var task = api.Navigate<TaskData>( taskCreationResult.Location );
             return task;
         }

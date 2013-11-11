@@ -1,0 +1,114 @@
+﻿HTTP/1.1 200 OK 
+Content-Type: application/json 
+{
+  "VersionNumber":0,
+  "Items":[
+    {
+      "Id":32001,
+      "Name":null,
+      "Info":null,
+      "Type":null,
+      "State":"Unlocked",
+      "LockState":"None",
+      "TimeState":"None",
+      "Capacities":[
+
+      ],
+      "TimeWindows":[
+
+      ],
+      "Location":null,
+      "ServiceTime":0.0,
+      "WaitingTime":0.0,
+      "ActualArrivalTime":null,
+      "ActualDepartureTime":null,
+      "PlannedArrivalTime":null,
+      "PlannedDepartureTime":null,
+      "Meta":[
+
+      ],
+      "OriginalServiceTime":0.0
+    },
+    {
+      "Id":11,
+      "Name":null,
+      "Info":null,
+      "Type":null,
+      "State":"Unlocked",
+      "LockState":"None",
+      "TimeState":"None",
+      "Capacities":[
+
+      ],
+      "TimeWindows":[
+
+      ],
+      "Location":null,
+      "ServiceTime":0.0,
+      "WaitingTime":0.0,
+      "ActualArrivalTime":null,
+      "ActualDepartureTime":null,
+      "PlannedArrivalTime":null,
+      "PlannedDepartureTime":null,
+      "Meta":[
+
+      ],
+      "OriginalServiceTime":0.0
+    },
+    {
+      "Id":12,
+      "Name":null,
+      "Info":null,
+      "Type":null,
+      "State":"Unlocked",
+      "LockState":"None",
+      "TimeState":"None",
+      "Capacities":[
+
+      ],
+      "TimeWindows":[
+
+      ],
+      "Location":null,
+      "ServiceTime":0.0,
+      "WaitingTime":0.0,
+      "ActualArrivalTime":null,
+      "ActualDepartureTime":null,
+      "PlannedArrivalTime":null,
+      "PlannedDepartureTime":null,
+      "Meta":[
+
+      ],
+      "OriginalServiceTime":0.0
+    },
+    {
+      "Id":16001,
+      "Name":null,
+      "Info":null,
+      "Type":null,
+      "State":"Unlocked",
+      "LockState":"None",
+      "TimeState":"None",
+      "Capacities":[
+
+      ],
+      "TimeWindows":[
+
+      ],
+      "Location":null,
+      "ServiceTime":0.0,
+      "WaitingTime":0.0,
+      "ActualArrivalTime":null,
+      "ActualDepartureTime":null,
+      "PlannedArrivalTime":null,
+      "PlannedDepartureTime":null,
+      "Meta":[
+
+      ],
+      "OriginalServiceTime":0.0
+    }
+  ],
+  "Meta":[
+
+  ]
+}
