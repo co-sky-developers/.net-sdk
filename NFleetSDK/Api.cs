@@ -8,6 +8,7 @@ using System.Text;
 using NFleet.Data;
 using RestSharp;
 using RestSharp.Contrib;
+using RestSharp.Deserializers;
 
 namespace NFleet
 {
@@ -45,7 +46,8 @@ namespace NFleet
             this.password = password;
         }
 
-        public ResponseData Navigate( Link link, object data = null, Dictionary<string, string> queryParameters = null )
+
+       public ResponseData Navigate( Link link, object data = null, Dictionary<string, string> queryParameters = null )
         {
             return Navigate<ResponseData>( link, data, queryParameters );
         }
@@ -67,7 +69,7 @@ namespace NFleet
 
             // when POSTing, if data is null, add an empty object to prevent 500 Internal Server Error due to null payload
             request.AddBody( data == null && link.Method == "POST" ? new Empty() : data );
-
+            request.OnBeforeDeserialization = resp => resp.ContentType = "application/json";
             var result = client.Execute<T>( request );
 
             if ( result.StatusCode == HttpStatusCode.Unauthorized )
@@ -291,4 +293,6 @@ namespace NFleet
     internal class Empty
     {
     }
+    
 }
+
