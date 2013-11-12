@@ -118,7 +118,7 @@ namespace NFleet.Example
                             var point = sequence.Items[i];
                             var routeEvent = routeEvents.Items[i];
 
-                            Console.Write( "{0}: {1}-{2} ", point, routeEvent.PlannedArrivalTime, routeEvent.PlannedDepartureTime );
+                            Console.WriteLine( "{0}: {1}-{2} ", point, routeEvent.PlannedArrivalTime, routeEvent.PlannedDepartureTime );
                         }
                         Console.WriteLine();
                     }
@@ -134,73 +134,81 @@ namespace NFleet.Example
 
         private static void CreateDemoData( RoutingProblemData problem, Api api )
         {
-            api.Navigate<ResponseData>( problem.GetLink( "create-vehicle" ), new VehicleUpdateRequest
-            {
-                Name = "test",
-                Capacities = new List<CapacityData>
-                {
-                    new CapacityData { Name = "Weight", Amount = 100000 }
-                },
-                StartLocation = new LocationData
-                {
-                    Coordinate = new CoordinateData
-                    {
-                        Latitude = 62.244588,
-                        Longitude = 25.742683,
-                        System = "Euclidian"
-                    }
-                },
-                EndLocation = new LocationData
-                {
-                    Coordinate = new CoordinateData
-                    {
-                        Latitude = 62.244588,
-                        Longitude = 25.742683,
-                        System = "Euclidian"
-                    }
-                },
-                TimeWindows = { new TimeWindowData { Start = new DateTime( 2013, 5, 14, 7, 0, 0 ), End = new DateTime( 2013, 5, 14, 16, 0, 0 ) } }
+            // To build a test case we first need to create a vehicle.
+            // We start by defining vehicle capacity.
+            var vehicleCapacities = new List<CapacityData> {new CapacityData() {Name = "Weight", Amount = 100000}};
+            // ...the time window(s)
+            var vehicleTimeWindow = new List<TimeWindowData> { new TimeWindowData { Start = new DateTime( 2013, 5, 14, 7, 0, 0 ), End = new DateTime( 2013, 5, 14, 16, 0, 0 ) }};
+            // ... the locations for pickup and delivery
+            var vehiclePickup = new LocationData() {Coordinate = new CoordinateData { Latitude = 62.244588, Longitude = 25.742683, System = "WGS84" }};
+            var vehicleDelivery = new LocationData() {Coordinate = new CoordinateData { Latitude = 62.244588, Longitude = 25.742683, System = "WGS84" }};
+            // And then we wrap these into a single vehicle update request.
+            var vehicleUpdateRequest = new VehicleUpdateRequest()
+                                           {
+                                               Name = "Vehicle1",
+                                               Capacities = vehicleCapacities,
+                                               StartLocation = vehiclePickup,
+                                               EndLocation = vehicleDelivery,
+                                               TimeWindows = vehicleTimeWindow
+                                           };
 
-            } );
 
-            var newTask = new TaskUpdateRequest { Name = "task" };
+            api.Navigate<ResponseData>( problem.GetLink( "create-vehicle" ), vehicleUpdateRequest );
+            // This should have created a vehicle.
+
+            // Next, we will create a pickup and delivery task.
+            // The task will consist of two task events that are the pickup and delivery.
+            // Define the capacity, location and time window for the pickup.
             var capacity = new CapacityData { Name = "Weight", Amount = 1 };
-
+            var task1PickupLocation = new LocationData
+                                          {
+                                              Coordinate = new CoordinateData
+                                                               {
+                                                                   Latitude = 62.247906,
+                                                                   Longitude = 25.867395,
+                                                                   System = "WGS84"
+                                                               }
+                                          };
+            var task1PickupTimeWindows = new List<TimeWindowData> { new TimeWindowData { Start = new DateTime(2013, 5, 14, 7, 0, 0), End = new DateTime(2013, 5, 14, 16, 0, 0) } };
+            //... and wrap it in a task event update request.
             var pickup = new TaskEventUpdateRequest
             {
                 Type = "Pickup",
-                Location = new LocationData
-                {
-                    Coordinate = new CoordinateData
-                    {
-                        Latitude = 62.247906,
-                        Longitude = 25.867395,
-                        System = "Euclidian"
-                    }
-                },
-                TimeWindows = { new TimeWindowData { Start = new DateTime( 2013, 5, 14, 7, 0, 0 ), End = new DateTime( 2013, 5, 14, 16, 0, 0 ) } }
+                Location = task1PickupLocation,
+                TimeWindows = task1PickupTimeWindows,
+                Capacities = new List<CapacityData>() {capacity}
             };
-            pickup.Capacities.Add( capacity );
-            newTask.TaskEvents.Add( pickup );
+
+
+            // Then we do the same for the delivery.
+            var task1DeliveryLocation = new LocationData
+                                            {
+                                                Coordinate = new CoordinateData
+                                                                 {
+                                                                     Latitude = 61.386909,
+                                                                     Longitude = 24.654106,
+                                                                     System = "WGS84"
+                                                                 }
+                                            };
+            var task1DeliveryTimeWindows = new List<TimeWindowData> { new TimeWindowData { Start = new DateTime(2013, 5, 14, 7, 0, 0), End = new DateTime(2013, 5, 14, 16, 0, 0) } };
 
             var delivery = new TaskEventUpdateRequest
             {
                 Type = "Delivery",
-                Location = new LocationData
-                {
-                    Coordinate = new CoordinateData
-                    {
-                        Latitude = 61.386909,
-                        Longitude = 24.654106,
-                        System = "Euclidian"
-                    }
-                },
-                TimeWindows = { new TimeWindowData { Start = new DateTime( 2013, 5, 14, 7, 0, 0 ), End = new DateTime( 2013, 5, 14, 16, 0, 0 ) } }
+                Location = task1DeliveryLocation,
+                TimeWindows = task1DeliveryTimeWindows,
+                Capacities = new List<CapacityData>() { capacity }
             };
-            delivery.Capacities.Add( capacity );
+
+
+            // And finally we contain the pickup and delivery in a task update request and send it.
+            var newTask = new TaskUpdateRequest() {Name = "Task1"};
+            newTask.TaskEvents.Add( pickup );
             newTask.TaskEvents.Add( delivery );
 
             api.Navigate<ResponseData>( problem.GetLink( "create-task" ), newTask );
+
+            // And this is how we can create optimization cases.
         }
     }
 }
