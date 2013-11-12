@@ -169,8 +169,6 @@ namespace NFleet.Tests
                                 {
                                     Capacities = te.Capacities,
                                     Location = te.Location,
-                                    PlannedArrivalTime = te.PlannedArrivalTime,
-                                    PlannedDepartureTime = te.PlannedDepartureTime,
                                     ServiceTime = te.ServiceTime,
                                     TaskEventId = te.Id,
                                     TimeWindows = te.TimeWindows,

@@ -17,10 +17,7 @@ namespace NFleet.Data
         public LocationData Location { get; set; }
         public double ServiceTime { get; set; }
         public double WaitingTime { get; set; }
-        public DateTime? ActualArrivalTime { get; set; }
-        public DateTime? ActualDepartureTime { get; set; }
-        public DateTime? PlannedArrivalTime { get; set; }
-        public DateTime? PlannedDepartureTime { get; set; }
+
         public List<Link> Meta { get; set; }
         public double OriginalServiceTime { get; set; }
 

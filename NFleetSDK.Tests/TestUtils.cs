@@ -57,10 +57,6 @@ namespace NFleet.Tests
             Assert.AreEqual( a.TimeState, b.TimeState );
             Assert.AreEqual( a.ServiceTime, b.ServiceTime );
             Assert.AreEqual( a.WaitingTime, b.WaitingTime );
-            Assert.AreEqual( a.ActualArrivalTime, b.ActualArrivalTime );
-            Assert.AreEqual( a.ActualDepartureTime, b.ActualDepartureTime );
-            Assert.AreEqual( a.PlannedArrivalTime, b.PlannedArrivalTime );
-            Assert.AreEqual( a.PlannedDepartureTime, b.PlannedDepartureTime );
             Assert.AreEqual( a.OriginalServiceTime, b.OriginalServiceTime );
 
             LocationsAreEqual( a.Location, b.Location );
@@ -215,6 +211,15 @@ namespace NFleet.Tests
             ListsAreEqual( expected.TaskEvents, actual.TaskEvents, TaskEventsAreEqual );
             ListsAreEqual( expected.Meta, actual.Meta, LinksAreEqual );
 
+            return null;
+        }
+
+        public static RouteEventData RouteEventsAreEqual( RouteEventData a, RouteEventData b )
+        {
+            Assert.AreEqual( a.ActualArrivalTime, b.ActualArrivalTime );
+            Assert.AreEqual( a.ActualDepartureTime, b.ActualDepartureTime );
+            Assert.AreEqual( a.PlannedArrivalTime, b.PlannedArrivalTime );
+            Assert.AreEqual( a.PlannedDepartureTime, b.PlannedDepartureTime );
             return null;
         }
     }
