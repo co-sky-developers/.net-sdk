@@ -187,10 +187,7 @@ namespace NFleet.Tests
             Assert.AreEqual( a.Name, b.Name );
             Assert.AreEqual( a.VersionNumber, b.VersionNumber );
             ListsAreEqual( a.Meta, b.Meta, LinksAreEqual );
-            CollectionAssert.AreEqual( a.Unassigned, b.Unassigned );
             Assert.IsTrue( a.CreationDate <= a.ModifiedDate );
-            CollectionAssert.AreEqual( a.Distances, b.Distances );
-            CollectionAssert.AreEqual( a.LocationIndex, b.LocationIndex );
         }
 
         public static void TaskDataSetsAreEqual( TaskDataSet a, TaskDataSet b )

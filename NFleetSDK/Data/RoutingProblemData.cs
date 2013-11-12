@@ -8,7 +8,6 @@ namespace NFleet.Data
         public RoutingProblemData()
         {
             Meta = new List<Link>();
-            Unassigned = new List<int>();
         }
 
         public int VersionNumber { get; set; }
@@ -17,13 +16,9 @@ namespace NFleet.Data
         public DateTime CreationDate { get; set; }
         public DateTime ModifiedDate { get; set; }
         public List<Link> Meta { get; set; }
-        public List<int> Unassigned { get; set; }
 
         public string State { get; set; }
 
         public int Progress { get; set; }
-
-        public double[,] Distances { get; set; }
-        public int[] LocationIndex { get; set; }
     }
 }
