@@ -64,7 +64,7 @@ namespace NFleet
 
             var request = InitializeRequest( link, queryParameters );
 
-            InsertIfNoneMatchHeader( ref request, data, cache );
+            InsertIfNoneMatchHeader( ref request, data, cache, queryParameters );
             InsertAuthorizationHeader( ref request, currentToken );
 
             // when POSTing, if data is null, add an empty object to prevent 500 Internal Server Error due to null payload
@@ -76,7 +76,7 @@ namespace NFleet
             {
                 Authenticate( username, password );
                 request = InitializeRequest( link, queryParameters );
-                InsertIfNoneMatchHeader( ref request, data, cache );
+                InsertIfNoneMatchHeader( ref request, data, cache, queryParameters );
                 InsertAuthorizationHeader( ref request, currentToken );
 
                 result = client.Execute<T>( request );
@@ -103,7 +103,12 @@ namespace NFleet
 
             if ( result.StatusCode == HttpStatusCode.NotModified )
             {
-                return (T)cache[request.Resource];
+                var key = request.Resource;
+                if ( queryParameters != null && queryParameters.Count > 0 )
+                {
+                    key += BuildQuery( queryParameters );
+                }
+                return (T)cache[key];
             }
 
             if ( code == HttpStatusCode.Created || code == HttpStatusCode.SeeOther )
@@ -127,7 +132,12 @@ namespace NFleet
 
             if ( !Equals( result.Data, default( T ) ) && !String.IsNullOrEmpty( request.Resource ) )
             {
-                cache[request.Resource] = result.Data;
+                var key = request.Resource;
+                if (queryParameters != null && queryParameters.Count > 0)
+                {
+                    key += BuildQuery(queryParameters);
+                }
+                cache[key] = result.Data;
             }
 
 
@@ -147,6 +157,20 @@ namespace NFleet
 
             currentToken = token;
             return currentToken;
+        }
+
+        private static string BuildQuery(Dictionary<string, string> queryParameters )
+        {
+            var sb = new StringBuilder("?");
+            var lst = new List<String>();
+            foreach (var queryParameter in queryParameters)
+            {
+                lst.Add( String.Format("{0}={1}", queryParameter.Key, queryParameter.Value) );
+            }
+            var arr = lst.ToArray();
+            sb.Append(string.Join("&",arr) );
+
+            return sb.ToString();
         }
 
         private RestRequest InitializeRequest( Link link, Dictionary<string, string> queryParameters )
@@ -181,16 +205,21 @@ namespace NFleet
                 request.AddHeader( "Authorization", token.TokenType + " " + token.AccessToken );
         }
 
-        private static void InsertIfNoneMatchHeader( ref RestRequest request, object data, Dictionary<string, object> cache )
+        private static void InsertIfNoneMatchHeader( ref RestRequest request, object data, Dictionary<string, object> cache, Dictionary<string,string> queryParameters  )
         {
+            var key = request.Resource;
+            if ( queryParameters != null && queryParameters.Count > 0 )
+            {
+                key += BuildQuery( queryParameters );
+            }
             if ( data != null && ( data as IVersioned ) != null )
             {
                 var d = data as IVersioned;
                 request.AddHeader( versionNumberHeader, d.VersionNumber.ToString( CultureInfo.InvariantCulture ) );
             }
-            else if ( cache.ContainsKey( request.Resource ) && cache[request.Resource] is IVersioned )
+            else if ( cache.ContainsKey( key ) && cache[key] is IVersioned )
             {
-                var d = cache[request.Resource] as IVersioned;
+                var d = cache[key] as IVersioned;
                 request.AddHeader( versionNumberHeader, d.VersionNumber.ToString( CultureInfo.InvariantCulture ) );
             }
         }
