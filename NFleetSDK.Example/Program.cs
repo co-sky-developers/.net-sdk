@@ -53,7 +53,7 @@ namespace NFleet.Example
             var createdUser = api2.Navigate( apiData.GetLink( "create-user" ), new UserData() );
             var user = api2.Navigate<UserData>( createdUser.Location );
             var problems = api2.Navigate<RoutingProblemDataSet>( user.GetLink( "list-problems" ) );
-            var created = api2.Navigate( problems.GetLink( "create" ), new RoutingProblemUpdateRequest { Name = "test" } );
+            var created = api2.Navigate( user.GetLink( "create-problem" ), new RoutingProblemUpdateRequest { Name = "test" } );
             var problem = api2.Navigate<RoutingProblemData>( created.Location );
             var problem2 = api2.Navigate<RoutingProblemData>( created.Location );
             CreateDemoData( problem, api2 );
