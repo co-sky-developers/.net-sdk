@@ -1,0 +1,27 @@
+{
+  "VersionNumber":1,
+  "Id":3,
+  "Meta":[
+    {
+      "Uri":"/users/3",
+      "Rel":"self",
+      "Method":"GET",
+      "Enabled":false,
+      "Type":"application/vnd.jyu.nfleet.user+json;version=2.0"
+    },
+    {
+      "Uri":"/problems",
+      "Rel":"create-problem",
+      "Method":"POST",
+      "Enabled":false,
+      "Type":"application/vnd.jyu.nfleet.routingproblem+json;version=2.0"
+    },
+    {
+      "Uri":"/problems",
+      "Rel":"list-problems",
+      "Method":"GET",
+      "Enabled":false,
+      "Type":"application/vnd.jyu.nfleet.routingproblemset+json;version=2.0"
+    }
+  ]
+}

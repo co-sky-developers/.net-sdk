@@ -27,6 +27,14 @@ namespace NFleet.Tests
             return Deserializer.Deserialize<T>( mockresponse );
         }
 
+        public static void UsersAreEqual(UserData expected, UserData actual )
+        {
+            if ( expected == null && actual == null ) return;
+            Assert.NotNull( expected, "Expected UserData is null." );
+            Assert.NotNull( actual, "Actual UserData is null." );
+            ListsAreEqual( expected.Meta, actual.Meta, LinksAreEqual );
+        }
+
         public static void VehicleDataSetsAreEqual( VehicleDataSet a, VehicleDataSet b )
         {
             if ( a == null && b == null ) return;
@@ -138,7 +146,15 @@ namespace NFleet.Tests
             Assert.NotNull( b );
 
             //TODO: It might be more clever to implement this with some tokens in example code
-            const string pattern = "/users/1/problems/\\d+(\\S*)";
+            const string userPattern = "/users/\\d+(\\S*)";
+            const string problemsPattern = "/users/\\d+(\\S*)/problems/\\d+(\\S*)";
+            string pattern = userPattern;
+
+            if (a.Contains("/problems/") && b.Contains("/problems/"))
+            {
+                pattern = problemsPattern;
+            }
+
             var amatch = Regex.Match( a, pattern );
             var bmatch = Regex.Match( b, pattern );
             if ( amatch.Success )

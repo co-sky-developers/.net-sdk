@@ -196,18 +196,7 @@ namespace NFleet.Tests
             TestUtils.TasksAreEqual( mockNewTask, newTask );
         }
 
-        [Test]
-        public void T06DeletingTaskTest()
-        {
-            /*var newTask = (TaskData) testObjects["newTask"];
-            //##BEGIN EXAMPLE deletingtask##
-            var deleteResponse = api.Navigate<ResponseData>(newTask.GetLink("delete"));
-            //##END EXAMPLE##
-
-            var mockDeleteResponse = TestUtils.GetMockResponse<ResponseData>(responses["deletingtaskresp"].json);
-            Trace.Write(JsonConvert.SerializeObject(deleteResponse));
-            TestUtils.ResponsesAreEqual( mockDeleteResponse, deleteResponse );*/
-        }
+        
 
         [Test]
         public void T07ListingVehiclesTest()
@@ -334,21 +323,7 @@ namespace NFleet.Tests
             TestUtils.ResponsesAreEqual( mockCreation, res );
         }
 
-        /*[Test]
-        public void T12AccessingNewOptTest()
-        {
-            var problem = (RoutingProblemData)testObjects["problem"];
-            
-            //##BEGIN EXAMPLE accessingnewopt##
-            var creation = api.Navigate<ResponseData>( problem.GetLink( "create-new-optimization" ) );
-            var optimization = api.Navigate<OptimizationData>(creation.Location); 
-            //##END EXAMPLE##
-            testObjects["optimization"] = optimization;
-
-            var mockOptimization = TestUtils.GetMockResponse<OptimizationData>(responses["accessingnewoptresp"].json);
-            Trace.Write(JsonConvert.SerializeObject(optimization));
-            TestUtils.OptimizationsAreEqual( mockOptimization, optimization );
-        }*/
+        
 
         [Test]
         public void T13StoppingOptTest()
@@ -368,18 +343,8 @@ namespace NFleet.Tests
             Trace.Write( JsonConvert.SerializeObject( res ) );
             TestUtils.ResponsesAreEqual( mockResponse, res );
         }
-        /*
-        [Test]
-        public void T14GetOptStatusTest()
-        {
-            var optimization = (OptimizationData)testObjects["optimization"];
-            //##BEGIN EXAMPLE getoptstatus#
-            var optimizationResult = api.Navigate<OptimizationData>(optimization.GetLink("self")); 
-            //##END EXAMPLE##
-            var mockOptimizationResult = TestUtils.GetMockResponse<OptimizationData>(responses["getoptstatusresp"].json);
-            Trace.Write(JsonConvert.SerializeObject(optimizationResult));
-            TestUtils.OptimizationsAreEqual( mockOptimizationResult, optimizationResult );
-        }*/
+        
+        
 
         [Test]
         public void T15BadRequestTest()
@@ -429,9 +394,24 @@ namespace NFleet.Tests
             {
                 Assert.IsTrue( "412 Precondition Failed".Equals( ioe.Message ) || "412 PreconditionFailed".Equals( ioe.Message ) );
             }
-
             //##END EXAMPLE##
 
+        }
+
+        [Test]
+        public void T17CreateUser()
+        {
+            var api = TestHelper.Authenticate();
+
+            //##BEGIN EXAMPLE creatingauser##
+
+            var users = api.Navigate<UserDataSet>( api.Root.GetLink( "list-users" ) );
+            var response = api.Navigate( users.GetLink( "create" ) );
+            var user = api.Navigate<UserData>( response.Location );
+            //##END EXAMPLE##
+            var mockUser = TestUtils.GetMockResponse<UserData>( responses["createuserresp"].json );
+            Trace.Write( JsonConvert.SerializeObject( user ) );
+            TestUtils.UsersAreEqual( mockUser, user );
         }
     }
 }
