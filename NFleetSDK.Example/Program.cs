@@ -61,7 +61,7 @@ namespace NFleet.Example
             // refresh to get up to date set of operations
             problem = api2.Navigate<RoutingProblemData>( problem.GetLink( "self" ) );
 
-            var res = api2.Navigate<ResponseData>( problem.GetLink( "update" ), new RoutingProblemUpdateRequest { Name = problem.Name, State = "Running", VersionNumber = problem.VersionNumber } );
+            var res = api2.Navigate<ResponseData>( problem.GetLink( "toggle-optimization" ), new RoutingProblemUpdateRequest { Name = problem.Name, State = "Running", VersionNumber = problem.VersionNumber } );
             RoutingProblemData rb = null;
             while ( true )
             {

@@ -35,6 +35,19 @@ namespace NFleet.Tests
             ListsAreEqual( expected.Meta, actual.Meta, LinksAreEqual );
         }
 
+        public static void RouteEventsAreEqual(RouteEventData a, RouteEventData b)
+        {
+            Assert.AreEqual( a.State, b.State );
+            Assert.AreEqual( a.LockState, b.LockState );
+            Assert.AreEqual( a.TimeState, b.TimeState );
+            Assert.AreEqual( a.WaitingTimeBefore, b.WaitingTimeBefore );
+            Assert.AreEqual( a.ActualArrivalTime, b.ActualArrivalTime );
+            Assert.AreEqual( a.ActualDepartureTime, b.ActualDepartureTime );
+            Assert.AreEqual( a.PlannedArrivalTime, b.PlannedArrivalTime );
+            Assert.AreEqual( a.PlannedDepartureTime, b.PlannedDepartureTime );
+
+        }
+
         public static void VehicleDataSetsAreEqual( VehicleDataSet a, VehicleDataSet b )
         {
             if ( a == null && b == null ) return;
@@ -60,13 +73,9 @@ namespace NFleet.Tests
             Assert.AreEqual( a.Name, b.Name );
             Assert.AreEqual( a.Info, b.Info );
             Assert.AreEqual( a.Type, b.Type );
-            Assert.AreEqual( a.State, b.State );
-            Assert.AreEqual( a.LockState, b.LockState );
-            Assert.AreEqual( a.TimeState, b.TimeState );
+            
             Assert.AreEqual( a.ServiceTime, b.ServiceTime );
-            Assert.AreEqual( a.WaitingTime, b.WaitingTime );
-            Assert.AreEqual( a.OriginalServiceTime, b.OriginalServiceTime );
-
+            
             LocationsAreEqual( a.Location, b.Location );
             ListsAreEqual( a.Capacities, b.Capacities, CapacitiesAreEqual );
             ListsAreEqual( a.TimeWindows, b.TimeWindows, TimeWindowsAreEqual );
@@ -224,15 +233,6 @@ namespace NFleet.Tests
             ListsAreEqual( expected.TaskEvents, actual.TaskEvents, TaskEventsAreEqual );
             ListsAreEqual( expected.Meta, actual.Meta, LinksAreEqual );
 
-            return null;
-        }
-
-        public static RouteEventData RouteEventsAreEqual( RouteEventData a, RouteEventData b )
-        {
-            Assert.AreEqual( a.ActualArrivalTime, b.ActualArrivalTime );
-            Assert.AreEqual( a.ActualDepartureTime, b.ActualDepartureTime );
-            Assert.AreEqual( a.PlannedArrivalTime, b.PlannedArrivalTime );
-            Assert.AreEqual( a.PlannedDepartureTime, b.PlannedDepartureTime );
             return null;
         }
     }

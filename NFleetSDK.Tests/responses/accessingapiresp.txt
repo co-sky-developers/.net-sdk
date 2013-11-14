@@ -1,24 +1,28 @@
 ﻿HTTP/1.1 200 OK
 Content-Type: application/json; charset=utf-8
 {
-   "Meta":[
-      {
-         "Uri":"",
-         "Rel":"self",
-         "Method":"GET",
-         "Enabled":true
-      },
-      {
-         "Uri":"/users",
-         "Rel":"list-users",
-         "Method":"GET",
-         "Enabled":true
-      },
-      {
-         "Uri":"/users",
-         "Rel":"create-user",
-         "Method":"POST",
-         "Enabled":true
-      }
-   ]
+  "VersionNumber":0,
+  "Meta":[
+    {
+      "Uri":"",
+      "Rel":"self",
+      "Method":"GET",
+      "Enabled":true,
+      "Type":null
+    },
+    {
+      "Uri":"/users",
+      "Rel":"list-users",
+      "Method":"GET",
+      "Enabled":true,
+      "Type":null
+    },
+    {
+      "Uri":"/users",
+      "Rel":"create-user",
+      "Method":"POST",
+      "Enabled":true,
+      "Type":null
+    }
+  ]
 }

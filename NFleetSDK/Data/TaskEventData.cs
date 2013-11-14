@@ -9,17 +9,12 @@ namespace NFleet.Data
         public string Name { get; set; }
         public string Info { get; set; }
         public string Type { get; set; }
-        public string State { get; set; }
-        public string LockState { get; set; }
-        public string TimeState { get; set; }
         public List<CapacityData> Capacities { get; set; }
         public List<TimeWindowData> TimeWindows { get; set; }
         public LocationData Location { get; set; }
         public double ServiceTime { get; set; }
-        public double WaitingTime { get; set; }
 
         public List<Link> Meta { get; set; }
-        public double OriginalServiceTime { get; set; }
 
         public TaskEventData()
         {

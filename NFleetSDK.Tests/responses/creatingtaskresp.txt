@@ -1,19 +1,24 @@
 ﻿HTTP/1.1 201 Created 
 Content-Type: application/json 
 {
-   "Items":null,
-   "Location":{
-         "Uri":"/users/1/problems/1/tasks/2",
-         "Rel":"location",
-         "Method":"GET",
-         "Enabled":null
-      },
-   "Meta":[
-      {
-         "Uri":"/users/1/problems/1/tasks/2",
-         "Rel":"location",
-         "Method":"GET",
-         "Enabled":null
-      },
-   ]
+  "Location":{
+    "Uri":"/users/1/problems/9/tasks/2",
+    "Rel":"location",
+    "Method":"GET",
+    "Enabled":false,
+    "Type":null
+  },
+  "Meta":[
+    {
+      "Uri":"/users/1/problems/9/tasks/2",
+      "Rel":"location",
+      "Method":"GET",
+      "Enabled":false,
+      "Type":null
+    }
+  ],
+  "Items":[
+
+  ],
+  "VersionNumber":0
 }

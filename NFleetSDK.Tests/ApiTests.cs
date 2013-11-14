@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
+using System.Threading;
 using NFleet.Data;
 using NUnit.Framework;
 using Newtonsoft.Json;
@@ -412,6 +413,31 @@ namespace NFleet.Tests
             var mockUser = TestUtils.GetMockResponse<UserData>( responses["createuserresp"].json );
             Trace.Write( JsonConvert.SerializeObject( user ) );
             TestUtils.UsersAreEqual( mockUser, user );
+        }
+
+        [Test]
+        public void T17GetProgress()
+        {
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetOrCreateUser( api );
+            var problem = TestHelper.CreateProblemWithDemoData( api, user );
+            //api.Navigate<>()
+            //##BEGIN EXAMPLE getprogress##
+            api.Navigate<ResponseData>( problem.GetLink( "toggle-optimization" ),
+                new RoutingProblemUpdateRequest { Name = problem.Name,
+                    State = "Running",
+                    VersionNumber = problem.VersionNumber
+                } );
+
+            while (true)
+            {
+                Thread.Sleep(100);
+                var progress = api.Navigate<RoutingProblemData>(problem.GetLink("self")).Progress;
+                Console.WriteLine( "Progress: " + progress + "%" );
+                if (progress >= 100) break;
+            }
+            //##END EXAMPLE##
+
         }
     }
 }
