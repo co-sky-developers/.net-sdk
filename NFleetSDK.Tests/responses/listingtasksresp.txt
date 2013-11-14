@@ -1,8 +1,7 @@
 ﻿HTTP/1.1 200 OK 
 Content-Type: application/json 
 {
-   
-  "VersionNumber":0,
+  "VersionNumber":42352753,
   "Items":[
     {
       "VersionNumber":0,
@@ -15,9 +14,6 @@ Content-Type: application/json
           "Name":null,
           "Info":null,
           "Type":"Pickup",
-          "State":null,
-          "LockState":null,
-          "TimeState":null,
           "Capacities":[
             {
               "Name":"Weight",
@@ -40,24 +36,15 @@ Content-Type: application/json
             "Address":null
           },
           "ServiceTime":0.0,
-          "WaitingTime":0.0,
-          "ActualArrivalTime":null,
-          "ActualDepartureTime":null,
-          "PlannedArrivalTime":null,
-          "PlannedDepartureTime":null,
           "Meta":[
 
-          ],
-          "OriginalServiceTime":0.0
+          ]
         },
         {
           "Id":12,
           "Name":null,
           "Info":null,
           "Type":"Delivery",
-          "State":null,
-          "LockState":null,
-          "TimeState":null,
           "Capacities":[
             {
               "Name":"Weight",
@@ -80,35 +67,32 @@ Content-Type: application/json
             "Address":null
           },
           "ServiceTime":0.0,
-          "WaitingTime":0.0,
-          "ActualArrivalTime":null,
-          "ActualDepartureTime":null,
-          "PlannedArrivalTime":null,
-          "PlannedDepartureTime":null,
           "Meta":[
 
-          ],
-          "OriginalServiceTime":0.0
+          ]
         }
       ],
       "Meta":[
         {
-          "Uri":"/users/1/problems/10/tasks/1",
+          "Uri":"/users/1/problems/1/tasks/1",
           "Rel":"self",
           "Method":"GET",
-          "Enabled":true
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.task+json;version=2.0"
         },
         {
           "Uri":"",
           "Rel":"update",
           "Method":"PUT",
-          "Enabled":true
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.task+json;version=2.0"
         },
         {
           "Uri":"",
           "Rel":"delete",
           "Method":"DELETE",
-          "Enabled":true
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.task+json;version=2.0"
         }
       ],
       "State":"Active"
@@ -116,40 +100,46 @@ Content-Type: application/json
   ],
   "Meta":[
     {
-      "Uri":"/users/1/problems/10/tasks",
+      "Uri":"/users/1/problems/1/tasks",
       "Rel":"self",
       "Method":"GET",
-      "Enabled":true
+      "Enabled":true,
+      "Type":null
     },
     {
       "Uri":"?limit=1&offset=0",
       "Rel":"current",
       "Method":"GET",
-      "Enabled":true
+      "Enabled":true,
+      "Type":null
     },
     {
       "Uri":"?limit=1&offset=0",
       "Rel":"first",
       "Method":"GET",
-      "Enabled":true
+      "Enabled":true,
+      "Type":null
     },
     {
       "Uri":"?limit=1&offset=0",
       "Rel":"prev",
       "Method":"GET",
-      "Enabled":true
+      "Enabled":true,
+      "Type":null
     },
     {
       "Uri":"?limit=1&offset=0",
       "Rel":"next",
       "Method":"GET",
-      "Enabled":true
+      "Enabled":true,
+      "Type":null
     },
     {
       "Uri":"?limit=1&offset=0",
       "Rel":"last",
       "Method":"GET",
-      "Enabled":true
+      "Enabled":true,
+      "Type":null
     }
   ]
 }

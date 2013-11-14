@@ -1,7 +1,7 @@
 ﻿HTTP/1.1 200 OK 
 Content-Type: application/json 
 {
-  "VersionNumber":0,
+  "VersionNumber":7707844,
   "Items":[
     {
       "VersionNumber":1,
@@ -39,52 +39,60 @@ Content-Type: application/json
       },
       "Meta":[
         {
-          "Uri":"/users/1/problems/14/vehicles/1",
+          "Uri":"/users/1/problems/1/vehicles/1",
           "Rel":"self",
           "Method":"GET",
-          "Enabled":true
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.vehicle+json;version=2.0"
         },
         {
           "Uri":"",
           "Rel":"delete",
           "Method":"DELETE",
-          "Enabled":true
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.vehicle+json;version=2.0"
         },
         {
           "Uri":"",
           "Rel":"update",
           "Method":"PUT",
-          "Enabled":true
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.vehicle+json;version=2.0"
         },
         {
           "Uri":"/route",
           "Rel":"get-route",
           "Method":"GET",
-          "Enabled":true
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.route+json;version=2.0"
         },
         {
           "Uri":"/route",
           "Rel":"set-route",
           "Method":"PUT",
-          "Enabled":true
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.route+json;version=2.0"
         },
         {
           "Uri":"/events",
           "Rel":"list-events",
           "Method":"GET",
-          "Enabled":true
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.routeevent+json;version=2.0"
         },
         {
           "Uri":"",
           "Rel":"activate",
           "Method":"PUT",
-          "Enabled":false
+          "Enabled":false,
+          "Type":"application/vnd.jyu.nfleet.vehicle+json;version=2.0"
         },
         {
           "Uri":"",
           "Rel":"deactivate",
           "Method":"PUT",
-          "Enabled":true
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.vehicle+json;version=2.0"
         }
       ],
       "State":"Active"
@@ -106,7 +114,7 @@ Content-Type: application/json
         }
       ],
       "StartLocation":{
-        "Id":5,
+        "Id":4,
         "Coordinate":{
           "Latitude":61.244958,
           "Longitude":20.747143,
@@ -125,52 +133,60 @@ Content-Type: application/json
       },
       "Meta":[
         {
-          "Uri":"/users/1/problems/14/vehicles/2",
+          "Uri":"/users/1/problems/1/vehicles/2",
           "Rel":"self",
           "Method":"GET",
-          "Enabled":true
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.vehicle+json;version=2.0"
         },
         {
           "Uri":"",
           "Rel":"delete",
           "Method":"DELETE",
-          "Enabled":true
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.vehicle+json;version=2.0"
         },
         {
           "Uri":"",
           "Rel":"update",
           "Method":"PUT",
-          "Enabled":true
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.vehicle+json;version=2.0"
         },
         {
           "Uri":"/route",
           "Rel":"get-route",
           "Method":"GET",
-          "Enabled":true
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.route+json;version=2.0"
         },
         {
           "Uri":"/route",
           "Rel":"set-route",
           "Method":"PUT",
-          "Enabled":true
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.route+json;version=2.0"
         },
         {
           "Uri":"/events",
           "Rel":"list-events",
           "Method":"GET",
-          "Enabled":true
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.routeevent+json;version=2.0"
         },
         {
           "Uri":"",
           "Rel":"activate",
           "Method":"PUT",
-          "Enabled":false
+          "Enabled":false,
+          "Type":"application/vnd.jyu.nfleet.vehicle+json;version=2.0"
         },
         {
           "Uri":"",
           "Rel":"deactivate",
           "Method":"PUT",
-          "Enabled":true
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.vehicle+json;version=2.0"
         }
       ],
       "State":"Active"
@@ -178,40 +194,46 @@ Content-Type: application/json
   ],
   "Meta":[
     {
-      "Uri":"/users/1/problems/14/vehicles",
+      "Uri":"/users/1/problems/1/vehicles",
       "Rel":"self",
       "Method":"GET",
-      "Enabled":true
+      "Enabled":true,
+      "Type":null
     },
     {
       "Uri":"?limit=2&offset=0",
       "Rel":"current",
       "Method":"GET",
-      "Enabled":true
+      "Enabled":true,
+      "Type":null
     },
     {
       "Uri":"?limit=2&offset=0",
       "Rel":"first",
       "Method":"GET",
-      "Enabled":true
+      "Enabled":true,
+      "Type":null
     },
     {
       "Uri":"?limit=2&offset=0",
       "Rel":"prev",
       "Method":"GET",
-      "Enabled":true
+      "Enabled":true,
+      "Type":null
     },
     {
       "Uri":"?limit=2&offset=0",
       "Rel":"next",
       "Method":"GET",
-      "Enabled":true
+      "Enabled":true,
+      "Type":null
     },
     {
       "Uri":"?limit=2&offset=0",
       "Rel":"last",
       "Method":"GET",
-      "Enabled":true
+      "Enabled":true,
+      "Type":null
     }
   ]
 }

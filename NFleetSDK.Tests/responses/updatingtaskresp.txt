@@ -34,10 +34,6 @@ Content-Type: application/json
       },
       "ServiceTime":0.0,
       "WaitingTime":0.0,
-      "ActualArrivalTime":null,
-      "ActualDepartureTime":null,
-      "PlannedArrivalTime":null,
-      "PlannedDepartureTime":null,
       "Meta":[
 
       ],
@@ -71,10 +67,6 @@ Content-Type: application/json
       },
       "ServiceTime":0.0,
       "WaitingTime":0.0,
-      "ActualArrivalTime":null,
-      "ActualDepartureTime":null,
-      "PlannedArrivalTime":null,
-      "PlannedDepartureTime":null,
       "Meta":[
 
       ],
@@ -83,22 +75,25 @@ Content-Type: application/json
   ],
   "Meta":[
     {
-      "Uri":"/users/1/problems/3/tasks/2",
+      "Uri":"/users/1/problems/5/tasks/2",
       "Rel":"self",
       "Method":"GET",
-      "Enabled":true
+      "Enabled":true,
+      "Type":"application/vnd.jyu.nfleet.task+json;version=2.0"
     },
     {
       "Uri":"",
       "Rel":"update",
       "Method":"PUT",
-      "Enabled":true
+      "Enabled":true,
+      "Type":"application/vnd.jyu.nfleet.task+json;version=2.0"
     },
     {
       "Uri":"",
       "Rel":"delete",
       "Method":"DELETE",
-      "Enabled":true
+      "Enabled":true,
+      "Type":"application/vnd.jyu.nfleet.task+json;version=2.0"
     }
   ],
   "State":"Active"

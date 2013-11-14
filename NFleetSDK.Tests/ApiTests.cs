@@ -416,7 +416,7 @@ namespace NFleet.Tests
         }
 
         [Test]
-        public void T17GetProgress()
+        public void T18GetProgress()
         {
             var api = TestHelper.Authenticate();
             var user = TestHelper.GetOrCreateUser( api );
