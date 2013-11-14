@@ -439,5 +439,18 @@ namespace NFleet.Tests
             //##END EXAMPLE##
 
         }
+
+        [Test]
+        public void T19GetRouteEvents()
+        {
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetOrCreateUser( api );
+            var problem = TestHelper.CreateProblemWithDemoData( api, user );
+            var vehicle = TestHelper.GetVehicle( api, user, problem );
+            //api.Navigate<>()
+            //##BEGIN EXAMPLE getrouteEvents##
+            var events = api.Navigate<RouteEventDataSet>( vehicle.GetLink( "list-events" ));
+            //##END EXAMPLE##
+        }
     }
 }
