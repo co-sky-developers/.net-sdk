@@ -447,10 +447,12 @@ namespace NFleet.Tests
             var user = TestHelper.GetOrCreateUser( api );
             var problem = TestHelper.CreateProblemWithDemoData( api, user );
             var vehicle = TestHelper.GetVehicle( api, user, problem );
-            //api.Navigate<>()
+
             //##BEGIN EXAMPLE getrouteEvents##
             var events = api.Navigate<RouteEventDataSet>( vehicle.GetLink( "list-events" ));
             //##END EXAMPLE##
+            Trace.Write( JsonConvert.SerializeObject( events ) );
+            var mockevents = TestUtils.GetMockResponse<RouteEventDataSet>( responses["accessingrouteeventsresp"].json );
         }
     }
 }

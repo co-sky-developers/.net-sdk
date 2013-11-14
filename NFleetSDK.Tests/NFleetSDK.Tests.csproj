@@ -89,6 +89,7 @@
     <Content Include="responses\accessingproblemresp.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="responses\accessingrouteeventsresp.txt" />
     <Content Include="responses\accessingrouteresp.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

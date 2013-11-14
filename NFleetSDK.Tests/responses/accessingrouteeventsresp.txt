@@ -1,0 +1,56 @@
+﻿HTTP/1.1 200 OK 
+Content-Type: application/json 
+{
+  "Items":[
+    {
+      "VersionNumber":0,
+      "State":"Unlocked",
+      "LockState":"None",
+      "TimeState":"None",
+      "Pending":false,
+      "WaitingTimeBefore":0.0,
+      "ActualArrivalTime":null,
+      "ActualDepartureTime":null,
+      "PlannedArrivalTime":null,
+      "PlannedDepartureTime":null,
+      "Meta":[
+
+      ],
+      "DataState":"Pending",
+      "IsFeasible":false,
+      "VehicleId":1,
+      "Id":32001,
+      "SequenceNumber":1,
+      "ActualServiceTime":0.0,
+      "TravelTimeBefore":0.0,
+      "InternalState":"Unlocked"
+    },
+    {
+      "VersionNumber":0,
+      "State":"Unlocked",
+      "LockState":"None",
+      "TimeState":"None",
+      "Pending":false,
+      "WaitingTimeBefore":0.0,
+      "ActualArrivalTime":null,
+      "ActualDepartureTime":null,
+      "PlannedArrivalTime":null,
+      "PlannedDepartureTime":null,
+      "Meta":[
+
+      ],
+      "DataState":"Pending",
+      "IsFeasible":false,
+      "VehicleId":1,
+      "Id":16001,
+      "SequenceNumber":2,
+      "ActualServiceTime":0.0,
+      "TravelTimeBefore":0.0,
+      "InternalState":"Unlocked"
+    }
+  ],
+  "Meta":[
+
+  ],
+  "VersionNumber":99552928
+}
