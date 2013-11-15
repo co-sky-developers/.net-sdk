@@ -8,7 +8,6 @@ using System.Text;
 using NFleet.Data;
 using RestSharp;
 using RestSharp.Contrib;
-using RestSharp.Deserializers;
 
 namespace NFleet
 {
@@ -103,11 +102,7 @@ namespace NFleet
 
             if ( result.StatusCode == HttpStatusCode.NotModified )
             {
-                var key = request.Resource;
-                if ( queryParameters != null && queryParameters.Count > 0 )
-                {
-                    key += BuildQuery( queryParameters );
-                }
+                var key = BuildCacheKey( request.Resource, queryParameters );
                 return (T)cache[key];
             }
 
@@ -132,11 +127,7 @@ namespace NFleet
 
             if ( !Equals( result.Data, default( T ) ) && !String.IsNullOrEmpty( request.Resource ) )
             {
-                var key = request.Resource;
-                if (queryParameters != null && queryParameters.Count > 0)
-                {
-                    key += BuildQuery(queryParameters);
-                }
+                var key = BuildCacheKey(request.Resource, queryParameters);
                 cache[key] = result.Data;
             }
 
@@ -173,6 +164,17 @@ namespace NFleet
             return sb.ToString();
         }
 
+        private static string BuildCacheKey(string resource, Dictionary<string, string> queryParameters)
+        {
+            var key = resource;
+            if ( queryParameters != null && queryParameters.Count > 0 )
+            {
+                key += BuildQuery( queryParameters );
+            }
+
+            return key;
+        }
+
         private RestRequest InitializeRequest( Link link, Dictionary<string, string> queryParameters )
         {
             var uri = link.Uri;
@@ -207,11 +209,8 @@ namespace NFleet
 
         private static void InsertIfNoneMatchHeader( ref RestRequest request, object data, Dictionary<string, object> cache, Dictionary<string,string> queryParameters  )
         {
-            var key = request.Resource;
-            if ( queryParameters != null && queryParameters.Count > 0 )
-            {
-                key += BuildQuery( queryParameters );
-            }
+            var key = BuildCacheKey( request.Resource, queryParameters );
+
             if ( data != null && ( data as IVersioned ) != null )
             {
                 var d = data as IVersioned;
