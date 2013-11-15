@@ -32,196 +32,202 @@ namespace NFleet.Tests
             if ( expected == null && actual == null ) return;
             Assert.NotNull( expected, "Expected UserData is null." );
             Assert.NotNull( actual, "Actual UserData is null." );
+            Assert.AreEqual(expected.VersionNumber, actual.VersionNumber, "Version numbers do not match.");
             ListsAreEqual( expected.Meta, actual.Meta, LinksAreEqual );
         }
 
-        public static void RouteEventsAreEqual(RouteEventData a, RouteEventData b)
+        public static void RouteEventsAreEqual(RouteEventData expected, RouteEventData actual)
         {
-            Assert.AreEqual( a.State, b.State );
-            Assert.AreEqual( a.LockState, b.LockState );
-            Assert.AreEqual( a.TimeState, b.TimeState );
-            Assert.AreEqual( a.WaitingTimeBefore, b.WaitingTimeBefore );
-            Assert.AreEqual( a.ActualArrivalTime, b.ActualArrivalTime );
-            Assert.AreEqual( a.ActualDepartureTime, b.ActualDepartureTime );
-            Assert.AreEqual( a.PlannedArrivalTime, b.PlannedArrivalTime );
-            Assert.AreEqual( a.PlannedDepartureTime, b.PlannedDepartureTime );
+            Assert.AreEqual( expected.VersionNumber, actual.VersionNumber, "Version numbers do not match.");
+            Assert.AreEqual( expected.State, actual.State );
+            Assert.AreEqual( expected.LockState, actual.LockState );
+            Assert.AreEqual( expected.TimeState, actual.TimeState );
+            Assert.AreEqual( expected.WaitingTimeBefore, actual.WaitingTimeBefore );
+            Assert.AreEqual( expected.ActualArrivalTime, actual.ActualArrivalTime );
+            Assert.AreEqual( expected.ActualDepartureTime, actual.ActualDepartureTime );
+            Assert.AreEqual( expected.PlannedArrivalTime, actual.PlannedArrivalTime );
+            Assert.AreEqual( expected.PlannedDepartureTime, actual.PlannedDepartureTime );
 
         }
 
-        public static void VehicleDataSetsAreEqual( VehicleDataSet a, VehicleDataSet b )
+        public static void VehicleDataSetsAreEqual( VehicleDataSet expected, VehicleDataSet actual )
         {
-            if ( a == null && b == null ) return;
-            Assert.NotNull( a );
-            Assert.NotNull( b );
-            ListsAreEqual( a.Items, b.Items, VehiclesAreEqual );
-            ListsAreEqual( a.Meta, b.Meta, LinksAreEqual );
+            if ( expected == null && actual == null ) return;
+            Assert.NotNull( expected );
+            Assert.NotNull( actual );
+            Assert.AreEqual( expected.VersionNumber, actual.VersionNumber, "Version numbers do not match." );
+            ListsAreEqual( expected.Items, actual.Items, VehiclesAreEqual );
+            ListsAreEqual( expected.Meta, actual.Meta, LinksAreEqual );
         }
 
-        private static VehicleData VehiclesAreEqual( VehicleData a, VehicleData b )
+        private static VehicleData VehiclesAreEqual( VehicleData expected, VehicleData actual )
         {
-            Assert.AreEqual( a.Name, b.Name );
-            LocationsAreEqual( a.StartLocation, b.StartLocation );
-            LocationsAreEqual( a.EndLocation, b.EndLocation );
-            ListsAreEqual( a.Meta, b.Meta, LinksAreEqual );
-            ListsAreEqual( a.Capacities, b.Capacities, CapacitiesAreEqual );
-            ListsAreEqual( a.TimeWindows, b.TimeWindows, TimeWindowsAreEqual );
+            Assert.AreEqual( expected.VersionNumber, actual.VersionNumber, "Version numbers do not match." );
+            Assert.AreEqual( expected.Name, actual.Name );
+            LocationsAreEqual( expected.StartLocation, actual.StartLocation );
+            LocationsAreEqual( expected.EndLocation, actual.EndLocation );
+            ListsAreEqual( expected.Meta, actual.Meta, LinksAreEqual );
+            ListsAreEqual( expected.Capacities, actual.Capacities, CapacitiesAreEqual );
+            ListsAreEqual( expected.TimeWindows, actual.TimeWindows, TimeWindowsAreEqual );
             return null;
         }
 
-        private static TaskEventData TaskEventsAreEqual( TaskEventData a, TaskEventData b )
+        private static TaskEventData TaskEventsAreEqual( TaskEventData expected, TaskEventData actual )
         {
-            Assert.AreEqual( a.Name, b.Name );
-            Assert.AreEqual( a.Info, b.Info );
-            Assert.AreEqual( a.Type, b.Type );
+            Assert.AreEqual( expected.Name, actual.Name );
+            Assert.AreEqual( expected.Info, actual.Info );
+            Assert.AreEqual( expected.Type, actual.Type );
             
-            Assert.AreEqual( a.ServiceTime, b.ServiceTime );
+            Assert.AreEqual( expected.ServiceTime, actual.ServiceTime );
             
-            LocationsAreEqual( a.Location, b.Location );
-            ListsAreEqual( a.Capacities, b.Capacities, CapacitiesAreEqual );
-            ListsAreEqual( a.TimeWindows, b.TimeWindows, TimeWindowsAreEqual );
-            ListsAreEqual( a.Meta, b.Meta, LinksAreEqual );
+            LocationsAreEqual( expected.Location, actual.Location );
+            ListsAreEqual( expected.Capacities, actual.Capacities, CapacitiesAreEqual );
+            ListsAreEqual( expected.TimeWindows, actual.TimeWindows, TimeWindowsAreEqual );
+            ListsAreEqual( expected.Meta, actual.Meta, LinksAreEqual );
 
             return null;
         }
 
-        public static void TaskEventDataSetsAreEqual( TaskEventDataSet a, TaskEventDataSet b )
+        public static void TaskEventDataSetsAreEqual( TaskEventDataSet expected, TaskEventDataSet actual )
         {
-            ListsAreEqual( a.Items, b.Items, TaskEventsAreEqual );
-            ListsAreEqual( a.Meta, b.Meta, LinksAreEqual );
+            Assert.AreEqual( expected.VersionNumber, actual.VersionNumber, "Version numbers do not match." );
+            ListsAreEqual( expected.Items, actual.Items, TaskEventsAreEqual );
+            ListsAreEqual( expected.Meta, actual.Meta, LinksAreEqual );
         }
 
-        private static void LocationsAreEqual( LocationData a, LocationData b )
+        private static void LocationsAreEqual( LocationData expected, LocationData actual )
         {
-            if ( a == null && b == null ) return;
-            Assert.NotNull( a );
-            Assert.NotNull( b );
-            CoordinatesAreEqual( a.Coordinate, b.Coordinate );
-            AddressesAreEqual( a.Address, b.Address );
+            if ( expected == null && actual == null ) return;
+            Assert.NotNull( expected );
+            Assert.NotNull( actual );
+            CoordinatesAreEqual( expected.Coordinate, actual.Coordinate );
+            AddressesAreEqual( expected.Address, actual.Address );
         }
 
-        private static void CoordinatesAreEqual( CoordinateData a, CoordinateData b )
+        private static void CoordinatesAreEqual( CoordinateData expected, CoordinateData actual )
         {
-            if ( a == null && b == null ) return;
-            Assert.NotNull( a );
-            Assert.NotNull( b );
-            Assert.AreEqual( a.System, b.System );
-            Assert.AreEqual( a.Latitude, a.Latitude );
-            Assert.AreEqual( a.Longitude, b.Longitude );
+            if ( expected == null && actual == null ) return;
+            Assert.NotNull( expected );
+            Assert.NotNull( actual );
+            Assert.AreEqual( expected.System, actual.System );
+            Assert.AreEqual( expected.Latitude, expected.Latitude );
+            Assert.AreEqual( expected.Longitude, actual.Longitude );
         }
 
-        private static void AddressesAreEqual( AddressData a, AddressData b )
+        private static void AddressesAreEqual( AddressData expected, AddressData actual )
         {
-            if ( a == null && b == null ) return;
-            Assert.NotNull( a );
-            Assert.NotNull( b );
-            Assert.AreEqual( a.Country, b.Country );
-            Assert.AreEqual( a.City, b.City );
-            Assert.AreEqual( a.PostalCode, b.PostalCode );
-            Assert.AreEqual( a.StreetAddress, b.StreetAddress );
+            if ( expected == null && actual == null ) return;
+            Assert.NotNull( expected );
+            Assert.NotNull( actual );
+            Assert.AreEqual( expected.Country, actual.Country );
+            Assert.AreEqual( expected.City, actual.City );
+            Assert.AreEqual( expected.PostalCode, actual.PostalCode );
+            Assert.AreEqual( expected.StreetAddress, actual.StreetAddress );
         }
 
-        public static void RoutesAreEqual( RouteData a, RouteData b )
+        public static void RoutesAreEqual( RouteData expected, RouteData actual )
         {
-            CollectionAssert.AreEqual( a.Items, b.Items, "Route sequence mismatch." );
+            CollectionAssert.AreEqual( expected.Items, actual.Items, "Route sequence mismatch." );
         }
 
-        public static void ListsAreEqual<T>( IEnumerable<T> a, List<T> b, Func<T, T, T> comparator )
+        public static void ListsAreEqual<T>( IEnumerable<T> expected, List<T> actual, Func<T, T, T> comparator )
         {
-            var bEnumerator = b.GetEnumerator();
+            var bEnumerator = actual.GetEnumerator();
             bEnumerator.MoveNext();
 
-            foreach ( var aItem in a )
+            foreach ( var aItem in expected )
             {
                 comparator( aItem, bEnumerator.Current );
                 bEnumerator.MoveNext();
             }
         }
 
-        public static Link LinksAreEqual( Link a, Link b )
+        public static Link LinksAreEqual( Link expected, Link actual )
         {
-            if ( a == null && b == null ) return null;
-            Assert.NotNull( a );
-            Assert.NotNull( b );
+            if ( expected == null && actual == null ) return null;
+            Assert.NotNull( expected );
+            Assert.NotNull( actual );
 
-            UrisAreEqualEnough( a.Uri, b.Uri );
-            Assert.AreEqual( a.Rel, b.Rel );
-            Assert.AreEqual( a.Method, b.Method );
+            UrisAreEqualEnough( expected.Uri, actual.Uri );
+            Assert.AreEqual( expected.Rel, actual.Rel );
+            Assert.AreEqual( expected.Method, actual.Method );
             return null;
         }
 
-        private static void UrisAreEqualEnough( string a, string b )
+        private static void UrisAreEqualEnough( string expected, string actual )
         {
-            Assert.NotNull( a );
-            Assert.NotNull( b );
+            Assert.NotNull( expected );
+            Assert.NotNull( actual );
 
             //TODO: It might be more clever to implement this with some tokens in example code
             const string userPattern = "/users/\\d+(\\S*)";
             const string problemsPattern = "/users/\\d+(\\S*)/problems/\\d+(\\S*)";
             string pattern = userPattern;
 
-            if (a.Contains("/problems/") && b.Contains("/problems/"))
+            if (expected.Contains("/problems/") && actual.Contains("/problems/"))
             {
                 pattern = problemsPattern;
             }
 
-            var amatch = Regex.Match( a, pattern );
-            var bmatch = Regex.Match( b, pattern );
+            var amatch = Regex.Match( expected, pattern );
+            var bmatch = Regex.Match( actual, pattern );
             if ( amatch.Success )
             {
                 Assert.AreEqual( amatch.Groups[1].Value, bmatch.Groups[1].Value );
             }
             else
             {
-                Assert.AreEqual( a, b );
+                Assert.AreEqual( expected, actual );
             }
         }
 
-        private static CapacityData CapacitiesAreEqual( CapacityData a, CapacityData b )
+        private static CapacityData CapacitiesAreEqual( CapacityData expected, CapacityData actual )
         {
-            Assert.AreEqual( a.Amount, b.Amount );
-            Assert.AreEqual( a.Name, b.Name );
+            Assert.AreEqual( expected.Amount, actual.Amount );
+            Assert.AreEqual( expected.Name, actual.Name );
             return null;
         }
 
-        private static TimeWindowData TimeWindowsAreEqual( TimeWindowData a, TimeWindowData b )
+        private static TimeWindowData TimeWindowsAreEqual( TimeWindowData expected, TimeWindowData actual )
         {
-            Assert.AreEqual( a.Start, b.Start );
-            Assert.AreEqual( a.End, b.End );
+            Assert.AreEqual( expected.Start, actual.Start );
+            Assert.AreEqual( expected.End, actual.End );
             return null;
         }
 
-        public static void ResponsesAreEqual( ResponseData a, ResponseData b )
+        public static void ResponsesAreEqual( ResponseData expected, ResponseData actual )
         {
-            ListsAreEqual( a.Meta, b.Meta, LinksAreEqual );
-            ListsAreEqual( a.Items, b.Items, ErrorsAreEqual );
-            LinksAreEqual( a.Location, b.Location );
+            ListsAreEqual( expected.Meta, actual.Meta, LinksAreEqual );
+            ListsAreEqual( expected.Items, actual.Items, ErrorsAreEqual );
+            LinksAreEqual( expected.Location, actual.Location );
         }
 
-        private static ErrorData ErrorsAreEqual( ErrorData a, ErrorData b )
+        private static ErrorData ErrorsAreEqual( ErrorData expected, ErrorData actual )
         {
-            ListsAreEqual( a.Meta, b.Meta, LinksAreEqual );
-            Assert.AreEqual( a.Code, b.Code );
-            Assert.AreEqual( a.Message, b.Message );
+            ListsAreEqual( expected.Meta, actual.Meta, LinksAreEqual );
+            Assert.AreEqual( expected.Code, actual.Code );
+            Assert.AreEqual( expected.Message, actual.Message );
             return null;
         }
 
-        public static void RoutingProblemsAreEqual(RoutingProblemData a, RoutingProblemData b)
+        public static void RoutingProblemsAreEqual(RoutingProblemData expected, RoutingProblemData actual)
         {
-            Assert.IsNotNull( a );
-            Assert.IsNotNull( b );
-            Assert.AreEqual( a.Name, b.Name );
-            Assert.AreEqual( a.VersionNumber, b.VersionNumber );
-            ListsAreEqual( a.Meta, b.Meta, LinksAreEqual );
-            Assert.IsTrue( a.CreationDate <= a.ModifiedDate );
+            Assert.IsNotNull( expected );
+            Assert.IsNotNull( actual );
+            Assert.AreEqual( expected.Name, actual.Name );
+            Assert.AreEqual( expected.VersionNumber, actual.VersionNumber );
+            ListsAreEqual( expected.Meta, actual.Meta, LinksAreEqual );
+            Assert.IsTrue( expected.CreationDate <= expected.ModifiedDate );
         }
 
-        public static void TaskDataSetsAreEqual( TaskDataSet a, TaskDataSet b )
+        public static void TaskDataSetsAreEqual( TaskDataSet expected, TaskDataSet actual )
         {
-            if ( a == null && b == null ) return;
-            Assert.NotNull( a );
-            Assert.NotNull( b );
-            ListsAreEqual( a.Meta, b.Meta, LinksAreEqual );
-            ListsAreEqual( a.Items, b.Items, TasksAreEqual );
+            if ( expected == null && actual == null ) return;
+            Assert.NotNull( expected );
+            Assert.NotNull( actual );
+            Assert.AreEqual( expected.VersionNumber, actual.VersionNumber, "Version numbers do not match." );
+            ListsAreEqual( expected.Meta, actual.Meta, LinksAreEqual );
+            ListsAreEqual( expected.Items, actual.Items, TasksAreEqual );
         }
 
         public static TaskData TasksAreEqual( TaskData expected, TaskData actual )
