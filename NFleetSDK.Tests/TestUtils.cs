@@ -48,16 +48,6 @@ namespace NFleet.Tests
 
         }
 
-        public static void VehicleDataSetsAreEqual( VehicleDataSet expected, VehicleDataSet actual )
-        {
-            if ( expected == null && actual == null ) return;
-            Assert.NotNull( expected );
-            Assert.NotNull( actual );
-            Assert.AreEqual( expected.VersionNumber, actual.VersionNumber, "Version numbers do not match." );
-            ListsAreEqual( expected.Items, actual.Items, VehiclesAreEqual );
-            ListsAreEqual( expected.Meta, actual.Meta, LinksAreEqual );
-        }
-
         private static VehicleData VehiclesAreEqual( VehicleData expected, VehicleData actual )
         {
             Assert.AreEqual( expected.VersionNumber, actual.VersionNumber, "Version numbers do not match." );
@@ -229,15 +219,6 @@ namespace NFleet.Tests
         {
             ListsAreEqual( expected.Items, actual.Items, EntityLinksAreEqual );
             ListsAreEqual( expected.Meta, actual.Meta, LinksAreEqual );
-        }
-
-        public static void TaskDataSetsAreEqual( TaskDataSet expected, TaskDataSet actual )
-        {
-            if ( expected == null && actual == null ) return;
-            Assert.NotNull( expected );
-            Assert.NotNull( actual );
-            ListsAreEqual( expected.Meta, actual.Meta, LinksAreEqual );
-            ListsAreEqual( expected.Items, actual.Items, TasksAreEqual );
         }
 
         public static TaskData TasksAreEqual( TaskData expected, TaskData actual )

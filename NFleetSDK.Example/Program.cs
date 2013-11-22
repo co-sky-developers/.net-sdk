@@ -102,7 +102,7 @@ namespace NFleet.Example
                 if ( routingProblem.State == "Stopped" )
                 {
                     var resultVehicles = api2.Navigate<EntityLinkCollection>( routingProblem.GetLink( "list-vehicles" ) );
-                    var resultTasks = api2.Navigate<TaskDataSet>( routingProblem.GetLink( "list-tasks" ) );
+                    var resultTasks = api2.Navigate<EntityLinkCollection>( routingProblem.GetLink( "list-tasks" ) );
 
                     foreach ( var vehicleData in resultVehicles.Items )
                     {
@@ -126,11 +126,6 @@ namespace NFleet.Example
                     break;
                 }
             }
-        }
-
-        private static TaskEventData FindTaskEventData( TaskDataSet set, int id )
-        {
-            return set.Items.SelectMany( taskData => taskData.TaskEvents ).FirstOrDefault( taskEventData => taskEventData.Id == id );
         }
 
         private static void CreateDemoData( RoutingProblemData problem, Api api )
