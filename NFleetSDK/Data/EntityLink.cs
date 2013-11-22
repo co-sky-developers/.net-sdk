@@ -1,21 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace NFleet.Data
 {
     [DataContract]
-    public class UserData : IResponseData
+    public class EntityLink : IResponseData
     {
         [IgnoreDataMember]
         public int VersionNumber { get; set; }
         [DataMember]
         public int Id { get; set; }
-
-        #region Implementation of IResponseData
+        [DataMember]
+        public String Name { get; set; }
         [DataMember]
         public List<Link> Meta { get; set; }
-        
 
-        #endregion
+        public EntityLink()
+        {
+            Meta = new List<Link>();
+        }
     }
 }

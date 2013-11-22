@@ -2,7 +2,7 @@
 
 namespace NFleet.Data
 {
-    public interface IResponseData : IVersioned
+    public interface IResponseData
     {
         List<Link> Meta { get; }
     }

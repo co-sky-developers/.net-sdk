@@ -32,13 +32,11 @@ namespace NFleet.Tests
             if ( expected == null && actual == null ) return;
             Assert.NotNull( expected, "Expected UserData is null." );
             Assert.NotNull( actual, "Actual UserData is null." );
-            Assert.AreEqual(expected.VersionNumber, actual.VersionNumber, "Version numbers do not match.");
             ListsAreEqual( expected.Meta, actual.Meta, LinksAreEqual );
         }
 
         public static void RouteEventsAreEqual(RouteEventData expected, RouteEventData actual)
         {
-            Assert.AreEqual( expected.VersionNumber, actual.VersionNumber, "Version numbers do not match.");
             Assert.AreEqual( expected.State, actual.State );
             Assert.AreEqual( expected.LockState, actual.LockState );
             Assert.AreEqual( expected.TimeState, actual.TimeState );
@@ -90,7 +88,6 @@ namespace NFleet.Tests
 
         public static void TaskEventDataSetsAreEqual( TaskEventDataSet expected, TaskEventDataSet actual )
         {
-            Assert.AreEqual( expected.VersionNumber, actual.VersionNumber, "Version numbers do not match." );
             ListsAreEqual( expected.Items, actual.Items, TaskEventsAreEqual );
             ListsAreEqual( expected.Meta, actual.Meta, LinksAreEqual );
         }
@@ -151,6 +148,15 @@ namespace NFleet.Tests
             UrisAreEqualEnough( expected.Uri, actual.Uri );
             Assert.AreEqual( expected.Rel, actual.Rel );
             Assert.AreEqual( expected.Method, actual.Method );
+            Assert.AreEqual(expected.Type, actual.Type);
+            return null;
+        }
+
+        public static EntityLink EntityLinksAreEqual( EntityLink expected, EntityLink actual ) 
+        {
+            Assert.AreEqual( expected.Name, actual.Name );
+            Assert.AreEqual( expected.Id, actual.Id );
+            ListsAreEqual( expected.Meta, actual.Meta, LinksAreEqual );
             return null;
         }
 
@@ -215,9 +221,14 @@ namespace NFleet.Tests
             Assert.IsNotNull( expected );
             Assert.IsNotNull( actual );
             Assert.AreEqual( expected.Name, actual.Name );
-            Assert.AreEqual( expected.VersionNumber, actual.VersionNumber );
             ListsAreEqual( expected.Meta, actual.Meta, LinksAreEqual );
             Assert.IsTrue( expected.CreationDate <= expected.ModifiedDate );
+        }
+
+        public static void EntityCollectionLinksAreEqual(EntityLinkCollection expected, EntityLinkCollection actual)
+        {
+            ListsAreEqual( expected.Items, actual.Items, EntityLinksAreEqual );
+            ListsAreEqual( expected.Meta, actual.Meta, LinksAreEqual );
         }
 
         public static void TaskDataSetsAreEqual( TaskDataSet expected, TaskDataSet actual )
@@ -225,14 +236,12 @@ namespace NFleet.Tests
             if ( expected == null && actual == null ) return;
             Assert.NotNull( expected );
             Assert.NotNull( actual );
-            Assert.AreEqual( expected.VersionNumber, actual.VersionNumber, "Version numbers do not match." );
             ListsAreEqual( expected.Meta, actual.Meta, LinksAreEqual );
             ListsAreEqual( expected.Items, actual.Items, TasksAreEqual );
         }
 
         public static TaskData TasksAreEqual( TaskData expected, TaskData actual )
         {
-            Assert.AreEqual( expected.VersionNumber, actual.VersionNumber, "Task version number mismatch" );
             Assert.AreEqual( expected.Info, actual.Info, "Task info mismatch" );
             Assert.AreEqual( expected.Name, actual.Name, "Task name mismatch" );
             Assert.AreEqual( expected.State, actual.State, "Task state mismatch" );

@@ -1,28 +1,27 @@
 ﻿HTTP/1.1 200 OK
 Content-Type: application/json; charset=utf-8
 {
-  "VersionNumber":0,
   "Meta":[
     {
       "Uri":"",
       "Rel":"self",
       "Method":"GET",
       "Enabled":true,
-      "Type":null
+      "Type":""
     },
     {
       "Uri":"/users",
       "Rel":"list-users",
       "Method":"GET",
       "Enabled":true,
-      "Type":null
+      "Type":"application/vnd.jyu.nfleet.userset+json;version=2.0"
     },
     {
       "Uri":"/users",
       "Rel":"create-user",
       "Method":"POST",
       "Enabled":true,
-      "Type":null
+      "Type":"application/vnd.jyu.nfleet.user+json;version=2.0"
     }
   ]
 }

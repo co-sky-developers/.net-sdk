@@ -2,9 +2,9 @@
 
 namespace NFleet.Data
 {
-    public class TaskData : IResponseData
+    public class TaskData : IResponseData, IVersioned
     {
-        public int VersionNumber { get; set; }
+        int IVersioned.VersionNumber { get; set; }
         public int Id { get; set; }
         public string Name { get; set; }
         public string Info { get; set; }

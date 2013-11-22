@@ -70,6 +70,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api.cs" />
@@ -80,6 +81,8 @@
     <Compile Include="Data\AuthenticationRequest.cs" />
     <Compile Include="Data\CapacityData.cs" />
     <Compile Include="Data\CoordinateData.cs" />
+    <Compile Include="Data\EntityLink.cs" />
+    <Compile Include="Data\EntityLinkCollection.cs" />
     <Compile Include="Data\ErrorData.cs" />
     <Compile Include="Data\IResponseData.cs" />
     <Compile Include="Data\IVersioned.cs" />

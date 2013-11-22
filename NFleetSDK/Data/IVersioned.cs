@@ -1,6 +1,6 @@
 ﻿namespace NFleet.Data
 {
-    public interface IVersioned
+    interface IVersioned
     {
         int VersionNumber { get; set; }
     }

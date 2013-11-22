@@ -4,7 +4,6 @@ namespace NFleet.Data
 {
     public class ObjectiveValueDataSet : IResponseData
     {
-        public int VersionNumber { get; set; }
         public List<ObjectiveValueData> Items { get; set; }
         public List<Link> Meta { get; set; }
 

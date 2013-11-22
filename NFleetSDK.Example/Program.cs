@@ -43,6 +43,7 @@ namespace NFleet.Example
 
 
             var api1 = new Api( url, clientKey, clientSecret );
+
             var tokenResponse = api1.Authenticate();
 
             var apiData = api1.Root;
@@ -52,16 +53,17 @@ namespace NFleet.Example
             tokenResponse = api2.Authorize( tokenResponse );
             var createdUser = api2.Navigate( apiData.GetLink( "create-user" ), new UserData() );
             var user = api2.Navigate<UserData>( createdUser.Location );
-            var problems = api2.Navigate<RoutingProblemDataSet>( user.GetLink( "list-problems" ) );
+            var problems = api2.Navigate<EntityLinkCollection>( user.GetLink( "list-problems" ) );
             var created = api2.Navigate( user.GetLink( "create-problem" ), new RoutingProblemUpdateRequest { Name = "test" } );
             var problem = api2.Navigate<RoutingProblemData>( created.Location );
             var problem2 = api2.Navigate<RoutingProblemData>( created.Location );
+            
             CreateDemoData( problem, api2 );
 
             // refresh to get up to date set of operations
             problem = api2.Navigate<RoutingProblemData>( problem.GetLink( "self" ) );
 
-            var res = api2.Navigate<ResponseData>( problem.GetLink( "toggle-optimization" ), new RoutingProblemUpdateRequest { Name = problem.Name, State = "Running", VersionNumber = problem.VersionNumber } );
+            var res = api2.Navigate<ResponseData>( problem.GetLink( "toggle-optimization" ), new RoutingProblemUpdateRequest { Name = problem.Name, State = "Running" } );
             RoutingProblemData rb = null;
             while ( true )
             {
@@ -99,7 +101,7 @@ namespace NFleet.Example
 
                 if ( routingProblem.State == "Stopped" )
                 {
-                    var resultVehicles = api2.Navigate<VehicleDataSet>( routingProblem.GetLink( "list-vehicles" ) );
+                    var resultVehicles = api2.Navigate<EntityLinkCollection>( routingProblem.GetLink( "list-vehicles" ) );
                     var resultTasks = api2.Navigate<TaskDataSet>( routingProblem.GetLink( "list-tasks" ) );
 
                     foreach ( var vehicleData in resultVehicles.Items )
@@ -107,7 +109,6 @@ namespace NFleet.Example
                         var veh = api2.Navigate<VehicleData>( vehicleData.GetLink( "self" ) );
                         Console.Write( "Vehicle {0}({1}): ", vehicleData.Id, vehicleData.Name );
                         var routeEvents = api2.Navigate<RouteEventDataSet>( veh.GetLink( "list-events" ) );
-                        var routeEvents2 = api2.Navigate<RouteEventDataSet>( veh.GetLink( "list-events" ) );
                         var sequence = api2.Navigate<RouteData>( veh.GetLink( "get-route" ) );
 
                         sequence.Items.Insert( 0, veh.StartLocation.Id );

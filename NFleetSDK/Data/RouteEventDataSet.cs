@@ -2,8 +2,10 @@
 
 namespace NFleet.Data
 {
-    public class RouteEventDataSet : IResponseData
+    public class RouteEventDataSet : IResponseData, IVersioned
     {
+        int IVersioned.VersionNumber { get; set; }
+
         public List<RouteEventData> Items { get; set; }
 
         public List<Link> Meta { get; set; }
@@ -14,11 +16,5 @@ namespace NFleet.Data
 
             Meta = new List<Link>();
         }
-
-        #region Implementation of IVersioned
-
-        public int VersionNumber { get; set; }
-
-        #endregion
     }
 }

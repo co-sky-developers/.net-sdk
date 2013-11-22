@@ -4,18 +4,19 @@ using System.Runtime.Serialization;
 namespace NFleet.Data
 {
     [DataContract]
-    public class UserData : IResponseData
+    public class EntityLinkCollection : IResponseData, IVersioned
     {
         [IgnoreDataMember]
         public int VersionNumber { get; set; }
         [DataMember]
-        public int Id { get; set; }
-
-        #region Implementation of IResponseData
+        public List<EntityLink> Items { get; set; }
         [DataMember]
         public List<Link> Meta { get; set; }
-        
 
-        #endregion
+        public EntityLinkCollection()
+        {
+            Items = new List<EntityLink>();
+            Meta = new List<Link>();
+        }
     }
 }

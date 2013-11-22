@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace NFleet.Data
 {
-    public class RouteEventData : IResponseData
+    public class RouteEventData : IResponseData, IVersioned
     {
-        public int VersionNumber { get; set; }
+        int IVersioned.VersionNumber { get; set; }
 
         public string State { get; set; }
 

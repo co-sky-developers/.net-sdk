@@ -97,7 +97,9 @@ namespace NFleet
             {
                 var etag = result.Headers.FirstOrDefault( h => h.Name == "ETag" );
                 var version = etag != null ? Int32.Parse( etag.Value.ToString() ) : 0;
-                result.Data.VersionNumber = version;
+
+                var obj = result.Data as IVersioned;
+                if (obj != null) obj.VersionNumber = version;
             }
 
             if ( result.StatusCode == HttpStatusCode.NotModified )

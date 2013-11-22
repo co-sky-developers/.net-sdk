@@ -2,9 +2,8 @@
 
 namespace NFleet.Data
 {
-    public class RouteData : IResponseData
+    public class RouteData : IResponseData, IVersioned
     {
-        public int VersionNumber { get; set; }
         public List<int> Items { get; set; }
         public List<Link> Meta { get; set; }
 
@@ -13,5 +12,8 @@ namespace NFleet.Data
             Items = new List<int>();
             Meta = new List<Link>();
         }
+
+
+        int IVersioned.VersionNumber { get; set; }
     }
 }
