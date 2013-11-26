@@ -253,7 +253,7 @@ namespace NFleet.Tests
 
             var routeReq = new RouteUpdateRequest
             {
-                Sequence = new[] { 11, 12 }
+                Items = new[] { 11, 12 }
             };
             api.Navigate<ResponseData>( vehicle.GetLink( "set-route" ), routeReq );
             //##BEGIN EXAMPLE accessingtaskseq##
@@ -271,9 +271,10 @@ namespace NFleet.Tests
             var user = TestHelper.GetOrCreateUser( api );
             var problem = TestHelper.CreateProblemWithDemoData( api, user );
             var vehicle = TestHelper.GetVehicle( api, user, problem );
+            api.Navigate<RouteData>(vehicle.GetLink("get-route"));
             var routeReq = new RouteUpdateRequest
             {
-                Sequence = new[] { 11, 12 }
+                Items = new[] { 11, 12 }
             };
             api.Navigate<ResponseData>( vehicle.GetLink( "set-route" ), routeReq );
 
@@ -294,9 +295,10 @@ namespace NFleet.Tests
             var vehicle = TestHelper.GetVehicle( api, user, problem );
 
             //##BEGIN EXAMPLE updatingroute##
+            api.Navigate<RouteData>(vehicle.GetLink("get-route"));
             var routeReq = new RouteUpdateRequest
             {
-                Sequence = new[] { 11, 21, 12, 22 }
+                Items = new[] { 11, 21, 12, 22 }
             };
             api.Navigate<ResponseData>( vehicle.GetLink( "set-route" ), routeReq );
             //##END EXAMPLE##

@@ -1,17 +1,28 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace NFleet.Data
 {
-    public class VehicleData : IResponseData
+    [DataContract]
+    public class VehicleData : IResponseData, IVersioned
     {
-        public int VersionNumber { get; set; }
+        [IgnoreDataMember]
+        int IVersioned.VersionNumber { get; set; }
+        [DataMember]
         public int Id { get; set; }
+        [DataMember]
         public string Name { get; set; }
+        [DataMember]
         public List<CapacityData> Capacities { get; set; }
+        [DataMember]
         public List<TimeWindowData> TimeWindows { get; set; }
+        [DataMember]
         public LocationData StartLocation { get; set; }
+        [DataMember]
         public LocationData EndLocation { get; set; }
+        [DataMember]
         public List<Link> Meta { get; set; }
+        [DataMember]
         public string State { get; set; }
 
         public VehicleData()
