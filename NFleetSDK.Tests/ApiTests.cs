@@ -251,6 +251,7 @@ namespace NFleet.Tests
             var problem = TestHelper.CreateProblemWithDemoData( api, user );
             var vehicle = TestHelper.GetVehicle( api, user, problem );
 
+            api.Navigate<RouteData>(vehicle.GetLink("get-route"));
             var routeReq = new RouteUpdateRequest
             {
                 Items = new[] { 11, 12 }

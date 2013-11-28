@@ -50,7 +50,6 @@ namespace NFleet.Tests
 
         private static VehicleData VehiclesAreEqual( VehicleData expected, VehicleData actual )
         {
-            Assert.AreEqual( expected.VersionNumber, actual.VersionNumber, "Version numbers do not match." );
             Assert.AreEqual( expected.Name, actual.Name );
             LocationsAreEqual( expected.StartLocation, actual.StartLocation );
             LocationsAreEqual( expected.EndLocation, actual.EndLocation );
