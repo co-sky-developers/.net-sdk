@@ -1,239 +1,76 @@
 ﻿HTTP/1.1 200 OK 
 Content-Type: application/json 
 {
-  "VersionNumber":7707844,
   "Items":[
     {
-      "VersionNumber":1,
       "Id":1,
       "Name":"test",
-      "Capacities":[
-        {
-          "Name":"Weight",
-          "Amount":5000
-        }
-      ],
-      "TimeWindows":[
-        {
-          "Start":"2013-05-14T08:00:00",
-          "End":"2013-05-14T12:00:00"
-        }
-      ],
-      "StartLocation":{
-        "Id":1,
-        "Coordinate":{
-          "Latitude":62.244958,
-          "Longitude":25.747143,
-          "System":"Euclidian"
-        },
-        "Address":null
-      },
-      "EndLocation":{
-        "Id":1,
-        "Coordinate":{
-          "Latitude":62.244958,
-          "Longitude":25.747143,
-          "System":"Euclidian"
-        },
-        "Address":null
-      },
       "Meta":[
         {
-          "Uri":"/users/1/problems/1/vehicles/1",
+          "Uri":"/users/1/problems/6/vehicles/1",
           "Rel":"self",
           "Method":"GET",
           "Enabled":true,
           "Type":"application/vnd.jyu.nfleet.vehicle+json;version=2.0"
-        },
-        {
-          "Uri":"",
-          "Rel":"delete",
-          "Method":"DELETE",
-          "Enabled":true,
-          "Type":"application/vnd.jyu.nfleet.vehicle+json;version=2.0"
-        },
-        {
-          "Uri":"",
-          "Rel":"update",
-          "Method":"PUT",
-          "Enabled":true,
-          "Type":"application/vnd.jyu.nfleet.vehicle+json;version=2.0"
-        },
-        {
-          "Uri":"/route",
-          "Rel":"get-route",
-          "Method":"GET",
-          "Enabled":true,
-          "Type":"application/vnd.jyu.nfleet.route+json;version=2.0"
-        },
-        {
-          "Uri":"/route",
-          "Rel":"set-route",
-          "Method":"PUT",
-          "Enabled":true,
-          "Type":"application/vnd.jyu.nfleet.route+json;version=2.0"
-        },
-        {
-          "Uri":"/events",
-          "Rel":"list-events",
-          "Method":"GET",
-          "Enabled":true,
-          "Type":"application/vnd.jyu.nfleet.routeevent+json;version=2.0"
-        },
-        {
-          "Uri":"",
-          "Rel":"activate",
-          "Method":"PUT",
-          "Enabled":false,
-          "Type":"application/vnd.jyu.nfleet.vehicle+json;version=2.0"
-        },
-        {
-          "Uri":"",
-          "Rel":"deactivate",
-          "Method":"PUT",
-          "Enabled":true,
-          "Type":"application/vnd.jyu.nfleet.vehicle+json;version=2.0"
         }
-      ],
-      "State":"Active"
+      ]
     },
     {
-      "VersionNumber":1,
       "Id":2,
       "Name":"vehicle 2",
-      "Capacities":[
-        {
-          "Name":"Weight",
-          "Amount":3500
-        }
-      ],
-      "TimeWindows":[
-        {
-          "Start":"2013-05-14T08:00:00",
-          "End":"2013-05-14T12:00:00"
-        }
-      ],
-      "StartLocation":{
-        "Id":4,
-        "Coordinate":{
-          "Latitude":61.244958,
-          "Longitude":20.747143,
-          "System":"Euclidian"
-        },
-        "Address":null
-      },
-      "EndLocation":{
-        "Id":1,
-        "Coordinate":{
-          "Latitude":62.244958,
-          "Longitude":25.747143,
-          "System":"Euclidian"
-        },
-        "Address":null
-      },
       "Meta":[
         {
-          "Uri":"/users/1/problems/1/vehicles/2",
+          "Uri":"/users/1/problems/6/vehicles/2",
           "Rel":"self",
           "Method":"GET",
           "Enabled":true,
           "Type":"application/vnd.jyu.nfleet.vehicle+json;version=2.0"
-        },
-        {
-          "Uri":"",
-          "Rel":"delete",
-          "Method":"DELETE",
-          "Enabled":true,
-          "Type":"application/vnd.jyu.nfleet.vehicle+json;version=2.0"
-        },
-        {
-          "Uri":"",
-          "Rel":"update",
-          "Method":"PUT",
-          "Enabled":true,
-          "Type":"application/vnd.jyu.nfleet.vehicle+json;version=2.0"
-        },
-        {
-          "Uri":"/route",
-          "Rel":"get-route",
-          "Method":"GET",
-          "Enabled":true,
-          "Type":"application/vnd.jyu.nfleet.route+json;version=2.0"
-        },
-        {
-          "Uri":"/route",
-          "Rel":"set-route",
-          "Method":"PUT",
-          "Enabled":true,
-          "Type":"application/vnd.jyu.nfleet.route+json;version=2.0"
-        },
-        {
-          "Uri":"/events",
-          "Rel":"list-events",
-          "Method":"GET",
-          "Enabled":true,
-          "Type":"application/vnd.jyu.nfleet.routeevent+json;version=2.0"
-        },
-        {
-          "Uri":"",
-          "Rel":"activate",
-          "Method":"PUT",
-          "Enabled":false,
-          "Type":"application/vnd.jyu.nfleet.vehicle+json;version=2.0"
-        },
-        {
-          "Uri":"",
-          "Rel":"deactivate",
-          "Method":"PUT",
-          "Enabled":true,
-          "Type":"application/vnd.jyu.nfleet.vehicle+json;version=2.0"
         }
-      ],
-      "State":"Active"
+      ]
     }
   ],
   "Meta":[
     {
-      "Uri":"/users/1/problems/1/vehicles",
+      "Uri":"/users/1/problems/6/vehicles",
       "Rel":"self",
       "Method":"GET",
       "Enabled":true,
-      "Type":null
+      "Type":"application/vnd.jyu.nfleet.vehicleset+json;version=2.0"
     },
     {
       "Uri":"?limit=2&offset=0",
       "Rel":"current",
       "Method":"GET",
       "Enabled":true,
-      "Type":null
+      "Type":"application/vnd.jyu.nfleet.vehicleset+json;version=2.0"
     },
     {
       "Uri":"?limit=2&offset=0",
       "Rel":"first",
       "Method":"GET",
       "Enabled":true,
-      "Type":null
+      "Type":"application/vnd.jyu.nfleet.vehicleset+json;version=2.0"
     },
     {
       "Uri":"?limit=2&offset=0",
       "Rel":"prev",
       "Method":"GET",
       "Enabled":true,
-      "Type":null
+      "Type":"application/vnd.jyu.nfleet.vehicleset+json;version=2.0"
     },
     {
       "Uri":"?limit=2&offset=0",
       "Rel":"next",
       "Method":"GET",
       "Enabled":true,
-      "Type":null
+      "Type":"application/vnd.jyu.nfleet.vehicleset+json;version=2.0"
     },
     {
       "Uri":"?limit=2&offset=0",
       "Rel":"last",
       "Method":"GET",
       "Enabled":true,
-      "Type":null
+      "Type":"application/vnd.jyu.nfleet.vehicleset+json;version=2.0"
     }
   ]
 }

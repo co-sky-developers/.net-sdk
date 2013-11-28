@@ -3,7 +3,6 @@ Content-Type: application/json
 {
   "Items":[
     {
-      "VersionNumber":0,
       "State":"Unlocked",
       "LockState":"None",
       "TimeState":"None",
@@ -26,7 +25,6 @@ Content-Type: application/json
       "InternalState":"Unlocked"
     },
     {
-      "VersionNumber":0,
       "State":"Unlocked",
       "LockState":"None",
       "TimeState":"None",
@@ -51,6 +49,5 @@ Content-Type: application/json
   ],
   "Meta":[
 
-  ],
-  "VersionNumber":99552928
+  ]
 }
