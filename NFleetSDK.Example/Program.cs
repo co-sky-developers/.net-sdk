@@ -53,7 +53,7 @@ namespace NFleet.Example
             tokenResponse = api2.Authorize( tokenResponse );
             var createdUser = api2.Navigate( apiData.GetLink( "create-user" ), new UserData() );
             var user = api2.Navigate<UserData>( createdUser.Location );
-            var problems = api2.Navigate<EntityLinkCollection>( user.GetLink( "list-problems" ) );
+            var problems = api2.Navigate<RoutingProblemDataSet>( user.GetLink( "list-problems" ) );
             var created = api2.Navigate( user.GetLink( "create-problem" ), new RoutingProblemUpdateRequest { Name = "test" } );
             var problem = api2.Navigate<RoutingProblemData>( created.Location );
             var problem2 = api2.Navigate<RoutingProblemData>( created.Location );
@@ -101,8 +101,8 @@ namespace NFleet.Example
 
                 if ( routingProblem.State == "Stopped" )
                 {
-                    var resultVehicles = api2.Navigate<EntityLinkCollection>( routingProblem.GetLink( "list-vehicles" ) );
-                    var resultTasks = api2.Navigate<EntityLinkCollection>( routingProblem.GetLink( "list-tasks" ) );
+                    var resultVehicles = api2.Navigate<VehicleDataSet>( routingProblem.GetLink( "list-vehicles" ) );
+                    var resultTasks = api2.Navigate<TaskDataSet>( routingProblem.GetLink( "list-tasks" ) );
 
                     foreach ( var vehicleData in resultVehicles.Items )
                     {
