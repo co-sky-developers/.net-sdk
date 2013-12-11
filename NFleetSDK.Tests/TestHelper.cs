@@ -18,7 +18,7 @@ namespace NFleet.Tests
 
         internal static UserData GetOrCreateUser( Api api )
         {
-            var users = api.Navigate<EntityLinkCollection>( api.Root.GetLink( "list-users" ) );
+            var users = api.Navigate<UserDataSet>( api.Root.GetLink( "list-users" ) );
             var userExists = users.Items.Exists( u => u.Id == 1 );
             UserData user = null;
             if ( !userExists )
@@ -51,7 +51,7 @@ namespace NFleet.Tests
         public static VehicleData GetVehicle( Api api, UserData user, RoutingProblemData problem )
         {
             TestData.CreateDemoData( problem, api );
-            var vehicles = api.Navigate<EntityLinkCollection>( problem.GetLink( "list-vehicles" ) );
+            var vehicles = api.Navigate<VehicleDataSet>( problem.GetLink( "list-vehicles" ) );
             var vehicleLink = vehicles.Items.Find( v => v.Id == 1 );
             var vehicle = api.Navigate<VehicleData>(vehicleLink.GetLink("self"));
             return vehicle;
@@ -59,7 +59,7 @@ namespace NFleet.Tests
 
         internal static TaskData GetTask( Api api, RoutingProblemData problem )
         {
-            var tasks = api.Navigate<EntityLinkCollection>( problem.GetLink( "list-tasks" ) );
+            var tasks = api.Navigate<TaskDataSet>( problem.GetLink( "list-tasks" ) );
             var newTask = new TaskUpdateRequest { Name = "test name" };
             var capacity = new CapacityData { Name = "Weight", Amount = 20 };
 

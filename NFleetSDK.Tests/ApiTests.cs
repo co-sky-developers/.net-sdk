@@ -94,12 +94,12 @@ namespace NFleet.Tests
             var problem = TestHelper.CreateProblemWithDemoData( api, user );
 
             //##BEGIN EXAMPLE listingtasks##
-            var tasks = api.Navigate<EntityLinkCollection>( problem.GetLink( "list-tasks" ) );
+            var tasks = api.Navigate<TaskDataSet>( problem.GetLink( "list-tasks" ) );
             //##END EXAMPLE##
 
-            var mockTasks = TestUtils.GetMockResponse<EntityLinkCollection>( responses["listingtasksresp"].json );
+            var mockTasks = TestUtils.GetMockResponse<TaskDataSet>(responses["listingtasksresp"].json);
             Trace.Write( JsonConvert.SerializeObject( tasks ) );
-            TestUtils.EntityCollectionLinksAreEqual( mockTasks, tasks );
+            TestUtils.TaskDataSetsAreEqual( mockTasks, tasks );
         }
 
 
@@ -109,7 +109,7 @@ namespace NFleet.Tests
             var api = TestHelper.Authenticate();
             var user = TestHelper.GetOrCreateUser( api );
             var problem = TestHelper.CreateProblemWithDemoData( api, user );
-            var tasks = api.Navigate<EntityLinkCollection>( problem.GetLink( "list-tasks" ) );
+            var tasks = api.Navigate<TaskDataSet>( problem.GetLink( "list-tasks" ) );
             //##BEGIN EXAMPLE creatingtask##
             var newTask = new TaskUpdateRequest { Name = "test name" };
             var capacity = new CapacityData { Name = "Weight", Amount = 20 };
@@ -235,12 +235,12 @@ namespace NFleet.Tests
             };
             api.Navigate<ResponseData>( problem.GetLink( "create-vehicle" ), vehicle );
             //##BEGIN EXAMPLE listingvehicles##
-            var vehicles = api.Navigate<EntityLinkCollection>( problem.GetLink( "list-vehicles" ) );
+            var vehicles = api.Navigate<VehicleDataSet>( problem.GetLink( "list-vehicles" ) );
             //##END EXAMPLE##
 
-            var mockVehicles = TestUtils.GetMockResponse<EntityLinkCollection>( responses["listingvehiclesresp"].json );
+            var mockVehicles = TestUtils.GetMockResponse<VehicleDataSet>(responses["listingvehiclesresp"].json);
             Trace.Write( JsonConvert.SerializeObject( vehicles ) );
-            TestUtils.EntityCollectionLinksAreEqual( mockVehicles, vehicles );
+            TestUtils.VehicleDataSetsAreEqual( mockVehicles, vehicles );
         }
 
         [Test]
@@ -406,7 +406,7 @@ namespace NFleet.Tests
 
             //##BEGIN EXAMPLE creatingauser##
 
-            var users = api.Navigate<EntityLinkCollection>( api.Root.GetLink( "list-users" ) );
+            var users = api.Navigate<UserDataSet>( api.Root.GetLink( "list-users" ) );
             var response = api.Navigate( users.GetLink( "create" ) );
             var user = api.Navigate<UserData>( response.Location );
             //##END EXAMPLE##

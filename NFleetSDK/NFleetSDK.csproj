@@ -81,8 +81,6 @@
     <Compile Include="Data\AuthenticationRequest.cs" />
     <Compile Include="Data\CapacityData.cs" />
     <Compile Include="Data\CoordinateData.cs" />
-    <Compile Include="Data\EntityLink.cs" />
-    <Compile Include="Data\EntityLinkCollection.cs" />
     <Compile Include="Data\ErrorData.cs" />
     <Compile Include="Data\FieldsItem.cs" />
     <Compile Include="Data\IResponseData.cs" />
@@ -112,6 +110,7 @@
     <Compile Include="Data\TimeWindowData.cs" />
     <Compile Include="Data\TokenData.cs" />
     <Compile Include="Data\UserData.cs" />
+    <Compile Include="Data\UserDataSet.cs" />
     <Compile Include="Data\UserSetRequest.cs" />
     <Compile Include="Data\VehicleData.cs" />
     <Compile Include="Data\VehicleDataSet.cs" />
