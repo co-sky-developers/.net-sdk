@@ -1,9 +1,10 @@
+HTTP/1.1 200 OK 
+Content-Type: application/json
 {
-  "VersionNumber":1,
-  "Id":3,
+  "Id":4,
   "Meta":[
     {
-      "Uri":"/users/3",
+      "Uri":"/users/4",
       "Rel":"self",
       "Method":"GET",
       "Enabled":true,

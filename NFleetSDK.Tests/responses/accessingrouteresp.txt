@@ -1,17 +1,17 @@
 ﻿HTTP/1.1 200 OK 
 Content-Type: application/json 
 {
-  "VersionNumber":0,
   "Items":[
     11,
     12
   ],
   "Meta":[
     {
-      "Uri":"/users/1/problems/17/vehicles/1/route",
+      "Uri":"/users/1/problems/8/vehicles/1/route",
       "Rel":"self",
       "Method":"GET",
-      "Enabled":false
+      "Enabled":false,
+      "Type":"application/vnd.jyu.nfleet.route+json;version=2.0"
     }
-  ],
+  ]
 }

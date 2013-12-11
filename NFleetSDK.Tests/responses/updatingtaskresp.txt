@@ -1,7 +1,6 @@
 ﻿HTTP/1.1 200 OK 
 Content-Type: application/json 
 {
-  "VersionNumber":2,
   "Id":2,
   "Name":"Other name",
   "Info":null,
@@ -11,9 +10,6 @@ Content-Type: application/json
       "Name":null,
       "Info":null,
       "Type":"Pickup",
-      "State":null,
-      "LockState":null,
-      "TimeState":null,
       "Capacities":[
         {
           "Name":"Weight",
@@ -33,20 +29,15 @@ Content-Type: application/json
         "Address":null
       },
       "ServiceTime":0.0,
-      "WaitingTime":0.0,
       "Meta":[
 
-      ],
-      "OriginalServiceTime":0.0
+      ]
     },
     {
       "Id":22,
       "Name":null,
       "Info":null,
       "Type":"Delivery",
-      "State":null,
-      "LockState":null,
-      "TimeState":null,
       "Capacities":[
         {
           "Name":"Weight",
@@ -66,11 +57,9 @@ Content-Type: application/json
         "Address":null
       },
       "ServiceTime":0.0,
-      "WaitingTime":0.0,
       "Meta":[
 
-      ],
-      "OriginalServiceTime":0.0
+      ]
     }
   ],
   "Meta":[

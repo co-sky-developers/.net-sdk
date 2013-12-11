@@ -10,7 +10,8 @@ Content-Type: application/json
                "Uri":"https://developer.co-sky.fi/help/#3401",
                "Rel":"help",
                "Method":"GET",
-               "Enabled":false
+               "Enabled":true,
+               "Type":null
             }
          ]
       }
@@ -20,7 +21,8 @@ Content-Type: application/json
          "Uri":"https://developer.co-sky.fi/help/#400",
          "Rel":"help",
          "Method":"GET",
-         "Enabled":false
+         "Enabled":true,
+         "Type":null
       }
    ]
 }

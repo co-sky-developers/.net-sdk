@@ -1,7 +1,6 @@
 ﻿HTTP/1.1 200 OK 
 Content-Type: application/json 
 {
-  "VersionNumber":74575363,
   "Items":[
     {
       "Id":32001,

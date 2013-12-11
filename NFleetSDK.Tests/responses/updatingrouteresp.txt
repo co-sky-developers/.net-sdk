@@ -9,16 +9,11 @@ Content-Type: application/json
   ],
   "Meta":[
     {
-      "Uri":"/users/1/problems/1/vehicles/1/route",
+      "Uri":"/users/1/problems/9/vehicles/1/route",
       "Rel":"self",
       "Method":"GET",
-      "Enabled":"True"
+      "Enabled":false,
+      "Type":"application/vnd.jyu.nfleet.route+json;version=2.0"
     }
-  ],
-  "ActualStartTime":null,
-  "ActualEndTime":null,
-  "PlannedStartTime":null,
-  "PlannedEndTime":null,
-  "ArrivalTimeState":"None",
-  "DepartureTimeState":"None"
+  ]
 }

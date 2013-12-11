@@ -1,0 +1,9 @@
+HTTP/1.1 201 Created
+Cache-Control: private
+Transfer-Encoding: chunked
+Content-Type: application/json
+Location: http://test.api.co-sky.fi/tokens/pxNiGMu7Pwnw5XXEqI9rxObHPOB2405LDoD0F
+tW8tF4T
+Server: Microsoft-IIS/8.0
+X-Powered-By: ServiceStack/3.959 Win32NT/.NET
+Date: Fri, 22 Nov 2013 10:47:02 GMT

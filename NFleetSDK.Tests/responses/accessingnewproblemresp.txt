@@ -45,7 +45,7 @@
       "Rel":"list-tasks",
       "Method":"GET",
       "Enabled":true,
-      "Type":"application/vnd.jyu.nfleet.task+json;version=2.0"
+      "Type":"application/vnd.jyu.nfleet.taskset+json;version=2.0"
     },
     {
       "Uri":"/objective-values",
