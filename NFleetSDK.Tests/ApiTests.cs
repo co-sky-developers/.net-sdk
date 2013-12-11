@@ -453,5 +453,68 @@ namespace NFleet.Tests
             Trace.Write( JsonConvert.SerializeObject( events ) );
             var mockevents = TestUtils.GetMockResponse<RouteEventDataSet>( responses["accessingrouteeventsresp"].json );
         }
+
+
+        [Test]
+        public void T20VehicleImportSpeedTest()
+        {
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetOrCreateUser(api);
+            var problem = TestHelper.CreateProblemWithDemoData(api, user);
+
+            var vehicleCapacities = new List<CapacityData> { new CapacityData() { Name = "Weight", Amount = 100000 } };
+
+            var vehicleTimeWindow = new List<TimeWindowData> { new TimeWindowData { Start = new DateTime(2013, 5, 14, 7, 0, 0), End = new DateTime(2013, 5, 14, 16, 0, 0) } };
+
+            var vehiclePickup = new LocationData() { Coordinate = new CoordinateData { Latitude = 62.244588, Longitude = 25.742683, System = "WGS84" } };
+            var vehicleDelivery = new LocationData() { Coordinate = new CoordinateData { Latitude = 62.244588, Longitude = 25.742683, System = "WGS84" } };
+            var importRequest = new VehicleSetImportRequest
+            {
+                Items = new List<VehicleUpdateRequest>()
+            };
+
+            for (int i = 0; i < 100; i++)
+            {
+                var veh = new VehicleUpdateRequest()
+                {
+                    Name = "Vehicle" + i + 1,
+                    Capacities = vehicleCapacities,
+                    StartLocation = vehiclePickup,
+                    EndLocation = vehicleDelivery,
+                    TimeWindows = vehicleTimeWindow
+                };
+            }
+
+            Stopwatch timer = new Stopwatch();
+            timer.Start();
+            var result = api.Navigate<ResponseData>(problem.GetLink("import-vehicles"), importRequest);
+            timer.Stop();
+            Console.WriteLine("Time elapsed with set import: {0}", timer.Elapsed);
+
+            
+
+            var vehicleList = new List<VehicleUpdateRequest>();
+            for (int i = 0; i < 100; i++)
+            {
+                var vehicleReq = new VehicleUpdateRequest()
+                {
+                    Name = "Car" + i+1,
+                    Capacities = vehicleCapacities,
+                    StartLocation = vehiclePickup,
+                    EndLocation = vehicleDelivery,
+                    TimeWindows = vehicleTimeWindow
+                };
+                vehicleList.Add(vehicleReq);
+            }
+
+            timer = new Stopwatch();
+            timer.Start();
+            foreach (var rekku in vehicleList)
+            {
+                api.Navigate<ResponseData>(problem.GetLink("create-vehicle"), rekku);
+            }
+            timer.Stop();
+            Console.WriteLine("Time elapsed with 100 create operations: {0}", timer.Elapsed);
+        }
     }
 }

@@ -80,7 +80,7 @@ namespace NFleet
 
                 result = client.Execute<T>( request );
                 if ( result.StatusCode == HttpStatusCode.Unauthorized )
-                    throw new IOException( "Invalid client key or client secret." );
+                    ThrowException(result);
             }
 
             if ( ( result.Content.Length > 0 && result.ResponseStatus != ResponseStatus.Completed ) || result.StatusCode == 0 )
@@ -229,8 +229,11 @@ namespace NFleet
         {
             var code = result.StatusCode;
 
-            var errorData = result.Data is ResponseData ? ( (ResponseData)(IResponseData)result.Data ).Items.FirstOrDefault() : null;
-            throw new IOException( String.Format( "{0} {1}{2}", (int)code, result.StatusDescription, errorData != null ? ": " + errorData.Message : "" ) );
+            var errors = result.Data is ResponseData
+                ? ((ResponseData) (IResponseData) result.Data).Items
+                : new List<ErrorData>();
+
+            throw new NFleetRequestException(String.Format("{0} {1}", (int)code, result.StatusDescription)) { Items = errors };
         }
 
         private void Authenticate( string key, string secret )

@@ -84,14 +84,17 @@
     <Compile Include="Data\EntityLink.cs" />
     <Compile Include="Data\EntityLinkCollection.cs" />
     <Compile Include="Data\ErrorData.cs" />
+    <Compile Include="Data\FieldsItem.cs" />
     <Compile Include="Data\IResponseData.cs" />
     <Compile Include="Data\IVersioned.cs" />
     <Compile Include="Data\Link.cs" />
     <Compile Include="Data\LocationData.cs" />
     <Compile Include="Data\LocationDataSet.cs" />
+    <Compile Include="Data\NFleetRequestException.cs" />
     <Compile Include="Data\ObjectiveValueData.cs" />
     <Compile Include="Data\ObjectiveValueDataSet.cs" />
     <Compile Include="Data\ObjectiveValuesRequest.cs" />
+    <Compile Include="Data\PlanData.cs" />
     <Compile Include="Data\RouteData.cs" />
     <Compile Include="Data\RouteEventData.cs" />
     <Compile Include="Data\RouteEventDataSet.cs" />
@@ -104,6 +107,7 @@
     <Compile Include="Data\TaskEventDataSet.cs" />
     <Compile Include="Data\TaskEventData.cs" />
     <Compile Include="Data\TaskEventUpdateRequest.cs" />
+    <Compile Include="Data\TaskSetImportRequest.cs" />
     <Compile Include="Data\TaskUpdateRequest.cs" />
     <Compile Include="Data\TimeWindowData.cs" />
     <Compile Include="Data\TokenData.cs" />
@@ -111,6 +115,7 @@
     <Compile Include="Data\UserSetRequest.cs" />
     <Compile Include="Data\VehicleData.cs" />
     <Compile Include="Data\VehicleDataSet.cs" />
+    <Compile Include="Data\VehicleSetImportRequest.cs" />
     <Compile Include="Data\VehicleUpdateRequest.cs" />
     <Compile Include="LinkUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

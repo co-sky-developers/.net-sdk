@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -26,6 +27,14 @@ namespace NFleet.Example
             try
             {
                 Run();
+            }
+            catch (NFleetRequestException nfre)
+            {
+                foreach (var error in nfre.Items)
+                {
+                    Console.WriteLine("{0}" + Environment.NewLine + "Error Code: {1}" + Environment.NewLine + "Message: {2}", nfre.Message, error.Code, error.Message);
+                }
+                
             }
             catch ( IOException e )
             {
@@ -56,7 +65,6 @@ namespace NFleet.Example
             var problems = api2.Navigate<RoutingProblemDataSet>( user.GetLink( "list-problems" ) );
             var created = api2.Navigate( user.GetLink( "create-problem" ), new RoutingProblemUpdateRequest { Name = "test" } );
             var problem = api2.Navigate<RoutingProblemData>( created.Location );
-            var problem2 = api2.Navigate<RoutingProblemData>( created.Location );
             
             CreateDemoData( problem, api2 );
 
