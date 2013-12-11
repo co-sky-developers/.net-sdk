@@ -2,15 +2,15 @@
 
 namespace NFleet.Data
 {
-    public class ObjectiveValueDataSet : IResponseData, IVersioned
+    public class RoutingProblemDataSet : IResponseData, IVersioned
     {
         int IVersioned.VersionNumber { get; set; }
-        public List<ObjectiveValueData> Items { get; set; }
+        public List<RoutingProblemData> Items { get; set; }
         public List<Link> Meta { get; set; }
 
-        public ObjectiveValueDataSet()
+        public RoutingProblemDataSet()
         {
-            Items = new List<ObjectiveValueData>();
+            Items = new List<RoutingProblemData>();
             Meta = new List<Link>();
         }
     }

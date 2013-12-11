@@ -97,8 +97,10 @@
     <Compile Include="Data\RouteEventDataSet.cs" />
     <Compile Include="Data\RouteUpdateRequest.cs" />
     <Compile Include="Data\RoutingProblemData.cs" />
+    <Compile Include="Data\RoutingProblemDataSet.cs" />
     <Compile Include="Data\RoutingProblemUpdateRequest.cs" />
     <Compile Include="Data\TaskData.cs" />
+    <Compile Include="Data\TaskDataSet.cs" />
     <Compile Include="Data\TaskEventDataSet.cs" />
     <Compile Include="Data\TaskEventData.cs" />
     <Compile Include="Data\TaskEventUpdateRequest.cs" />
