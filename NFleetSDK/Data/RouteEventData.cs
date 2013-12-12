@@ -33,7 +33,7 @@ namespace NFleet.Data
 
         public int VehicleId { get; set; }
 
-        public int Id { get; set; }
+        public int TaskEventId { get; set; }
 
         public int SequenceNumber { get; set; }
 
