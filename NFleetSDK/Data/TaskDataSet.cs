@@ -7,7 +7,7 @@ namespace NFleet.Data
 {
     public class TaskDataSet : IResponseData, IVersioned
     {
-        public int VersionNumber { get; set; }
+        int IVersioned.VersionNumber { get; set; }
         public List<TaskData> Items { get; set; }
         public List<Link> Meta { get; set; }
 

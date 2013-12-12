@@ -61,6 +61,7 @@
     <Compile Include="TestData.cs" />
     <Compile Include="TestHelper.cs" />
     <Compile Include="TestUtils.cs" />
+    <Compile Include="UtilTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

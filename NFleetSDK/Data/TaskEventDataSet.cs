@@ -1,16 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Runtime.Serialization;
 
 namespace NFleet.Data
 {
-    [DataContract]
-    public class TaskEventDataSet : IResponseData
+    public class TaskEventDataSet : IResponseData, IVersioned
     {
-        [IgnoreDataMember]
-        public int VersionNumber { get; set; }
-        [DataMember]
+        int IVersioned.VersionNumber { get; set; }
         public List<TaskEventData> Items { get; set; }
-        [DataMember]
         public List<Link> Meta { get; set; }
 
         public TaskEventDataSet()

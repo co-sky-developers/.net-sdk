@@ -516,5 +516,18 @@ namespace NFleet.Tests
             timer.Stop();
             Console.WriteLine("Time elapsed with 100 create operations: {0}", timer.Elapsed);
         }
+
+        [Test]
+        public void T21GetParentVehicleFromPlanData()
+        {
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetOrCreateUser(api);
+            var problem = TestHelper.CreateProblemWithDemoData(api, user);
+
+            var plan = api.Navigate<PlanData>(problem.GetLink("plan"));
+            var routeEvent = plan.Items[0].Events[0];
+            var vehicle = api.Navigate<VehicleData>(routeEvent.GetLink("get-vehicle"));
+            Trace.Write(JsonConvert.SerializeObject(vehicle));
+        }
     }
 }
