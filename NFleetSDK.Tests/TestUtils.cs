@@ -81,6 +81,18 @@ namespace NFleet.Tests
             ListsAreEqual( expected.Meta, actual.Meta, LinksAreEqual );
         }
 
+        public static void TaskDataSetsAreEqual(TaskDataSet expected, TaskDataSet actual)
+        {
+            ListsAreEqual(expected.Items, actual.Items, TasksAreEqual);
+            ListsAreEqual(expected.Meta, actual.Meta, LinksAreEqual);
+        }
+
+        public static void VehicleDataSetsAreEqual(VehicleDataSet expected, VehicleDataSet actual)
+        {
+            ListsAreEqual(expected.Items, actual.Items, VehiclesAreEqual);
+            ListsAreEqual(expected.Meta, actual.Meta, LinksAreEqual);
+        }
+
         private static void LocationsAreEqual( LocationData expected, LocationData actual )
         {
             if ( expected == null && actual == null ) return;
@@ -138,14 +150,6 @@ namespace NFleet.Tests
             Assert.AreEqual( expected.Rel, actual.Rel );
             Assert.AreEqual( expected.Method, actual.Method );
             Assert.AreEqual(expected.Type, actual.Type);
-            return null;
-        }
-
-        public static EntityLink EntityLinksAreEqual( EntityLink expected, EntityLink actual ) 
-        {
-            Assert.AreEqual( expected.Name, actual.Name );
-            Assert.AreEqual( expected.Id, actual.Id );
-            ListsAreEqual( expected.Meta, actual.Meta, LinksAreEqual );
             return null;
         }
 
@@ -214,12 +218,7 @@ namespace NFleet.Tests
             Assert.IsTrue( expected.CreationDate <= expected.ModifiedDate );
         }
 
-        public static void EntityCollectionLinksAreEqual(EntityLinkCollection expected, EntityLinkCollection actual)
-        {
-            ListsAreEqual( expected.Items, actual.Items, EntityLinksAreEqual );
-            ListsAreEqual( expected.Meta, actual.Meta, LinksAreEqual );
-        }
-
+ 
         public static TaskData TasksAreEqual( TaskData expected, TaskData actual )
         {
             Assert.AreEqual( expected.Info, actual.Info, "Task info mismatch" );

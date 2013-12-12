@@ -5,15 +5,15 @@ using System.Text;
 
 namespace NFleet.Data
 {
-    public class TaskDataSet : IResponseData, IVersioned
+    public class UserDataSet: IResponseData, IVersioned
     {
         int IVersioned.VersionNumber { get; set; }
-        public List<TaskData> Items { get; set; }
+        public List<UserData> Items { get; set; }
         public List<Link> Meta { get; set; }
 
-        public TaskDataSet()
+        public UserDataSet()
         {
-            Items = new List<TaskData>();
+            Items = new List<UserData>();
             Meta = new List<Link>();
         }
     }
