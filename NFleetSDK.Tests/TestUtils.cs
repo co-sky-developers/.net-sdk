@@ -43,8 +43,6 @@ namespace NFleet.Tests
             Assert.AreEqual( expected.WaitingTimeBefore, actual.WaitingTimeBefore );
             Assert.AreEqual( expected.ActualArrivalTime, actual.ActualArrivalTime );
             Assert.AreEqual( expected.ActualDepartureTime, actual.ActualDepartureTime );
-            Assert.AreEqual( expected.PlannedArrivalTime, actual.PlannedArrivalTime );
-            Assert.AreEqual( expected.PlannedDepartureTime, actual.PlannedDepartureTime );
 
         }
 

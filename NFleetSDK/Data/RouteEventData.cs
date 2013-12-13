@@ -21,10 +21,6 @@ namespace NFleet.Data
 
         public DateTime? ActualDepartureTime { get; set; }
 
-        public DateTime? PlannedArrivalTime { get; set; }
-
-        public DateTime? PlannedDepartureTime { get; set; }
-
         public List<Link> Meta { get; set; }
 
         public string DataState { get; set; }

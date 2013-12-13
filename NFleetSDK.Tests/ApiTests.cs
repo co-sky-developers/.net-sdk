@@ -524,10 +524,13 @@ namespace NFleet.Tests
             var user = TestHelper.GetOrCreateUser(api);
             var problem = TestHelper.CreateProblemWithDemoData(api, user);
 
+            //##BEGIN EXAMPLE queryrouteevents##
             var plan = api.Navigate<PlanData>(problem.GetLink("plan"));
+            //##END EXAMPLE##
+            Trace.Write(JsonConvert.SerializeObject(plan));
             var routeEvent = plan.Items[0].Events[0];
             var vehicle = api.Navigate<VehicleData>(routeEvent.GetLink("get-vehicle"));
-            Trace.Write(JsonConvert.SerializeObject(vehicle));
+  
         }
     }
 }
