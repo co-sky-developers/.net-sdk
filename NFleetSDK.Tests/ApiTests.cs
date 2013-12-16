@@ -483,6 +483,7 @@ namespace NFleet.Tests
                     EndLocation = vehicleDelivery,
                     TimeWindows = vehicleTimeWindow
                 };
+                importRequest.Items.Add(veh);
             }
 
             Stopwatch timer = new Stopwatch();
@@ -530,7 +531,108 @@ namespace NFleet.Tests
             Trace.Write(JsonConvert.SerializeObject(plan));
             var routeEvent = plan.Items[0].Events[0];
             var vehicle = api.Navigate<VehicleData>(routeEvent.GetLink("get-vehicle"));
-  
+        
+        }
+
+        [Test]
+        public void T22VehicleMassImport()
+        {
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetOrCreateUser(api);
+            var problem = TestHelper.CreateProblemWithDemoData(api, user);
+            //vehiclemassimport
+
+            var vehicleCapacities = new List<CapacityData> { new CapacityData() { Name = "Weight", Amount = 100000 } };
+
+            var vehicleTimeWindow = new List<TimeWindowData> { new TimeWindowData { Start = new DateTime(2013, 5, 14, 7, 0, 0), End = new DateTime(2013, 5, 14, 16, 0, 0) } };
+
+            var vehiclePickup = new LocationData() { Coordinate = new CoordinateData { Latitude = 62.244588, Longitude = 25.742683, System = "WGS84" } };
+            var vehicleDelivery = new LocationData() { Coordinate = new CoordinateData { Latitude = 62.244588, Longitude = 25.742683, System = "WGS84" } };
+
+            //##BEGIN EXAMPLE importvehicleset##
+            var importRequest = new VehicleSetImportRequest
+            {
+                Items = new List<VehicleUpdateRequest>()
+            };
+
+            for (int i = 0; i < 10; i++)
+            {
+                var veh = new VehicleUpdateRequest()
+                {
+                    Name = "Vehicle name",
+                    Capacities = vehicleCapacities,
+                    StartLocation = vehiclePickup,
+                    EndLocation = vehicleDelivery,
+                    TimeWindows = vehicleTimeWindow
+                };
+                importRequest.Items.Add(veh);
+            }
+
+            var result = api.Navigate<ResponseData>(problem.GetLink("import-vehicles"), importRequest);
+            //##END EXAMPLE##
+        }
+
+        [Test]
+        public void T24TaskMassImport()
+        {
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetOrCreateUser(api);
+            var problem = TestHelper.CreateProblemWithDemoData(api, user);
+
+            var capacity = new CapacityData { Name = "Weight", Amount = 20 };
+
+            var timeWindows = new List<TimeWindowData> { new TimeWindowData { Start = new DateTime(2013, 5, 14, 7, 0, 0), End = new DateTime(2013, 5, 14, 16, 0, 0) } };
+
+            var vehiclePickup = new LocationData() { Coordinate = new CoordinateData { Latitude = 62.244588, Longitude = 25.742683, System = "WGS84" } };
+            var vehicleDelivery = new LocationData() { Coordinate = new CoordinateData { Latitude = 62.244588, Longitude = 25.742683, System = "WGS84" } };
+
+            //##BEGIN EXAMPLE importtaskset##
+            var importRequest = new TaskSetImportRequest
+            {
+                Items = new List<TaskUpdateRequest>()
+            };
+
+            for (int i = 0; i < 10; i++)
+            {
+                var task = new TaskUpdateRequest { Name = "test name" };
+                
+
+                var pickup = new TaskEventUpdateRequest
+                {
+                    Type = "Pickup",
+                    Location = new LocationData
+                    {
+                        Coordinate = new CoordinateData
+                        {
+                            Latitude = 62.244958,
+                            Longitude = 25.747143,
+                            System = "Euclidian"
+                        }
+                    }
+                };
+                pickup.Capacities.Add(capacity);
+                task.TaskEvents.Add(pickup);
+
+                var delivery = new TaskEventUpdateRequest
+                {
+                    Type = "Delivery",
+                    Location = new LocationData
+                    {
+                        Coordinate = new CoordinateData
+                        {
+                            Latitude = 62.244589,
+                            Longitude = 25.74892,
+                            System = "Euclidian"
+                        }
+                    }
+                };
+                delivery.Capacities.Add(capacity);
+                task.TaskEvents.Add(delivery);
+                importRequest.Items.Add(task);
+            }
+
+            var result = api.Navigate<ResponseData>(problem.GetLink("import-tasks"), importRequest);
+            //##END EXAMPLE##
         }
     }
 }
