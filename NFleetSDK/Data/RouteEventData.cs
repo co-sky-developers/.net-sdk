@@ -9,12 +9,6 @@ namespace NFleet.Data
 
         public string State { get; set; }
 
-        public string LockState { get; set; }
-
-        public string TimeState { get; set; }
-
-        public bool Pending { get; set; }
-
         public double WaitingTimeBefore { get; set; }
 
         public DateTime? ActualArrivalTime { get; set; }
@@ -27,16 +21,7 @@ namespace NFleet.Data
 
         public bool IsFeasible { get; set; }
 
-        public int VehicleId { get; set; }
-
         public int TaskEventId { get; set; }
 
-        public int SequenceNumber { get; set; }
-
-        public double ActualServiceTime { get; set; }
-
-        public double TravelTimeBefore { get; set; }
-
-        public string InternalState { get; set; }
     }
 }
