@@ -38,8 +38,7 @@ namespace NFleet.Tests
         public static void RouteEventsAreEqual(RouteEventData expected, RouteEventData actual)
         {
             Assert.AreEqual( expected.State, actual.State );
-            Assert.AreEqual( expected.LockState, actual.LockState );
-            Assert.AreEqual( expected.TimeState, actual.TimeState );
+            Assert.AreEqual( expected.State, actual.State );
             Assert.AreEqual( expected.WaitingTimeBefore, actual.WaitingTimeBefore );
             Assert.AreEqual( expected.ActualArrivalTime, actual.ActualArrivalTime );
             Assert.AreEqual( expected.ActualDepartureTime, actual.ActualDepartureTime );
