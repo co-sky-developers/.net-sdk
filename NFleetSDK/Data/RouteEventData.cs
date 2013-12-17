@@ -19,7 +19,7 @@ namespace NFleet.Data
 
         public string DataState { get; set; }
 
-        public bool IsFeasible { get; set; }
+        public string FeasibilityState { get; set; }
 
         public int TaskEventId { get; set; }
 
