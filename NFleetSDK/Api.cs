@@ -83,7 +83,10 @@ namespace NFleet
                     ThrowException(result);
             }
 
-            if ( ( result.Content.Length > 0 && result.ResponseStatus != ResponseStatus.Completed ) || result.StatusCode == 0 )
+            if ( result.StatusCode == 0 )
+                throw new IOException( string.Format( "Could not connect to server at {0}.", client.BaseUrl ) );
+
+            if ( ( result.Content.Length > 0 && result.ResponseStatus != ResponseStatus.Completed ) )
                 throw new IOException( result.ErrorMessage );
 
             var code = result.StatusCode;
