@@ -46,7 +46,7 @@ namespace NFleet
         }
 
 
-       public ResponseData Navigate( Link link, object data = null, Dictionary<string, string> queryParameters = null )
+        public ResponseData Navigate( Link link, object data = null, Dictionary<string, string> queryParameters = null )
         {
             return Navigate<ResponseData>( link, data, queryParameters );
         }
@@ -80,7 +80,7 @@ namespace NFleet
 
                 result = client.Execute<T>( request );
                 if ( result.StatusCode == HttpStatusCode.Unauthorized )
-                    ThrowException(result);
+                    ThrowException( result );
             }
 
             if ( result.StatusCode == 0 )
@@ -102,7 +102,7 @@ namespace NFleet
                 var version = etag != null ? Int32.Parse( etag.Value.ToString() ) : 0;
 
                 var obj = result.Data as IVersioned;
-                if (obj != null) obj.VersionNumber = version;
+                if ( obj != null ) obj.VersionNumber = version;
             }
 
             if ( result.StatusCode == HttpStatusCode.NotModified )
@@ -132,7 +132,7 @@ namespace NFleet
 
             if ( !Equals( result.Data, default( T ) ) && !String.IsNullOrEmpty( request.Resource ) )
             {
-                var key = BuildCacheKey(request.Resource, queryParameters);
+                var key = BuildCacheKey( request.Resource, queryParameters );
                 cache[key] = result.Data;
             }
 
@@ -155,21 +155,21 @@ namespace NFleet
             return currentToken;
         }
 
-        private static string BuildQuery(Dictionary<string, string> queryParameters )
+        private static string BuildQuery( Dictionary<string, string> queryParameters )
         {
-            var sb = new StringBuilder("?");
+            var sb = new StringBuilder( "?" );
             var lst = new List<String>();
-            foreach (var queryParameter in queryParameters)
+            foreach ( var queryParameter in queryParameters )
             {
-                lst.Add( String.Format("{0}={1}", queryParameter.Key, queryParameter.Value) );
+                lst.Add( String.Format( "{0}={1}", queryParameter.Key, queryParameter.Value ) );
             }
             var arr = lst.ToArray();
-            sb.Append(string.Join("&",arr) );
+            sb.Append( string.Join( "&", arr ) );
 
             return sb.ToString();
         }
 
-        private static string BuildCacheKey(string resource, Dictionary<string, string> queryParameters)
+        private static string BuildCacheKey( string resource, Dictionary<string, string> queryParameters )
         {
             var key = resource;
             if ( queryParameters != null && queryParameters.Count > 0 )
@@ -212,7 +212,7 @@ namespace NFleet
                 request.AddHeader( "Authorization", token.TokenType + " " + token.AccessToken );
         }
 
-        private static void InsertIfNoneMatchHeader( ref RestRequest request, object data, Dictionary<string, object> cache, Dictionary<string,string> queryParameters  )
+        private static void InsertIfNoneMatchHeader( ref RestRequest request, object data, Dictionary<string, object> cache, Dictionary<string, string> queryParameters )
         {
             var key = BuildCacheKey( request.Resource, queryParameters );
 
@@ -233,10 +233,10 @@ namespace NFleet
             var code = result.StatusCode;
 
             var errors = result.Data is ResponseData
-                ? ((ResponseData) (IResponseData) result.Data).Items
+                ? ( (ResponseData)(IResponseData)result.Data ).Items
                 : new List<ErrorData>();
 
-            throw new NFleetRequestException(String.Format("{0} {1}", (int)code, result.StatusDescription)) { Items = errors };
+            throw new NFleetRequestException( String.Format( "{0} {1}", (int)code, result.StatusDescription ) ) { Items = errors };
         }
 
         private void Authenticate( string key, string secret )
@@ -329,6 +329,6 @@ namespace NFleet
     internal class Empty
     {
     }
-    
+
 }
 
