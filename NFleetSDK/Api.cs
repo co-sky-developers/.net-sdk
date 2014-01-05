@@ -38,7 +38,6 @@ namespace NFleet
             client = new RestClient( url ) { FollowRedirects = false };
 
 #if DEBUG
-            baseUrl = baseUrl.Replace( "81", "82" ); // Azure emulator hack
             client.Timeout = Int32.MaxValue;
 #endif
             this.username = username;
@@ -119,7 +118,7 @@ namespace NFleet
                     throw new IOException( "Server response missing Location header." );
 
                 var value = parameter.Value.ToString();
-                var entityLocation = value.Remove( 0, value.IndexOf( baseUrl, StringComparison.Ordinal ) + baseUrl.Length );
+                var entityLocation = new Uri( value ).AbsolutePath;
 
                 var responseData = new ResponseData();
                 responseData.Meta.Add( new Link { Method = "GET", Rel = "location", Uri = entityLocation } );
@@ -268,8 +267,7 @@ namespace NFleet
                 if ( locationParameter == null || locationParameter.Value == null )
                     throw new IOException( "Server response missing Location header." );
 
-                var locationValue = locationParameter.Value.ToString();
-                authLocation = locationValue.Remove( 0, locationValue.IndexOf( baseUrl, StringComparison.Ordinal ) + baseUrl.Length );
+                authLocation = new Uri( locationParameter.Value.ToString() ).AbsolutePath;
             }
             else if ( code >= HttpStatusCode.BadRequest )
             {
@@ -298,8 +296,7 @@ namespace NFleet
             if ( tokenLocationParameter == null || tokenLocationParameter.Value == null )
                 throw new IOException( "Server response missing Location header." );
 
-            var tokenLocationValue = tokenLocationParameter.Value.ToString();
-            return tokenLocationValue.Remove( 0, tokenLocationValue.IndexOf( baseUrl, StringComparison.Ordinal ) + baseUrl.Length );
+            return new Uri( tokenLocationParameter.Value.ToString() ).AbsolutePath;
         }
 
         private TokenData RequestToken( string tokenLocation )
