@@ -15,11 +15,9 @@ namespace NFleet
     {
         private readonly Dictionary<string, object> cache = new Dictionary<string, object>();
 
-        private const string separator = "://";
         private const string versionNumberHeader = "If-None-Match";
 
         private readonly RestClient client;
-        private readonly string baseUrl;
         private readonly string username;
         private readonly string password;
 
@@ -32,8 +30,6 @@ namespace NFleet
             if ( String.IsNullOrEmpty( url ) ) throw new ArgumentException( "Missing value", "url" );
             if ( String.IsNullOrEmpty( username ) ) throw new ArgumentException( "Missing value", "username" );
             if ( String.IsNullOrEmpty( password ) ) throw new ArgumentException( "Missing value", "password" );
-
-            baseUrl = url.Remove( 0, url.IndexOf( separator, StringComparison.Ordinal ) + separator.Length );
 
             client = new RestClient( url ) { FollowRedirects = false };
 
