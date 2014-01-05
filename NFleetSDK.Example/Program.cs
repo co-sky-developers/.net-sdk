@@ -30,6 +30,7 @@ namespace NFleet.Example
             }
             catch (NFleetRequestException nfre)
             {
+                Console.WriteLine( nfre.Message );
                 foreach (var error in nfre.Items)
                 {
                     Console.WriteLine("{0}" + Environment.NewLine + "Error Code: {1}" + Environment.NewLine + "Message: {2}", nfre.Message, error.Code, error.Message);
