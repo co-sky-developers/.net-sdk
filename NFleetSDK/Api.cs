@@ -61,7 +61,7 @@ namespace NFleet
             InsertIfNoneMatchHeader( ref request, data, cache, queryParameters );
             InsertAuthorizationHeader( ref request, currentToken );
 
-            // when POSTing, if data is null, add an empty object to prevent 500 Internal Server Error due to null payload
+            // when POSTing, if data is null, add an empty object to prevent error due to null payload
             request.AddBody( data == null && link.Method == "POST" ? new Empty() : data );
             request.OnBeforeDeserialization = resp => resp.ContentType = "application/json";
             var result = client.Execute<T>( request );
