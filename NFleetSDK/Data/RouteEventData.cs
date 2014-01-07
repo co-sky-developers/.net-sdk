@@ -11,9 +11,9 @@ namespace NFleet.Data
 
         public double WaitingTimeBefore { get; set; }
 
-        public DateTime? ActualArrivalTime { get; set; }
+        public DateTime? ArrivalTime { get; set; }
 
-        public DateTime? ActualDepartureTime { get; set; }
+        public DateTime? DepartureTime { get; set; }
 
         public List<Link> Meta { get; set; }
 

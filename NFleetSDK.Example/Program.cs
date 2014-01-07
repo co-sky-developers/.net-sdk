@@ -128,7 +128,7 @@ namespace NFleet.Example
                             var point = sequence.Items[i];
                             var routeEvent = routeEvents.Items[i];
 
-                            Console.WriteLine( "{0}: {1}-{2} ", point, routeEvent.ActualArrivalTime, routeEvent.ActualDepartureTime );
+                            Console.WriteLine( "{0}: {1}-{2} ", point, routeEvent.ArrivalTime, routeEvent.DepartureTime );
                         }
                         Console.WriteLine();
                     }
