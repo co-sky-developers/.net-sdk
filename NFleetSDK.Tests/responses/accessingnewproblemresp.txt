@@ -1,4 +1,6 @@
-﻿{
+﻿HTTP/1.1 200 OK
+Content-Type: application/vnd.jyu.nfleet.routingproblem+json;version=2.0
+{
   "VersionNumber":1,
   "Id":5,
   "Name":"test",

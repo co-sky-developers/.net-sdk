@@ -1,19 +1,2 @@
-﻿HTTP/1.1 200 OK 
-Content-Type: application/json 
-{
-  "Items":[
-    11,
-    21,
-    12,
-    22
-  ],
-  "Meta":[
-    {
-      "Uri":"/users/1/problems/9/vehicles/1/route",
-      "Rel":"self",
-      "Method":"GET",
-      "Enabled":false,
-      "Type":"application/vnd.jyu.nfleet.route+json;version=2.0"
-    }
-  ]
-}
+﻿HTTP/1.1 303 See Other
+Location: https://api.co-sky.fi/users/1/problems/6/vehicles/4/route

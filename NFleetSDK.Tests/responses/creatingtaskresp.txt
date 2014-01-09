@@ -1,5 +1,5 @@
 ﻿HTTP/1.1 201 Created 
-Content-Type: application/json 
+Content-Type: application/vnd.jyu.nfleet.task+json;version=2.0
 {
    "Items":null,
    "Location":{

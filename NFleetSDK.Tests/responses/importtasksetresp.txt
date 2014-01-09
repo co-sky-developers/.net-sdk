@@ -1,4 +1,4 @@
 HTTP/1.1 201 Created 
 Content-Type: application/json 
 Content-Length: 0 
-Location: https://api.co-sky.fi/users/1
+Location: https://api.co-sky.fi/users/1/problems/6/tasks
