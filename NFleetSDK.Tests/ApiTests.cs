@@ -632,5 +632,51 @@ namespace NFleet.Tests
             var result = api.Navigate<ResponseData>(problem.GetLink("import-tasks"), importRequest);
             //##END EXAMPLE##
         }
+
+        [Test]
+        public void T25ImportVehiclesAndTasks()
+        {
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetOrCreateUser( api );
+            var problem = TestHelper.CreateProblem( api, user );
+
+            var vehicleSet = new VehicleSetImportRequest
+            {
+                Items = new List<VehicleUpdateRequest>()
+            };
+
+            for (int i = 0; i < 5; i++)
+            {
+                var vehicle = TestHelper.GenerateVehicleUpdateRequestWithName("Vehicle" + i);
+                vehicleSet.Items.Add(vehicle);
+            }
+
+
+            var taskSet = new TaskSetImportRequest
+            {
+                Items = new List<TaskUpdateRequest>()
+            };
+
+            for (int i = 0; i < 5; i++)
+            {
+                var task = TestHelper.GenerateTaskUpdateRequestWithName("Task" + 1);
+                taskSet.Items.Add(task);
+            }
+            //##BEGIN EXAMPLE importtasksandvehicles##
+            var request = new ImportRequest
+            {
+                Tasks = taskSet,
+                Vehicles = vehicleSet
+            };
+            var result = api.Navigate<ResponseData>(problem.GetLink("import-data"), request);
+            //##END EXAMPLE##
+
+            var import = api.Navigate<ImportData>(result.Location);
+
+            Assert.AreEqual("Success", import.State);
+            Assert.AreEqual(0, import.ErrorCount);
+            Assert.AreEqual(5, import.Vehicles.Count);
+            Assert.AreEqual(5, import.Tasks.Count);
+        }
     }
 }

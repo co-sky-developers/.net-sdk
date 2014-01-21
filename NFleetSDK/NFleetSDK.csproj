@@ -83,6 +83,8 @@
     <Compile Include="Data\CoordinateData.cs" />
     <Compile Include="Data\ErrorData.cs" />
     <Compile Include="Data\FieldsItem.cs" />
+    <Compile Include="Data\ImportData.cs" />
+    <Compile Include="Data\ImportRequest.cs" />
     <Compile Include="Data\IResponseData.cs" />
     <Compile Include="Data\IVersioned.cs" />
     <Compile Include="Data\Link.cs" />
@@ -102,6 +104,7 @@
     <Compile Include="Data\RoutingProblemUpdateRequest.cs" />
     <Compile Include="Data\TaskData.cs" />
     <Compile Include="Data\TaskDataSet.cs" />
+    <Compile Include="Data\TaskError.cs" />
     <Compile Include="Data\TaskEventDataSet.cs" />
     <Compile Include="Data\TaskEventData.cs" />
     <Compile Include="Data\TaskEventUpdateRequest.cs" />
@@ -114,6 +117,7 @@
     <Compile Include="Data\UserSetRequest.cs" />
     <Compile Include="Data\VehicleData.cs" />
     <Compile Include="Data\VehicleDataSet.cs" />
+    <Compile Include="Data\VehicleError.cs" />
     <Compile Include="Data\VehicleSetImportRequest.cs" />
     <Compile Include="Data\VehicleUpdateRequest.cs" />
     <Compile Include="LinkUtil.cs" />
