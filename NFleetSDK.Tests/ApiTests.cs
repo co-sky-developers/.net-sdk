@@ -678,5 +678,52 @@ namespace NFleet.Tests
             Assert.AreEqual(5, import.Vehicles.Count);
             Assert.AreEqual(5, import.Tasks.Count);
         }
+
+        [Test]
+        public void T26ImportVehiclesAndTasksFails()
+        {
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetOrCreateUser(api);
+            var problem = TestHelper.CreateProblem(api, user);
+
+            var vehicleSet = new VehicleSetImportRequest
+            {
+                Items = new List<VehicleUpdateRequest>()
+            };
+
+            for (int i = 0; i < 4; i++)
+            {
+                var vehicle = TestHelper.GenerateVehicleUpdateRequestWithName("Vehicle" + i);
+                vehicleSet.Items.Add(vehicle);
+            }
+            vehicleSet.Items.Add(TestHelper.GenerateVehicleUpdateRequestWithName(""));
+
+            var taskSet = new TaskSetImportRequest
+            {
+                Items = new List<TaskUpdateRequest>()
+            };
+
+            for (int i = 0; i < 4; i++)
+            {
+                var task = TestHelper.GenerateTaskUpdateRequestWithName("Task" + 1);
+                taskSet.Items.Add(task);
+            }
+            taskSet.Items.Add(TestHelper.GenerateTaskUpdateRequestWithName(""));
+
+            var request = new ImportRequest
+            {
+                Tasks = taskSet,
+                Vehicles = vehicleSet
+            };
+            var result = api.Navigate<ResponseData>(problem.GetLink("import-data"), request);
+
+
+            var import = api.Navigate<ImportData>(result.Location);
+
+            Assert.AreEqual("Fail", import.State);
+            Assert.AreEqual(2, import.ErrorCount);
+            Assert.AreEqual(5, import.Vehicles.Count);
+            Assert.AreEqual(5, import.Tasks.Count);
+        }
     }
 }
