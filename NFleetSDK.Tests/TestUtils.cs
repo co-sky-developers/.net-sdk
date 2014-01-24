@@ -117,7 +117,7 @@ namespace NFleet.Tests
             Assert.AreEqual( expected.Country, actual.Country );
             Assert.AreEqual( expected.City, actual.City );
             Assert.AreEqual( expected.PostalCode, actual.PostalCode );
-            Assert.AreEqual( expected.StreetAddress, actual.StreetAddress );
+            Assert.AreEqual( expected.Street, actual.Street );
         }
 
         public static void RoutesAreEqual( RouteData expected, RouteData actual )

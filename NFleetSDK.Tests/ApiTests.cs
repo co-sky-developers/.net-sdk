@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using NFleet.Data;
 using NUnit.Framework;
@@ -638,7 +639,7 @@ namespace NFleet.Tests
         {
             var api = TestHelper.Authenticate();
             var user = TestHelper.GetOrCreateUser( api );
-            var problem = TestHelper.CreateProblem( api, user );
+            var problem = TestHelper.CreateProblem(api, user, "import-problem");
 
             var vehicleSet = new VehicleSetImportRequest
             {
@@ -659,7 +660,7 @@ namespace NFleet.Tests
 
             for (int i = 0; i < 5; i++)
             {
-                var task = TestHelper.GenerateTaskUpdateRequestWithName("Task" + 1);
+                var task = TestHelper.GenerateTaskUpdateRequestWithName("Task" + i);
                 taskSet.Items.Add(task);
             }
             //##BEGIN EXAMPLE importtasksandvehicles##
@@ -668,15 +669,20 @@ namespace NFleet.Tests
                 Tasks = taskSet,
                 Vehicles = vehicleSet
             };
+
             var result = api.Navigate<ResponseData>(problem.GetLink("import-data"), request);
             //##END EXAMPLE##
 
+            //#BEGIN EXAMPLE getimportresults##
             var import = api.Navigate<ImportData>(result.Location);
+            //##END EXAMPLE##
 
             Assert.AreEqual("Success", import.State);
             Assert.AreEqual(0, import.ErrorCount);
             Assert.AreEqual(5, import.Vehicles.Count);
             Assert.AreEqual(5, import.Tasks.Count);
+            Assert.IsTrue( import.Meta.Find( link => link.Rel.Equals("self")).Enabled );
+            Assert.IsTrue(import.Meta.Find(link => link.Rel.Equals("apply-import")).Enabled);
         }
 
         [Test]
@@ -684,7 +690,7 @@ namespace NFleet.Tests
         {
             var api = TestHelper.Authenticate();
             var user = TestHelper.GetOrCreateUser(api);
-            var problem = TestHelper.CreateProblem(api, user);
+            var problem = TestHelper.CreateProblem(api, user, "failing-import-problem2");
 
             var vehicleSet = new VehicleSetImportRequest
             {
@@ -705,7 +711,7 @@ namespace NFleet.Tests
 
             for (int i = 0; i < 4; i++)
             {
-                var task = TestHelper.GenerateTaskUpdateRequestWithName("Task" + 1);
+                var task = TestHelper.GenerateTaskUpdateRequestWithName("Task" + i);
                 taskSet.Items.Add(task);
             }
             taskSet.Items.Add(TestHelper.GenerateTaskUpdateRequestWithName(""));
@@ -724,6 +730,9 @@ namespace NFleet.Tests
             Assert.AreEqual(2, import.ErrorCount);
             Assert.AreEqual(5, import.Vehicles.Count);
             Assert.AreEqual(5, import.Tasks.Count);
+
+            Assert.IsTrue(import.Meta.Find(link => link.Rel.Equals("self")).Enabled);
+            Assert.IsFalse(import.Meta.Find(link => link.Rel.Equals("apply-import")).Enabled);
         }
     }
 }

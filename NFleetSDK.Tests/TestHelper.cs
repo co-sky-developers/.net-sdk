@@ -36,9 +36,9 @@ namespace NFleet.Tests
             return user;
         }
 
-        public static RoutingProblemData CreateProblem( Api api, UserData user )
+        public static RoutingProblemData CreateProblem( Api api, UserData user, string problemName="test" )
         {
-            var created = api.Navigate( user.GetLink( "create-problem" ), new RoutingProblemUpdateRequest { Name = "testProblem" } );
+            var created = api.Navigate(user.GetLink("create-problem"), new RoutingProblemUpdateRequest { Name = problemName });
             var problem = api.Navigate<RoutingProblemData>( created.Location );
             return problem;
         }
@@ -122,11 +122,12 @@ namespace NFleet.Tests
                 },
                 EndLocation = new LocationData
                 {
-                    Coordinate = new CoordinateData
+                    Address = new AddressData
                     {
-                        Latitude = 62.244958,
-                        Longitude = 25.747143,
-                        System = "Euclidian"
+                        City = "Jyväskylä",
+                        Country = "Finland",
+                        Street = "Poratie 2",
+                        PostalCode = "40320"
                     }
                 },
                 TimeWindows =
@@ -158,7 +159,8 @@ namespace NFleet.Tests
                         Latitude = 62.282617,
                         Longitude = 25.797272,
                         System = "Euclidian"
-                    }
+                    },
+                   
                 },
                 TimeWindows = { new TimeWindowData { Start = new DateTime(2013, 5, 14, 8, 0, 0), End = new DateTime(2013, 5, 14, 12, 0, 0) } }
             };
@@ -170,11 +172,12 @@ namespace NFleet.Tests
                 Type = "Delivery",
                 Location = new LocationData
                 {
-                    Coordinate = new CoordinateData
+                    Address = new AddressData
                     {
-                        Latitude = 62.373658,
-                        Longitude = 25.885506,
-                        System = "Euclidian"
+                        City = "Jyväskylä",
+                        Country = "Finland",
+                        Street = "Poratie 2",
+                        PostalCode = "40320"
                     }
                 },
                 TimeWindows = { new TimeWindowData { Start = new DateTime(2013, 5, 14, 8, 0, 0), End = new DateTime(2013, 5, 14, 12, 0, 0) } }
