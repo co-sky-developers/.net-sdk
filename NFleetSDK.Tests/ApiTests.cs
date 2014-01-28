@@ -370,7 +370,7 @@ namespace NFleet.Tests
         {
             var api = TestHelper.Authenticate();
             var user = TestHelper.GetOrCreateUser( api );
-            var problem = TestHelper.CreateProblem( api, user );
+            var problem = TestHelper.CreateProblemWithDemoData( api, user );
 
             //##BEGIN EXAMPLE invalidversionnumber##
 
