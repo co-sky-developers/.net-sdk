@@ -734,5 +734,61 @@ namespace NFleet.Tests
             Assert.IsTrue(import.Meta.Find(link => link.Rel.Equals("self")).Enabled);
             Assert.IsFalse(import.Meta.Find(link => link.Rel.Equals("apply-import")).Enabled);
         }
+
+        [Test]
+        public void T27ApplyImportedVehiclesAndTasks()
+        {
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetOrCreateUser(api);
+            var problem = TestHelper.CreateProblem(api, user, "applied-import-problem");
+
+            var vehicleSet = new VehicleSetImportRequest
+            {
+                Items = new List<VehicleUpdateRequest>()
+            };
+
+            for (int i = 0; i < 5; i++)
+            {
+                var vehicle = TestHelper.GenerateVehicleUpdateRequestWithName("Vehicle" + i);
+                vehicleSet.Items.Add(vehicle);
+            }
+
+
+            var taskSet = new TaskSetImportRequest
+            {
+                Items = new List<TaskUpdateRequest>()
+            };
+
+            for (int i = 0; i < 5; i++)
+            {
+                var task = TestHelper.GenerateTaskUpdateRequestWithName("Task" + i);
+                taskSet.Items.Add(task);
+            }
+
+            var request = new ImportRequest
+            {
+                Tasks = taskSet,
+                Vehicles = vehicleSet
+            };
+
+            var result = api.Navigate<ResponseData>(problem.GetLink("import-data"), request);
+
+            var import = api.Navigate<ImportData>(result.Location);
+
+            Assert.AreEqual("Success", import.State);
+            Assert.AreEqual(0, import.ErrorCount);
+            Assert.AreEqual(5, import.Vehicles.Count);
+            Assert.AreEqual(5, import.Tasks.Count);
+            
+            Assert.IsTrue(import.Meta.Find(link => link.Rel.Equals("self")).Enabled);
+            Assert.IsTrue(import.Meta.Find(link => link.Rel.Equals("apply-import")).Enabled);
+
+            var appyResult = api.Navigate<ResponseData>(import.GetLink("apply-import"));
+
+            var vehicles = api.Navigate<VehicleDataSet>(problem.GetLink("list-vehicles"));
+            var tasks = api.Navigate<VehicleDataSet>(problem.GetLink("list-tasks"));
+            Assert.AreEqual(5, vehicles.Items.Count);
+            Assert.AreEqual(5, tasks.Items.Count);
+        }
     }
 }

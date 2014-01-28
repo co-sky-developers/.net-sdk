@@ -2,10 +2,9 @@
 
 namespace NFleet.Data
 {
-    public class ImportData : IResponseData, IVersioned
+    public class ImportData : IResponseData
     {
         public List<Link> Meta { get; set; }
-        int IVersioned.VersionNumber { get; set; }
         public int ErrorCount { get; set; }
         public string State { get; set; }
         public List<VehicleError> Vehicles { get; set; }
