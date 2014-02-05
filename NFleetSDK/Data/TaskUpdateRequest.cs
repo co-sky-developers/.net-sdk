@@ -9,6 +9,7 @@ namespace NFleet.Data
         public int TaskId { get; set; }
         public string Name { get; set; }
         public string Info { get; set; }
+        public List<string> IncompatibleVehicleTypes { get; set; } 
         public List<TaskEventUpdateRequest> TaskEvents { get; set; }
 
         public TaskUpdateRequest()

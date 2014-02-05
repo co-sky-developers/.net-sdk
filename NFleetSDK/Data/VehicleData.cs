@@ -24,6 +24,8 @@ namespace NFleet.Data
         public List<Link> Meta { get; set; }
         [DataMember]
         public string State { get; set; }
+        [DataMember]
+        public string VehicleType { get; set; }
 
         public VehicleData()
         {

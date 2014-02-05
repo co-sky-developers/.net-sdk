@@ -8,6 +8,8 @@ namespace NFleet.Data
         public string Info { get; set; }
         public string State { get; set; }
         public string Name { get; set; }
+        public string VehicleType { get; set; }
+        public List<string> IncompatibleVehicleTypes { get; set; }
         public LocationData StartLocation { get; set; }
         public LocationData EndLocation { get; set; }
         public List<CapacityData> Capacities { get; set; }
