@@ -102,6 +102,17 @@ namespace NFleet.Tests
             return task;
         }
 
+        public static VehicleUpdateRequest GenerateVehicleUpdateRequestWithNameAndCoordinates(string name, CoordinateData start, CoordinateData end)
+        {
+            var vehicle = GenerateVehicleUpdateRequestWithName(name);
+            vehicle.StartLocation.Coordinate = start;
+            vehicle.EndLocation.Coordinate = end;
+            vehicle.StartLocation.Address = null;
+            vehicle.EndLocation.Address = null;
+
+            return vehicle;
+        }
+
         public static VehicleUpdateRequest GenerateVehicleUpdateRequestWithName(string name)
         {
             var request = new VehicleUpdateRequest
@@ -142,6 +153,19 @@ namespace NFleet.Tests
             };
 
             return request;
+        }
+
+        public static TaskUpdateRequest GenerateTaskUpdateRequestWithNameAndCoordinates(string name,
+            CoordinateData pickup, CoordinateData delivery)
+        {
+            var task = GenerateTaskUpdateRequestWithName(name);
+            task.TaskEvents[0].Location.Coordinate = pickup;
+            task.TaskEvents[1].Location.Coordinate = delivery;
+
+            task.TaskEvents[0].Location.Address = null;
+            task.TaskEvents[1].Location.Address = null;
+
+            return task;
         }
 
         public static TaskUpdateRequest GenerateTaskUpdateRequestWithName(string name)

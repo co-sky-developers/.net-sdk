@@ -790,5 +790,53 @@ namespace NFleet.Tests
             Assert.AreEqual(5, vehicles.Items.Count);
             Assert.AreEqual(5, tasks.Items.Count);
         }
+
+        [Test]
+        public void T28DifferentCompatibilityTypes()
+        {
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetOrCreateUser(api);
+            var problem = TestHelper.CreateProblem(api, user, "Compatibility-problem");
+
+            var pickupCoord = new CoordinateData { Latitude = 62.244958, Longitude = 25.747143, System = "Euclidian" };
+            var deliveryCoord = new CoordinateData { Latitude = 62.244589, Longitude = 25.74892, System = "Euclidian" };
+
+
+            var task1 = TestHelper.GenerateTaskUpdateRequestWithNameAndCoordinates("Task1", pickupCoord, deliveryCoord);
+            task1.IncompatibleVehicleTypes.Add("Kaivuri");
+
+            var task2 = TestHelper.GenerateTaskUpdateRequestWithNameAndCoordinates("Task2", pickupCoord, deliveryCoord);
+            task2.IncompatibleVehicleTypes.Add("Rekka");
+
+
+            var start = new CoordinateData {Latitude = 62.244589, Longitude = 25.74892, System = "Euclidian"};
+            var vehicle = TestHelper.GenerateVehicleUpdateRequestWithNameAndCoordinates("Vehicle", start, start);
+            vehicle.VehicleType = "Rekka";
+
+            var result = api.Navigate<ResponseData>(problem.GetLink("create-vehicle"), vehicle);
+            result = api.Navigate<ResponseData>(problem.GetLink("create-task"), task1);
+            result = api.Navigate<ResponseData>(problem.GetLink("create-task"), task2);
+
+            problem = api.Navigate<RoutingProblemData>(problem.GetLink("self"));
+
+            result = api.Navigate<ResponseData>(problem.GetLink("toggle-optimization"), new RoutingProblemUpdateRequest
+            {
+                Name = problem.Name,
+                State = "Running"
+            });
+
+            problem = api.Navigate<RoutingProblemData>(problem.GetLink("self"));
+            Thread.Sleep(1000);
+            while (problem.State.Equals("Running"))
+            {
+                Thread.Sleep(1000);
+                problem = api.Navigate<RoutingProblemData>(problem.GetLink("self"));
+            }
+
+            var plan = api.Navigate<PlanData>(problem.GetLink("plan"));
+
+            // the plan should contain four events because task2 is incompatible with the vehicle 
+            Assert.AreEqual(4, plan.Items[0].Events.Count, "Plan did not contain expected number of events.");
+        }
     }
 }
