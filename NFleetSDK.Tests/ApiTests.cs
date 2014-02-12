@@ -782,9 +782,9 @@ namespace NFleet.Tests
             
             Assert.IsTrue(import.Meta.Find(link => link.Rel.Equals("self")).Enabled);
             Assert.IsTrue(import.Meta.Find(link => link.Rel.Equals("apply-import")).Enabled);
-
+            //#BEGIN EXAMPLE applyimport##
             var appyResult = api.Navigate<ResponseData>(import.GetLink("apply-import"));
-
+            //##END EXAMPLE##
             var vehicles = api.Navigate<VehicleDataSet>(problem.GetLink("list-vehicles"));
             var tasks = api.Navigate<VehicleDataSet>(problem.GetLink("list-tasks"));
             Assert.AreEqual(5, vehicles.Items.Count);
