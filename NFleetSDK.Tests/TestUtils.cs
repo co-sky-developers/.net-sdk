@@ -186,8 +186,8 @@ namespace NFleet.Tests
 
         private static TimeWindowData TimeWindowsAreEqual( TimeWindowData expected, TimeWindowData actual )
         {
-            Assert.AreEqual( expected.Start, actual.Start );
-            Assert.AreEqual( expected.End, actual.End );
+            Assert.AreEqual(expected.Start.ToLocalTime(), actual.Start.ToLocalTime());
+            Assert.AreEqual(expected.End.ToLocalTime(), actual.End.ToLocalTime());
             return null;
         }
 

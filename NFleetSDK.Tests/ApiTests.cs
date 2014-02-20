@@ -472,7 +472,7 @@ namespace NFleet.Tests
                 Items = new List<VehicleUpdateRequest>()
             };
 
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 10; i++)
             {
                 var veh = new VehicleUpdateRequest()
                 {
@@ -494,7 +494,7 @@ namespace NFleet.Tests
             
 
             var vehicleList = new List<VehicleUpdateRequest>();
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 10; i++)
             {
                 var vehicleReq = new VehicleUpdateRequest()
                 {
@@ -509,9 +509,9 @@ namespace NFleet.Tests
 
             timer = new Stopwatch();
             timer.Start();
-            foreach (var rekku in vehicleList)
+            foreach (var request in vehicleList)
             {
-                api.Navigate<ResponseData>(problem.GetLink("create-vehicle"), rekku);
+                api.Navigate<ResponseData>(problem.GetLink("create-vehicle"), request);
             }
             timer.Stop();
             Console.WriteLine("Time elapsed with 100 create operations: {0}", timer.Elapsed);
