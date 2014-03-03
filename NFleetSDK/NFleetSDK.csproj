@@ -81,6 +81,7 @@
     <Compile Include="Data\AuthenticationRequest.cs" />
     <Compile Include="Data\CapacityData.cs" />
     <Compile Include="Data\CoordinateData.cs" />
+    <Compile Include="Data\DataUtil.cs" />
     <Compile Include="Data\ErrorData.cs" />
     <Compile Include="Data\FieldsItem.cs" />
     <Compile Include="Data\ImportData.cs" />
