@@ -81,6 +81,7 @@
     <Compile Include="Data\AuthenticationRequest.cs" />
     <Compile Include="Data\CapacityData.cs" />
     <Compile Include="Data\CoordinateData.cs" />
+    <Compile Include="Data\DataUtil.cs" />
     <Compile Include="Data\ErrorData.cs" />
     <Compile Include="Data\FieldsItem.cs" />
     <Compile Include="Data\ImportData.cs" />
@@ -101,7 +102,10 @@
     <Compile Include="Data\RouteUpdateRequest.cs" />
     <Compile Include="Data\RoutingProblemData.cs" />
     <Compile Include="Data\RoutingProblemDataSet.cs" />
+    <Compile Include="Data\RoutingProblemSettingsData.cs" />
+    <Compile Include="Data\RoutingProblemSettingsUpdateRequest.cs" />
     <Compile Include="Data\RoutingProblemUpdateRequest.cs" />
+    <Compile Include="Data\SpeedProfile.cs" />
     <Compile Include="Data\TaskData.cs" />
     <Compile Include="Data\TaskDataSet.cs" />
     <Compile Include="Data\TaskError.cs" />
