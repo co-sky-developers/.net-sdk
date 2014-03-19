@@ -901,7 +901,7 @@ namespace NFleet.Tests
             //##BEGIN EXAMPLE changeproblemsettings##
             var settings = api.Navigate<RoutingProblemSettingsData>( problem.GetLink( "view-settings" ) );
             var updatedSettings = new RoutingProblemSettingsUpdateRequest { DefaultVehicleSpeedFactor = 0.8, DefaultVehicleSpeedProfile = SpeedProfile.Max120Kmh.ToString() };
-            //##END EXAMPLE changeproblemsettings##
+            //##END EXAMPLE##
 
             var response = api.Navigate<ResponseData>(settings.GetLink("update-settings"), updatedSettings);
 
