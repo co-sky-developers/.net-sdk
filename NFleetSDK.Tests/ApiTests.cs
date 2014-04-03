@@ -909,6 +909,32 @@ namespace NFleet.Tests
 
             Assert.AreNotEqual(settings.DefaultVehicleSpeedFactor, after.DefaultVehicleSpeedFactor);
         }
-    
+
+        [Test]
+        public void T30RequestingVehicleTypesFromProblem()
+        {
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetOrCreateUser( api );
+            var problem = TestHelper.CreateProblem( api, user, "VehicleTypeTest" );
+
+            var vehicleTypes = new List<string> {"Rekka", "Auto", "Mopo"};
+            var vehicleSet = new VehicleSetImportRequest
+            {
+                Items = new List<VehicleUpdateRequest>()
+            };
+
+            for ( int i = 0; i < 3; i++ )
+            {
+                var vehicle = TestHelper.GenerateVehicleUpdateRequestWithName( "Vehicle" + i );
+                vehicle.VehicleType = vehicleTypes[i];
+                vehicleSet.Items.Add( vehicle );
+            }
+
+            var response = api.Navigate<ResponseData>(problem.GetLink("import-vehicles"), vehicleSet);
+            
+            var types = api.Navigate<VehicleTypeData>(problem.GetLink("get-types"));
+
+            Assert.AreEqual(types.VehicleTypes.Count, vehicleTypes.Count);
+        }
 }
 }
