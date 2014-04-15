@@ -12,6 +12,8 @@ namespace NFleet.Data
 
         public List<FieldsItem> Items { get; set; }
 
+        public KPIData KPIs { get; set; }
+
         public PlanData()
         {
             Items = new List<FieldsItem>();
