@@ -88,6 +88,7 @@
     <Compile Include="Data\ImportRequest.cs" />
     <Compile Include="Data\IResponseData.cs" />
     <Compile Include="Data\IVersioned.cs" />
+    <Compile Include="Data\KPIData.cs" />
     <Compile Include="Data\Link.cs" />
     <Compile Include="Data\LocationData.cs" />
     <Compile Include="Data\LocationDataSet.cs" />
