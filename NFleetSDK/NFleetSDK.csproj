@@ -123,6 +123,7 @@
     <Compile Include="Data\VehicleDataSet.cs" />
     <Compile Include="Data\VehicleError.cs" />
     <Compile Include="Data\VehicleSetImportRequest.cs" />
+    <Compile Include="Data\VehicleTypeData.cs" />
     <Compile Include="Data\VehicleUpdateRequest.cs" />
     <Compile Include="LinkUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
