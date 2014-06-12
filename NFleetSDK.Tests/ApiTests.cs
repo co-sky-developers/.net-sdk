@@ -1019,6 +1019,51 @@ namespace NFleet.Tests
             var plan = api.Navigate<PlanData>(problem.GetLink("plan"));
             Assert.AreEqual(4, plan.Items[0].Events.Count);
             Assert.AreEqual(4, plan.Items[1].Events.Count);
+
+            // unlocking
+
+            vehicleResult1 = api.Navigate<VehicleData>(v1.GetLink("self"));
+            vehicleResult2 = api.Navigate<VehicleData>(v2.GetLink("self"));
+
+            events1 = api.Navigate<RouteEventDataSet>(vehicleResult1.GetLink("list-events"));
+            events2 = api.Navigate<RouteEventDataSet>(vehicleResult2.GetLink("list-events"));
+
+            foreach (var item in events1.Items)
+            {
+                var @event = api.Navigate<RouteEventData>(item.GetLink("self"));
+                if (@event.TaskEventId < 20000) api.Navigate<ResponseData>(@event.GetLink("lock-to-vehicle"), new RouteEventUpdateRequest
+                {
+                    State = "UnlockedFromVehicle"
+                });
+            }
+            foreach (var item in events2.Items)
+            {
+                var @event = api.Navigate<RouteEventData>(item.GetLink("self"));
+                if (@event.TaskEventId < 20000) api.Navigate<ResponseData>(@event.GetLink("lock-to-vehicle"), new RouteEventUpdateRequest
+                {
+                    State = "UnlockedFromVehicle"
+                });
+            }
+
+            problem = api.Navigate<RoutingProblemData>(problem.GetLink("self"));
+
+            result = api.Navigate<ResponseData>(problem.GetLink("toggle-optimization"), new RoutingProblemUpdateRequest
+            {
+                Name = problem.Name,
+                State = "Running"
+            });
+
+            problem = api.Navigate<RoutingProblemData>(problem.GetLink("self"));
+            Thread.Sleep(1000);
+            while (problem.State.Equals("Running"))
+            {
+                Thread.Sleep(1000);
+                problem = api.Navigate<RoutingProblemData>(problem.GetLink("self"));
+            }
+
+            plan = api.Navigate<PlanData>(problem.GetLink("plan"));
+            Assert.AreEqual(2, plan.Items[0].Events.Count);
+            Assert.AreEqual(6, plan.Items[1].Events.Count);
         }
 }
 }
