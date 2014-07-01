@@ -26,6 +26,12 @@ namespace NFleet.Data
         public string State { get; set; }
         [DataMember]
         public string VehicleType { get; set; }
+        [DataMember]
+        public double FixedCost { get; set; }
+        [DataMember]
+        public double KilometerCost { get; set; }
+        [DataMember]
+        public double HourCost { get; set; }
 
         public VehicleData()
         {
