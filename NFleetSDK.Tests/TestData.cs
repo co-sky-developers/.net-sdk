@@ -1,16 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NFleet.Data;
 
 namespace NFleet.Tests
 {
     class TestData
     {
+        private static string GenerateRandomString( int length )
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            var random = new Random();
+            var result = new string(
+                Enumerable.Repeat( chars, length )
+                          .Select( s => s[random.Next( s.Length )] )
+                          .ToArray() );
+            return result;
+        }
+
         public static void CreateDemoData(RoutingProblemData problem, Api api)
         {
             api.Navigate<ResponseData>(problem.GetLink("create-vehicle"), new VehicleUpdateRequest
             {
-                Name = "test",
+                Name = "TestVehicle-" + GenerateRandomString(8),
                 Capacities = new List<CapacityData>
                 {
                     new CapacityData { Name = "Weight", Amount = 5000 }

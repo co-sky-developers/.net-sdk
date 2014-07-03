@@ -126,7 +126,8 @@ namespace NFleet.Tests
                         Longitude = 25.747143,
                         System = "Euclidian"
                     }
-                }
+                },
+                TimeWindows = { new TimeWindowData { Start = new DateTime( 2013, 5, 14, 8, 0, 0 ), End = new DateTime( 2013, 5, 14, 12, 0, 0 ) } }
             };
             pickup.Capacities.Add(capacity);
             newTask.TaskEvents.Add(pickup);
@@ -142,7 +143,8 @@ namespace NFleet.Tests
                         Longitude = 25.74892,
                         System = "Euclidian"
                     }
-                }
+                },
+                TimeWindows = { new TimeWindowData { Start = new DateTime( 2013, 5, 14, 8, 0, 0 ), End = new DateTime( 2013, 5, 14, 12, 0, 0 ) } }
             };
             delivery.Capacities.Add(capacity);
             newTask.TaskEvents.Add(delivery);
@@ -174,8 +176,7 @@ namespace NFleet.Tests
                     ServiceTime = te.ServiceTime,
                     TaskEventId = te.Id,
                     TimeWindows = te.TimeWindows,
-                    Type = te.Type
-
+                    Type = te.Type,
                 };
                 oldTaskEvents.Add(teReq);
             }
@@ -657,7 +658,8 @@ namespace NFleet.Tests
                             Longitude = 25.747143,
                             System = "Euclidian"
                         }
-                    }
+                    },
+                    TimeWindows = { new TimeWindowData { Start = new DateTime( 2013, 5, 14, 8, 0, 0 ), End = new DateTime( 2013, 5, 14, 12, 0, 0 ) } }
                 };
                 pickup.Capacities.Add(capacity);
                 task.TaskEvents.Add(pickup);
@@ -673,7 +675,8 @@ namespace NFleet.Tests
                             Longitude = 25.74892,
                             System = "Euclidian"
                         }
-                    }
+                    },
+                    TimeWindows = { new TimeWindowData { Start = new DateTime( 2013, 5, 14, 8, 0, 0 ), End = new DateTime( 2013, 5, 14, 12, 0, 0 ) } }
                 };
                 delivery.Capacities.Add(capacity);
                 task.TaskEvents.Add(delivery);
