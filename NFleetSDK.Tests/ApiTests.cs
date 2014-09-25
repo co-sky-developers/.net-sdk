@@ -430,7 +430,7 @@ namespace NFleet.Tests
             var api = TestHelper.Authenticate();
             var user = TestHelper.GetOrCreateUser(api);
             var problem = TestHelper.CreateProblemWithDemoData(api, user);
-            //api.Navigate<>()
+
             //##BEGIN EXAMPLE getprogress##
             api.Navigate<ResponseData>(problem.GetLink("toggle-optimization"),
                 new RoutingProblemUpdateRequest
@@ -955,7 +955,6 @@ namespace NFleet.Tests
             
             var task2 = TestHelper.GenerateTaskUpdateRequestWithNameAndCoordinates("Task2", pickupCoord, deliveryCoord);
 
-            //var start = new CoordinateData { Latitude = 62.244589, Longitude = 25.74892, System = "Euclidian" };
             var vehicle1 = TestHelper.GenerateVehicleUpdateRequestWithNameAndCoordinates("Vehicle1", pickupCoord, pickupCoord);
             var vehicle2 = TestHelper.GenerateVehicleUpdateRequestWithNameAndCoordinates("Vehicle2", pickupCoord, pickupCoord);
 
@@ -1067,6 +1066,108 @@ namespace NFleet.Tests
             plan = api.Navigate<PlanData>(problem.GetLink("plan"));
             Assert.AreEqual(2, plan.Items[0].Events.Count);
             Assert.AreEqual(6, plan.Items[1].Events.Count);
+        }
+
+
+        [Test]
+        public void T32LockingRoute()
+        {
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetOrCreateUser( api );
+            var problem = TestHelper.CreateProblem( api, user, "LockingRoute" );
+
+            var pickupCoord = new CoordinateData { Latitude = 62.244958, Longitude = 25.747143, System = "Euclidian" };
+            var deliveryCoord = new CoordinateData { Latitude = 62.244589, Longitude = 25.74892, System = "Euclidian" };
+
+
+            var task1 = TestHelper.GenerateTaskUpdateRequestWithNameAndCoordinates( "Task1", pickupCoord, deliveryCoord );
+
+            var task2 = TestHelper.GenerateTaskUpdateRequestWithNameAndCoordinates( "Task2", pickupCoord, deliveryCoord );
+
+            var vehicle1 = TestHelper.GenerateVehicleUpdateRequestWithNameAndCoordinates( "Vehicle1", pickupCoord, pickupCoord );
+            var vehicle2 = TestHelper.GenerateVehicleUpdateRequestWithNameAndCoordinates( "Vehicle2", pickupCoord, pickupCoord );
+
+            var response = api.Navigate<ResponseData>( problem.GetLink( "create-vehicle" ), vehicle1 );
+            response = api.Navigate<ResponseData>( problem.GetLink( "create-vehicle" ), vehicle2 );
+            response = api.Navigate<ResponseData>( problem.GetLink( "create-task" ), task1 );
+            response = api.Navigate<ResponseData>( problem.GetLink( "create-task" ), task2 );
+
+            var vehicles = api.Navigate<VehicleDataSet>( problem.GetLink( "list-vehicles" ) );
+            var tasks = api.Navigate<TaskDataSet>( problem.GetLink( "list-tasks" ) );
+
+            var v1 = vehicles.Items.Find( v => v.Name == "Vehicle1" );
+            var v2 = vehicles.Items.Find( v => v.Name == "Vehicle2" );
+            var vehicleResult1 = api.Navigate<VehicleData>( v1.GetLink( "self" ) );
+            var vehicleResult2 = api.Navigate<VehicleData>( v2.GetLink( "self" ) );
+            var t1 = tasks.Items.Find( t => t.Name == "Task1" );
+            var t2 = tasks.Items.Find( t => t.Name == "Task2" );
+
+            var route1 = t1.TaskEvents.Select( te => te.Id ).ToArray();
+            var route2 = t2.TaskEvents.Select( te => te.Id ).ToArray();
+
+            api.Navigate<RouteData>( vehicleResult1.GetLink( "get-route" ) );
+            api.Navigate<RouteData>( vehicleResult2.GetLink( "get-route" ) );
+
+            api.Navigate<ResponseData>( vehicleResult1.GetLink( "set-route" ), new RouteUpdateRequest { Items = route1 } );
+            api.Navigate<ResponseData>( vehicleResult2.GetLink( "set-route" ), new RouteUpdateRequest { Items = route2 } );
+
+            var events1 = api.Navigate<RouteEventDataSet>( vehicleResult1.GetLink( "list-events" ) );
+            var events2 = api.Navigate<RouteEventDataSet>( vehicleResult2.GetLink( "list-events" ) );
+
+            response = api.Navigate<ResponseData>( events1.Items[events1.Items.Count - 2].GetLink( "lock" ), new RouteEventUpdateRequest { State = "Locked"} );
+            response = api.Navigate<ResponseData>( events2.Items[events2.Items.Count - 2].GetLink( "lock" ), new RouteEventUpdateRequest { State = "Locked" } );
+
+            problem = api.Navigate<RoutingProblemData>( problem.GetLink( "self" ) );
+
+            var result = api.Navigate<ResponseData>( problem.GetLink( "toggle-optimization" ), new RoutingProblemUpdateRequest
+            {
+                Name = problem.Name,
+                State = "Running"
+            } );
+
+            problem = api.Navigate<RoutingProblemData>( problem.GetLink( "self" ) );
+            Thread.Sleep( 1000 );
+            while ( problem.State.Equals( "Running" ) )
+            {
+                Thread.Sleep( 1000 );
+                problem = api.Navigate<RoutingProblemData>( problem.GetLink( "self" ) );
+            }
+
+            var plan = api.Navigate<PlanData>( problem.GetLink( "plan" ) );
+            Assert.AreEqual( 4, plan.Items[0].Events.Count );
+            Assert.AreEqual( 4, plan.Items[1].Events.Count );
+
+            // unlocking
+
+            vehicleResult1 = api.Navigate<VehicleData>( v1.GetLink( "self" ) );
+            vehicleResult2 = api.Navigate<VehicleData>( v2.GetLink( "self" ) );
+
+            events1 = api.Navigate<RouteEventDataSet>( vehicleResult1.GetLink( "list-events" ) );
+            events2 = api.Navigate<RouteEventDataSet>( vehicleResult2.GetLink( "list-events" ) );
+
+            response = api.Navigate<ResponseData>( events1.Items[1].GetLink( "unlock" ), new RouteEventUpdateRequest { State = "Unlocked" } );
+            response = api.Navigate<ResponseData>( events2.Items[1].GetLink( "unlock" ), new RouteEventUpdateRequest { State = "Unlocked" } );
+
+
+            problem = api.Navigate<RoutingProblemData>( problem.GetLink( "self" ) );
+
+            result = api.Navigate<ResponseData>( problem.GetLink( "toggle-optimization" ), new RoutingProblemUpdateRequest
+            {
+                Name = problem.Name,
+                State = "Running"
+            } );
+
+            problem = api.Navigate<RoutingProblemData>( problem.GetLink( "self" ) );
+            Thread.Sleep( 1000 );
+            while ( problem.State.Equals( "Running" ) )
+            {
+                Thread.Sleep( 1000 );
+                problem = api.Navigate<RoutingProblemData>( problem.GetLink( "self" ) );
+            }
+
+            plan = api.Navigate<PlanData>( problem.GetLink( "plan" ) );
+            Assert.AreEqual( 2, plan.Items[0].Events.Count );
+            Assert.AreEqual( 6, plan.Items[1].Events.Count );
         }
 }
 }
