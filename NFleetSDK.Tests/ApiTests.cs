@@ -596,7 +596,7 @@ namespace NFleet.Tests
             {
                 var veh = new VehicleUpdateRequest()
                 {
-                    Name = "Vehicle name",
+                    Name = "Vehicle name "+i,
                     Capacities = vehicleCapacities,
                     StartLocation = vehiclePickup,
                     EndLocation = vehicleDelivery,
@@ -1064,8 +1064,15 @@ namespace NFleet.Tests
             }
 
             plan = api.Navigate<PlanData>(problem.GetLink("plan"));
-            Assert.AreEqual(2, plan.Items[0].Events.Count);
-            Assert.AreEqual(6, plan.Items[1].Events.Count);
+            if ( plan.Items[0].Events.Count == 2 )
+            {
+                Assert.AreEqual( 6, plan.Items[1].Events.Count );
+            }
+            else
+            {
+                Assert.AreEqual( 6, plan.Items[0].Events.Count );    
+            }
+
         }
 
 
@@ -1166,8 +1173,15 @@ namespace NFleet.Tests
             }
 
             plan = api.Navigate<PlanData>( problem.GetLink( "plan" ) );
-            Assert.AreEqual( 2, plan.Items[0].Events.Count );
-            Assert.AreEqual( 6, plan.Items[1].Events.Count );
+
+            if ( plan.Items[0].Events.Count == 2 )
+            {
+                Assert.AreEqual( 6, plan.Items[1].Events.Count );
+            }
+            else
+            {
+                Assert.AreEqual( 6, plan.Items[0].Events.Count );
+            }
         }
 }
 }
