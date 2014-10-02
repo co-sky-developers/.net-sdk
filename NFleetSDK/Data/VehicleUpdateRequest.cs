@@ -14,9 +14,14 @@ namespace NFleet.Data
         public LocationData EndLocation { get; set; }
         public List<CapacityData> Capacities { get; set; }
         public List<TimeWindowData> TimeWindows { get; set; }
+
+        public string SpeedProfile { get; set; }
+        public double SpeedFactor { get; set; }
+
         public double FixedCost { get; set; }
         public double KilometerCost { get; set; }
         public double HourCost { get; set; }
+
 
         public VehicleUpdateRequest()
         {

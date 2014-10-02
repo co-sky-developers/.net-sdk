@@ -27,6 +27,10 @@ namespace NFleet.Data
         [DataMember]
         public string VehicleType { get; set; }
         [DataMember]
+        public string SpeedProfile { get; set; }
+        [DataMember]
+        public double SpeedFactor { get; set; }
+        [DataMember]
         public double FixedCost { get; set; }
         [DataMember]
         public double KilometerCost { get; set; }
