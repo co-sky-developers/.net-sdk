@@ -83,6 +83,7 @@
     <Compile Include="Data\CoordinateData.cs" />
     <Compile Include="Data\DataUtil.cs" />
     <Compile Include="Data\DeleteRoutingProblemRequest.cs" />
+    <Compile Include="Data\DeleteTasksRequest.cs" />
     <Compile Include="Data\ErrorData.cs" />
     <Compile Include="Data\FieldsItem.cs" />
     <Compile Include="Data\ImportData.cs" />
