@@ -1211,10 +1211,47 @@ namespace NFleet.Tests
             Assert.AreEqual( 2, tasksSet.Items.Count );
 
             problem = api.Navigate<RoutingProblemData>( problem.GetLink( "self" ) );
-            response = api.Navigate<ResponseData>( problem.GetLink( "delete-tasks" ), new DeleteTasksRequest() );
+            response = api.Navigate<ResponseData>( problem.GetLink( "delete-tasks" ) );
 
             tasksSet = api.Navigate<TaskDataSet>( problem.GetLink( "list-tasks" ) );
             Assert.AreEqual( 0, tasksSet.Items.Count );
+        }
+
+        [Test]
+        public void T34DeleteASingleTasks()
+        {
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetOrCreateUser( api );
+            var problem = TestHelper.CreateProblem( api, user, "DeleteASingleTasks" );
+
+            var pickupCoord = new CoordinateData { Latitude = 62.244958, Longitude = 25.747143, System = "Euclidian" };
+            var deliveryCoord = new CoordinateData { Latitude = 62.244589, Longitude = 25.74892, System = "Euclidian" };
+
+
+            var task1 = TestHelper.GenerateTaskUpdateRequestWithNameAndCoordinates( "Task1", pickupCoord, deliveryCoord );
+
+            var task2 = TestHelper.GenerateTaskUpdateRequestWithNameAndCoordinates( "Task2", pickupCoord, deliveryCoord );
+
+            var vehicle1 = TestHelper.GenerateVehicleUpdateRequestWithNameAndCoordinates( "Vehicle1", pickupCoord, pickupCoord );
+            var vehicle2 = TestHelper.GenerateVehicleUpdateRequestWithNameAndCoordinates( "Vehicle2", pickupCoord, pickupCoord );
+
+            var response = api.Navigate<ResponseData>( problem.GetLink( "create-vehicle" ), vehicle1 );
+            response = api.Navigate<ResponseData>( problem.GetLink( "create-vehicle" ), vehicle2 );
+            response = api.Navigate<ResponseData>( problem.GetLink( "create-task" ), task1 );
+            response = api.Navigate<ResponseData>( problem.GetLink( "create-task" ), task2 );
+
+            
+            var tasksSet = api.Navigate<TaskDataSet>( problem.GetLink( "list-tasks" ) );
+            Assert.AreEqual( 2, tasksSet.Items.Count );
+
+            problem = api.Navigate<RoutingProblemData>( problem.GetLink( "self" ) );
+            var task = api.Navigate<TaskData>( response.Location );
+            api.Navigate<ResponseData>( task.GetLink( "delete" ) );
+
+            //response = api.Navigate<ResponseData>( problem.GetLink( "delete-tasks" ), new DeleteTasksRequest() );
+
+            tasksSet = api.Navigate<TaskDataSet>( problem.GetLink( "list-tasks" ) );
+            Assert.AreEqual( 1, tasksSet.Items.Count );
         }
     }
 }
