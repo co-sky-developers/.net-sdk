@@ -62,7 +62,7 @@ namespace NFleet
             InsertAuthorizationHeader( ref request, currentToken );
 
             // when POSTing, if data is null, add an empty object to prevent error due to null payload
-            request.AddBody( data == null && link.Method == "POST" ? new Empty() : data );
+            request.AddBody( data == null && (link.Method == "POST" || link.Method == "DELETE") ? new Empty() : data );
             request.OnBeforeDeserialization = resp => resp.ContentType = "application/json";
             var result = client.Execute<T>( request );
 
@@ -78,7 +78,7 @@ namespace NFleet
                     ThrowException( result );
             }
 
-            if ( result.StatusCode == 0 )
+            if ( result.StatusCode != HttpStatusCode.NoContent && result.StatusCode == 0 )
                 throw new IOException( string.Format( "Could not connect to server at {0}.", client.BaseUrl ) );
 
             if ( ( result.Content.Length > 0 && result.ResponseStatus != ResponseStatus.Completed ) )

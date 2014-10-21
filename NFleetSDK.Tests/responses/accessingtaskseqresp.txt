@@ -6,72 +6,370 @@ Content-Type: application/vnd.jyu.nfleet.taskset+json;version=2.0
       "Id":32001,
       "Name":null,
       "Info":null,
-      "Type":null,
+      "Type":"Start",
       "Capacities":[
 
       ],
       "TimeWindows":[
 
       ],
-      "Location":null,
+      "Location":{
+        "Id":1,
+        "Coordinate":{
+          "Latitude":62.244958,
+          "Longitude":25.747143,
+          "System":"Euclidian"
+        },
+        "Address":null
+      },
       "ServiceTime":0.0,
       "Meta":[
-
+        {
+          "Uri":"/users/1/problems/103/vehicles/1/events/1",
+          "Rel":"self",
+          "Method":"GET",
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.routeevent+json;version=2.0"
+        },
+        {
+          "Uri":"",
+          "Rel":"set-arrival",
+          "Method":"PUT",
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.routeevent+json;version=2.0"
+        },
+        {
+          "Uri":"",
+          "Rel":"reset-arrival",
+          "Method":"PUT",
+          "Enabled":false,
+          "Type":"application/vnd.jyu.nfleet.routeevent+json;version=2.0"
+        },
+        {
+          "Uri":"",
+          "Rel":"lock",
+          "Method":"PUT",
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.routeevent+json;version=2.0"
+        },
+        {
+          "Uri":"",
+          "Rel":"unlock",
+          "Method":"PUT",
+          "Enabled":false,
+          "Type":"application/vnd.jyu.nfleet.routeevent+json;version=2.0"
+        },
+        {
+          "Uri":"../../",
+          "Rel":"get-vehicle",
+          "Method":"GET",
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.vehicle+json;version=2.0"
+        },
+        {
+          "Uri":"../../../../tasks/0",
+          "Rel":"get-task",
+          "Method":"GET",
+          "Enabled":false,
+          "Type":"application/vnd.jyu.nfleet.task+json;version=2.0"
+        },
+        {
+          "Uri":"../",
+          "Rel":"get-events",
+          "Method":"GET",
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.routeeventset+json;version=2.0"
+        },
+        {
+          "Uri":"",
+          "Rel":"lock-to-vehicle",
+          "Method":"PUT",
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.routeevent+json;version=2.0"
+        }
       ]
     },
     {
       "Id":11,
       "Name":null,
       "Info":null,
-      "Type":null,
+      "Type":"Pickup",
       "Capacities":[
-
+        {
+          "Name":"Weight",
+          "Amount":20
+        }
       ],
       "TimeWindows":[
-
+        {
+          "Start":"2013-05-14T08:00:00+03:00",
+          "End":"2013-05-14T12:00:00+03:00"
+        }
       ],
-      "Location":null,
+      "Location":{
+        "Id":2,
+        "Coordinate":{
+          "Latitude":62.282617,
+          "Longitude":25.797272,
+          "System":"Euclidian"
+        },
+        "Address":null
+      },
       "ServiceTime":0.0,
       "Meta":[
-
+        {
+          "Uri":"/users/1/problems/103/vehicles/1/events/2",
+          "Rel":"self",
+          "Method":"GET",
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.routeevent+json;version=2.0"
+        },
+        {
+          "Uri":"",
+          "Rel":"set-arrival",
+          "Method":"PUT",
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.routeevent+json;version=2.0"
+        },
+        {
+          "Uri":"",
+          "Rel":"reset-arrival",
+          "Method":"PUT",
+          "Enabled":false,
+          "Type":"application/vnd.jyu.nfleet.routeevent+json;version=2.0"
+        },
+        {
+          "Uri":"",
+          "Rel":"lock",
+          "Method":"PUT",
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.routeevent+json;version=2.0"
+        },
+        {
+          "Uri":"",
+          "Rel":"unlock",
+          "Method":"PUT",
+          "Enabled":false,
+          "Type":"application/vnd.jyu.nfleet.routeevent+json;version=2.0"
+        },
+        {
+          "Uri":"../../",
+          "Rel":"get-vehicle",
+          "Method":"GET",
+          "Enabled":false,
+          "Type":"application/vnd.jyu.nfleet.vehicle+json;version=2.0"
+        },
+        {
+          "Uri":"../../../../tasks/1",
+          "Rel":"get-task",
+          "Method":"GET",
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.task+json;version=2.0"
+        },
+        {
+          "Uri":"../",
+          "Rel":"get-events",
+          "Method":"GET",
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.routeeventset+json;version=2.0"
+        },
+        {
+          "Uri":"",
+          "Rel":"lock-to-vehicle",
+          "Method":"PUT",
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.routeevent+json;version=2.0"
+        }
       ]
     },
     {
       "Id":12,
       "Name":null,
       "Info":null,
-      "Type":null,
+      "Type":"Delivery",
       "Capacities":[
-
+        {
+          "Name":"Weight",
+          "Amount":20
+        }
       ],
       "TimeWindows":[
-
+        {
+          "Start":"2013-05-14T08:00:00+03:00",
+          "End":"2013-05-14T12:00:00+03:00"
+        }
       ],
-      "Location":null,
+      "Location":{
+        "Id":3,
+        "Coordinate":{
+          "Latitude":62.373658,
+          "Longitude":25.885506,
+          "System":"Euclidian"
+        },
+        "Address":null
+      },
       "ServiceTime":0.0,
       "Meta":[
-
+        {
+          "Uri":"/users/1/problems/103/vehicles/1/events/3",
+          "Rel":"self",
+          "Method":"GET",
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.routeevent+json;version=2.0"
+        },
+        {
+          "Uri":"",
+          "Rel":"set-arrival",
+          "Method":"PUT",
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.routeevent+json;version=2.0"
+        },
+        {
+          "Uri":"",
+          "Rel":"reset-arrival",
+          "Method":"PUT",
+          "Enabled":false,
+          "Type":"application/vnd.jyu.nfleet.routeevent+json;version=2.0"
+        },
+        {
+          "Uri":"",
+          "Rel":"lock",
+          "Method":"PUT",
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.routeevent+json;version=2.0"
+        },
+        {
+          "Uri":"",
+          "Rel":"unlock",
+          "Method":"PUT",
+          "Enabled":false,
+          "Type":"application/vnd.jyu.nfleet.routeevent+json;version=2.0"
+        },
+        {
+          "Uri":"../../",
+          "Rel":"get-vehicle",
+          "Method":"GET",
+          "Enabled":false,
+          "Type":"application/vnd.jyu.nfleet.vehicle+json;version=2.0"
+        },
+        {
+          "Uri":"../../../../tasks/1",
+          "Rel":"get-task",
+          "Method":"GET",
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.task+json;version=2.0"
+        },
+        {
+          "Uri":"../",
+          "Rel":"get-events",
+          "Method":"GET",
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.routeeventset+json;version=2.0"
+        },
+        {
+          "Uri":"",
+          "Rel":"lock-to-vehicle",
+          "Method":"PUT",
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.routeevent+json;version=2.0"
+        }
       ]
     },
     {
       "Id":16001,
       "Name":null,
       "Info":null,
-      "Type":null,
+      "Type":"End",
       "Capacities":[
 
       ],
       "TimeWindows":[
 
       ],
-      "Location":null,
+      "Location":{
+        "Id":1,
+        "Coordinate":{
+          "Latitude":62.244958,
+          "Longitude":25.747143,
+          "System":"Euclidian"
+        },
+        "Address":null
+      },
       "ServiceTime":0.0,
       "Meta":[
-
+        {
+          "Uri":"/users/1/problems/103/vehicles/1/events/4",
+          "Rel":"self",
+          "Method":"GET",
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.routeevent+json;version=2.0"
+        },
+        {
+          "Uri":"",
+          "Rel":"set-arrival",
+          "Method":"PUT",
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.routeevent+json;version=2.0"
+        },
+        {
+          "Uri":"",
+          "Rel":"reset-arrival",
+          "Method":"PUT",
+          "Enabled":false,
+          "Type":"application/vnd.jyu.nfleet.routeevent+json;version=2.0"
+        },
+        {
+          "Uri":"",
+          "Rel":"lock",
+          "Method":"PUT",
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.routeevent+json;version=2.0"
+        },
+        {
+          "Uri":"",
+          "Rel":"unlock",
+          "Method":"PUT",
+          "Enabled":false,
+          "Type":"application/vnd.jyu.nfleet.routeevent+json;version=2.0"
+        },
+        {
+          "Uri":"../../",
+          "Rel":"get-vehicle",
+          "Method":"GET",
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.vehicle+json;version=2.0"
+        },
+        {
+          "Uri":"../../../../tasks/0",
+          "Rel":"get-task",
+          "Method":"GET",
+          "Enabled":false,
+          "Type":"application/vnd.jyu.nfleet.task+json;version=2.0"
+        },
+        {
+          "Uri":"../",
+          "Rel":"get-events",
+          "Method":"GET",
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.routeeventset+json;version=2.0"
+        },
+        {
+          "Uri":"",
+          "Rel":"lock-to-vehicle",
+          "Method":"PUT",
+          "Enabled":true,
+          "Type":"application/vnd.jyu.nfleet.routeevent+json;version=2.0"
+        }
       ]
     }
   ],
   "Meta":[
-
+    {
+      "Uri":"/users/1/problems/103/vehicles/1/events",
+      "Rel":"self",
+      "Method":"GET",
+      "Enabled":true,
+      "Type":"application/vnd.jyu.nfleet.routeeventset+json;version=2.0"
+    }
   ]
 }

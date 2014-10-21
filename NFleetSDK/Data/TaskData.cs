@@ -12,6 +12,7 @@ namespace NFleet.Data
         public List<TaskEventData> TaskEvents { get; set; }
         public List<Link> Meta { get; set; }
         public string State { get; set; }
+        public double Profit { get; set; }
 
         public TaskData()
         {

@@ -24,5 +24,9 @@ namespace NFleet.Data
         public int TaskEventId { get; set; }
 
         public KPIData KPIs { get; set; }
+
+        public string Type { get; set; }
+
+        public LocationData Location { get; set; }
     }
 }
