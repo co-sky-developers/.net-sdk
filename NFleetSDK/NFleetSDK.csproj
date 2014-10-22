@@ -85,6 +85,7 @@
     <Compile Include="Data\DeleteRoutingProblemRequest.cs" />
     <Compile Include="Data\ErrorData.cs" />
     <Compile Include="Data\FieldsItem.cs" />
+    <Compile Include="Data\IMime.cs" />
     <Compile Include="Data\ImportData.cs" />
     <Compile Include="Data\ImportRequest.cs" />
     <Compile Include="Data\IResponseData.cs" />

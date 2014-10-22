@@ -57,6 +57,7 @@ namespace NFleet
                 throw new ArgumentNullException( "link" );
 
             var request = InitializeRequest( link, queryParameters );
+            request.AddHeader( "Accept", TypeHelper.GetSupportedType( link.Type ) );
 
             InsertIfNoneMatchHeader( ref request, data, cache, queryParameters );
             InsertAuthorizationHeader( ref request, currentToken );
@@ -109,15 +110,19 @@ namespace NFleet
             if ( code == HttpStatusCode.Created || code == HttpStatusCode.SeeOther )
             {
                 var parameter = result.Headers.FirstOrDefault( h => h.Name == "Location" );
-
+                var contentType = result.Headers.FirstOrDefault( h => h.Name == "Content-Type" );
                 if ( parameter == null || parameter.Value == null )
                     throw new IOException( "Server response missing Location header." );
+
+                if ( contentType == null || contentType.Value == null )
+                    throw new IOException( "Server response missing Content-Type header." );
 
                 var value = parameter.Value.ToString();
                 var entityLocation = new Uri( value ).AbsolutePath;
 
                 var responseData = new ResponseData();
-                responseData.Meta.Add( new Link { Method = "GET", Rel = "location", Uri = entityLocation } );
+
+                responseData.Meta.Add( new Link { Method = "GET", Rel = "location", Uri = entityLocation, Type = contentType.Value.ToString() } );
 
                 if ( !( responseData is T ) )
                     throw new InvalidOperationException( string.Format( "The response from the given URL is not of the requested type {0}.", typeof( T ).Name ) );
