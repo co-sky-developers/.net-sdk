@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NFleet.Data;
 
 namespace NFleet
@@ -31,6 +32,7 @@ namespace NFleet
 
         public static string GetSupportedType( string typeString )
         {
+            if ( String.IsNullOrEmpty( typeString ) ) return "application/json";
             string[] parts = typeString.Split( ';' );
             string type = parts[0];
 
