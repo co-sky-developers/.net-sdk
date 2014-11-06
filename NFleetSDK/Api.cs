@@ -23,7 +23,7 @@ namespace NFleet
 
         private TokenData currentToken;
 
-        public ApiData Root { get { return Navigate<ApiData>( new Link { Method = "GET", Uri = "" } ); } }
+        public ApiData Root { get { return Navigate<ApiData>( new Link { Method = "GET", Uri = "", Type = "application/json" } ); } }
 
         public Api( string url, string username, string password )
         {
@@ -55,15 +55,25 @@ namespace NFleet
         {
             if ( link == null )
                 throw new ArgumentNullException( "link" );
-
+            client.ClearHandlers();
+            client.AddHandler( link.Type, new CustomConverter() );
             var request = InitializeRequest( link, queryParameters );
-            request.AddHeader( "Accept", TypeHelper.GetSupportedType( link.Type ) );
+            if (link.Method == "GET") request.AddHeader( "Accept", TypeHelper.GetSupportedType( link.Type ) );
+
+            request.AddHeader( "Content-Type", TypeHelper.GetSupportedType( link.Type ) );
 
             InsertIfNoneMatchHeader( ref request, data, cache, queryParameters );
             InsertAuthorizationHeader( ref request, currentToken );
 
             // when POSTing, if data is null, add an empty object to prevent error due to null payload
-            request.AddBody( data == null && (link.Method == "POST" || link.Method == "DELETE") ? new Empty() : data );
+            if ( data == null )
+            {
+                request.AddBody( (link.Method == "POST" || link.Method == "DELETE" ) ? new Empty() : data );
+            }
+            else
+            {
+                request.AddParameter( link.Type, data, ParameterType.RequestBody );
+            }
             request.OnBeforeDeserialization = resp => resp.ContentType = "application/json";
             var result = client.Execute<T>( request );
 
@@ -83,7 +93,13 @@ namespace NFleet
                 throw new IOException( string.Format( "Could not connect to server at {0}.", client.BaseUrl ) );
 
             if ( ( result.Content.Length > 0 && result.ResponseStatus != ResponseStatus.Completed ) )
-                throw new IOException( result.ErrorMessage );
+            {
+                var converter = new CustomConverter();
+                var res = converter.Deserialize<T>( result );
+                if ( res != null ) result.Data = res;
+                else throw new IOException( result.ErrorMessage );
+            }
+                
 
             var code = result.StatusCode;
 
@@ -192,7 +208,7 @@ namespace NFleet
             var request = new RestRequest( uri, link.Method.ToMethod() )
             {
                 RequestFormat = DataFormat.Json,
-                JsonSerializer = new CustomConverter { ContentType = "application/json" }
+                JsonSerializer = new CustomConverter { ContentType = link.Type ?? "application/json" }
             };
 
             if ( link.Method == "GET" && queryParameters != null )
