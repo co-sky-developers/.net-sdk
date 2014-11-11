@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using Newtonsoft.Json;
 using NFleet.Data;
 using RestSharp;
 using RestSharp.Contrib;
@@ -72,7 +73,7 @@ namespace NFleet
             }
             else
             {
-                request.AddParameter( link.Type, data, ParameterType.RequestBody );
+                request.AddParameter( link.Type, JsonConvert.SerializeObject( data ), ParameterType.RequestBody );
             }
             request.OnBeforeDeserialization = resp => resp.ContentType = "application/json";
             var result = client.Execute<T>( request );
