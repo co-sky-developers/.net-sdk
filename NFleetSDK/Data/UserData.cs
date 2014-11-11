@@ -6,7 +6,7 @@ namespace NFleet.Data
     [DataContract]
     public class UserData : IResponseData
     {
-        public static string MIMEType = "application/vnd.jyu.nfleet.user+json";
+        public static string MIMEType = "application/vnd.jyu.nfleet.user";
         public static string MIMEVersion = "2.0";
 
         [IgnoreDataMember]

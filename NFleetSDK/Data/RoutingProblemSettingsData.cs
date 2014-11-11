@@ -4,7 +4,7 @@ namespace NFleet.Data
 {
     public class RoutingProblemSettingsData : IVersioned, IResponseData
     {
-        public static string MIMEType = "application/vnd.jyu.nfleet.problemsettings+json";
+        public static string MIMEType = "application/vnd.jyu.nfleet.problemsettings";
         public static string MIMEVersion = "2.0";
 
         public int VersionNumber { get; set; }

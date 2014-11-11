@@ -4,7 +4,7 @@ namespace NFleet.Data
 {
     public class ObjectiveValueDataSet : IResponseData, IVersioned
     {
-        public static string MIMEType = "application/vnd.jyu.nfleet.objectivevalueset+json";
+        public static string MIMEType = "application/vnd.jyu.nfleet.objectivevalueset";
         public static string MIMEVersion = "2.0";
 
         int IVersioned.VersionNumber { get; set; }

@@ -6,7 +6,7 @@ namespace NFleet.Data
     [DataContract]
     public class VehicleData : IResponseData, IVersioned
     {
-        public static string MIMEType = "application/vnd.jyu.nfleet.vehicle+json";
+        public static string MIMEType = "application/vnd.jyu.nfleet.vehicle";
         public static string MIMEVersion = "2.0";
 
         [IgnoreDataMember]

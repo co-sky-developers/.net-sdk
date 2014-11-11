@@ -4,7 +4,7 @@ namespace NFleet.Data
 {
     public class TaskData : IResponseData, IVersioned
     {
-        public static string MIMEType = "application/vnd.jyu.nfleet.task+json";
+        public static string MIMEType = "application/vnd.jyu.nfleet.task";
         public static string MIMEVersion = "2.0";
 
         int IVersioned.VersionNumber { get; set; }

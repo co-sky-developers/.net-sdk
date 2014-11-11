@@ -4,7 +4,7 @@ namespace NFleet.Data
 {
     public class RouteEventDataSet : IResponseData, IVersioned
     {
-        public static string MIMEType = "application/vnd.jyu.nfleet.routeeventset+json";
+        public static string MIMEType = "application/vnd.jyu.nfleet.routeeventset";
         public static string MIMEVersion = "2.0";
 
         int IVersioned.VersionNumber { get; set; }

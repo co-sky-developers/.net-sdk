@@ -4,7 +4,7 @@ namespace NFleet.Data
 {
     public class ImportData : IResponseData
     {
-        public static string MIMEType = "application/vnd.jyu.nfleet.import+json";
+        public static string MIMEType = "application/vnd.jyu.nfleet.import";
         public static string MIMEVersion = "2.0";
 
         public List<Link> Meta { get; set; }
