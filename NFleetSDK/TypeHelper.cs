@@ -6,34 +6,38 @@ namespace NFleet
 {
     static class TypeHelper
     {
-        private const string versionPerfix = ";version=";
+        private const string versionPrefix = "-";
+        private const string versionPostfix = "+json";
 
         private static readonly Dictionary<string, string> supportedTypes = new Dictionary<string, string>
         {
-            { UserData.MIMEType, UserData.MIMEType + versionPerfix + UserData.MIMEVersion },
-            { ImportData.MIMEType, ImportData.MIMEType + versionPerfix + ImportData.MIMEVersion },
-            { ObjectiveValueDataSet.MIMEType, ObjectiveValueDataSet.MIMEType + versionPerfix + ObjectiveValueDataSet.MIMEVersion },
-            { PlanData.MIMEType, PlanData.MIMEType + versionPerfix + PlanData.MIMEVersion },
-            { RouteData.MIMEType, RouteData.MIMEType + versionPerfix + RouteData.MIMEVersion },
-            { RouteEventData.MIMEType, RouteEventData.MIMEType + versionPerfix + RouteEventData.MIMEVersion },
-            { RouteEventDataSet.MIMEType, RouteEventDataSet.MIMEType + versionPerfix + RouteEventDataSet.MIMEVersion },
-            { RoutingProblemData.MIMEType, RoutingProblemData.MIMEType + versionPerfix + RoutingProblemData.MIMEVersion },
-            { RoutingProblemDataSet.MIMEType, RoutingProblemDataSet.MIMEType + versionPerfix + RoutingProblemDataSet.MIMEVersion },
-            { RoutingProblemSettingsData.MIMEType, RoutingProblemSettingsData.MIMEType + versionPerfix + RoutingProblemSettingsData.MIMEVersion },
-            { TaskData.MIMEType, TaskData.MIMEType + versionPerfix + TaskData.MIMEVersion },
-            { TaskDataSet.MIMEType, TaskDataSet.MIMEType + versionPerfix + TaskDataSet.MIMEVersion },
-            { TaskEventData.MIMEType, TaskEventData.MIMEType + versionPerfix + TaskEventData.MIMEVersion },
-            { TaskEventDataSet.MIMEType, TaskEventDataSet.MIMEType + versionPerfix + TaskEventDataSet.MIMEVersion },
-            { VehicleData.MIMEType, VehicleData.MIMEType + versionPerfix + VehicleData.MIMEVersion },
-            { VehicleDataSet.MIMEType, VehicleDataSet.MIMEType + versionPerfix + VehicleDataSet.MIMEVersion },
-            { VehicleTypeData.MIMEType, VehicleTypeData.MIMEType + versionPerfix + VehicleTypeData.MIMEVersion },
+            { UserData.MIMEType, UserData.MIMEType + versionPrefix + UserData.MIMEVersion + versionPostfix },
+            { UserDataSet.MIMEType, UserDataSet.MIMEType + versionPrefix + UserDataSet.MIMEVersion + versionPostfix },
+            { ImportData.MIMEType, ImportData.MIMEType + versionPrefix + ImportData.MIMEVersion + versionPostfix },
+            { ObjectiveValueDataSet.MIMEType, ObjectiveValueDataSet.MIMEType + versionPrefix + ObjectiveValueDataSet.MIMEVersion + versionPostfix },
+            { PlanData.MIMEType, PlanData.MIMEType + versionPrefix + PlanData.MIMEVersion + versionPostfix },
+            { RouteData.MIMEType, RouteData.MIMEType + versionPrefix + RouteData.MIMEVersion + versionPostfix },
+            { RouteEventData.MIMEType, RouteEventData.MIMEType + versionPrefix + RouteEventData.MIMEVersion + versionPostfix },
+            { RouteEventDataSet.MIMEType, RouteEventDataSet.MIMEType + versionPrefix + RouteEventDataSet.MIMEVersion + versionPostfix },
+            { RoutingProblemData.MIMEType, RoutingProblemData.MIMEType + versionPrefix + RoutingProblemData.MIMEVersion + versionPostfix },
+            { RoutingProblemDataSet.MIMEType, RoutingProblemDataSet.MIMEType + versionPrefix + RoutingProblemDataSet.MIMEVersion + versionPostfix },
+            { RoutingProblemSettingsData.MIMEType, RoutingProblemSettingsData.MIMEType + versionPrefix + RoutingProblemSettingsData.MIMEVersion + versionPostfix },
+            { TaskData.MIMEType, TaskData.MIMEType + versionPrefix + TaskData.MIMEVersion + versionPostfix },
+            { TaskDataSet.MIMEType, TaskDataSet.MIMEType + versionPrefix + TaskDataSet.MIMEVersion + versionPostfix },
+            { TaskEventData.MIMEType, TaskEventData.MIMEType + versionPrefix + TaskEventData.MIMEVersion + versionPostfix },
+            { TaskEventDataSet.MIMEType, TaskEventDataSet.MIMEType + versionPrefix + TaskEventDataSet.MIMEVersion + versionPostfix },
+            { VehicleData.MIMEType, VehicleData.MIMEType + versionPrefix + VehicleData.MIMEVersion + versionPostfix },
+            { VehicleDataSet.MIMEType, VehicleDataSet.MIMEType + versionPrefix + VehicleDataSet.MIMEVersion + versionPostfix },
+            { VehicleTypeData.MIMEType, VehicleTypeData.MIMEType + versionPrefix + VehicleTypeData.MIMEVersion + versionPostfix },
 
         }; 
 
         public static string GetSupportedType( string typeString )
         {
             if ( String.IsNullOrEmpty( typeString ) ) return "application/json";
-            string[] parts = typeString.Split( ';' );
+
+            string[] parts = typeString.Split( '-' );
+
             string type = parts[0];
 
             if ( supportedTypes.ContainsKey( type ) )

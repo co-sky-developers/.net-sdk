@@ -69,7 +69,8 @@ namespace NFleet
             // when POSTing, if data is null, add an empty object to prevent error due to null payload
             if ( data == null )
             {
-                request.AddBody( (link.Method == "POST" || link.Method == "DELETE" ) ? new Empty() : data );
+                var b = ( link.Method == "POST" || link.Method == "DELETE" ) ? new Empty() : data;
+                request.AddParameter( link.Type, JsonConvert.SerializeObject( b ), ParameterType.RequestBody );
             }
             else
             {
