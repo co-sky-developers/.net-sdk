@@ -5,7 +5,7 @@ namespace NFleet.Data
     public class TaskDataSet : IResponseData, IVersioned
     {
         public static string MIMEType = "application/vnd.jyu.nfleet.taskset";
-        public static string MIMEVersion = "2.0";
+        public static string MIMEVersion = "2.1";
 
         int IVersioned.VersionNumber { get; set; }
         public List<TaskData> Items { get; set; }
