@@ -59,7 +59,7 @@ namespace NFleet
             client.ClearHandlers();
             client.AddHandler( link.Type, new CustomConverter() );
             var request = InitializeRequest( link, queryParameters );
-            if (link.Method == "GET") request.AddHeader( "Accept", TypeHelper.GetSupportedType( link.Type ) );
+            if (link.Method == "GET") request.AddHeader( "Accept", link.Type );
 
             request.AddHeader( "Content-Type", TypeHelper.GetSupportedType( link.Type ) );
 
@@ -70,11 +70,11 @@ namespace NFleet
             if ( data == null )
             {
                 var b = ( link.Method == "POST" || link.Method == "DELETE" ) ? new Empty() : data;
-                request.AddParameter( link.Type, JsonConvert.SerializeObject( b ), ParameterType.RequestBody );
+                request.AddParameter( TypeHelper.GetSupportedType( link.Type ), JsonConvert.SerializeObject( b ), ParameterType.RequestBody );
             }
             else
             {
-                request.AddParameter( link.Type, JsonConvert.SerializeObject( data ), ParameterType.RequestBody );
+                request.AddParameter( TypeHelper.GetSupportedType( link.Type ), JsonConvert.SerializeObject( data ), ParameterType.RequestBody );
             }
             request.OnBeforeDeserialization = resp => resp.ContentType = "application/json";
             var result = client.Execute<T>( request );

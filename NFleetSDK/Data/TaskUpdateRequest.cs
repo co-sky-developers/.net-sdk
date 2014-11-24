@@ -12,6 +12,8 @@ namespace NFleet.Data
         public double Profit { get; set; }
         public List<string> IncompatibleVehicleTypes { get; set; } 
         public List<TaskEventUpdateRequest> TaskEvents { get; set; }
+        public string CanBeRelocated { get; set; }
+        public bool Active { get; set; }
 
         public TaskUpdateRequest()
         {

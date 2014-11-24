@@ -16,6 +16,8 @@ namespace NFleet.Data
         public List<Link> Meta { get; set; }
         public string State { get; set; }
         public double Profit { get; set; }
+        public string CanBeRelocated { get; set; }
+        public bool Active { get; set; }
 
         public TaskData()
         {

@@ -21,6 +21,7 @@ namespace NFleet.Data
         public double FixedCost { get; set; }
         public double KilometerCost { get; set; }
         public double HourCost { get; set; }
+        public string CanBeRelocated { get; set; }
 
 
         public VehicleUpdateRequest()

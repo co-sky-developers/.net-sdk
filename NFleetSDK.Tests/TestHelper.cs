@@ -62,7 +62,7 @@ namespace NFleet.Tests
         internal static TaskData GetTask( Api api, RoutingProblemData problem )
         {
             var tasks = api.Navigate<TaskDataSet>( problem.GetLink( "list-tasks" ) );
-            var newTask = new TaskUpdateRequest { Name = "test name" };
+            var newTask = new TaskUpdateRequest { Name = "test name", CanBeRelocated = "None"};
             var capacity = new CapacityData { Name = "Weight", Amount = 20 };
 
             var pickup = new TaskEventUpdateRequest
@@ -120,6 +120,7 @@ namespace NFleet.Tests
             var request = new VehicleUpdateRequest
             {
                 Name = name,
+                CanBeRelocated = "None",
                 Capacities = new List<CapacityData>
                 {
                     new CapacityData {Name = "Weight", Amount = 5000}
@@ -172,7 +173,7 @@ namespace NFleet.Tests
 
         public static TaskUpdateRequest GenerateTaskUpdateRequestWithName(string name)
         {
-            var task = new TaskUpdateRequest { Name = name };
+            var task = new TaskUpdateRequest { Name = name, CanBeRelocated = "None", Active = true };
             var capacity = new CapacityData { Name = "Weight", Amount = 20 };
 
             var pickup = new TaskEventUpdateRequest
