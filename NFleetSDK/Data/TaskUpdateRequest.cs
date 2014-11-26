@@ -13,7 +13,7 @@ namespace NFleet.Data
         public List<string> IncompatibleVehicleTypes { get; set; } 
         public List<TaskEventUpdateRequest> TaskEvents { get; set; }
         public string CanBeRelocated { get; set; }
-        public bool Active { get; set; }
+        public string ActivityState { get; set; }
 
         public TaskUpdateRequest()
         {

@@ -17,7 +17,7 @@ namespace NFleet.Data
         public string State { get; set; }
         public double Profit { get; set; }
         public string CanBeRelocated { get; set; }
-        public bool Active { get; set; }
+        public string ActivityState { get; set; }
 
         public TaskData()
         {

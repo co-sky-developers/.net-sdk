@@ -112,7 +112,7 @@ namespace NFleet.Tests
             var problem = TestHelper.CreateProblemWithDemoData(api, user);
             var tasks = api.Navigate<TaskDataSet>(problem.GetLink("list-tasks"));
             //##BEGIN EXAMPLE creatingtask##
-            var newTask = new TaskUpdateRequest {Name = "test name", CanBeRelocated = "None" };
+            var newTask = new TaskUpdateRequest { Name = "test name", CanBeRelocated = "None", ActivityState = "Active" };
             var capacity = new CapacityData {Name = "Weight", Amount = 20};
 
             var pickup = new TaskEventUpdateRequest
@@ -188,7 +188,8 @@ namespace NFleet.Tests
                 Name = "Other name",
                 TaskEvents = oldTaskEvents,
                 TaskId = task.Id,
-                CanBeRelocated = task.CanBeRelocated
+                CanBeRelocated = task.CanBeRelocated,
+                ActivityState = task.ActivityState
             };
             var newTaskLocation = api.Navigate<ResponseData>(task.GetLink("update"), newTaskRequest);
             //##END EXAMPLE##
@@ -209,6 +210,7 @@ namespace NFleet.Tests
             var vehicle = new VehicleUpdateRequest
             {
                 Name = "vehicle 2",
+                CanBeRelocated = "None",
                 Capacities = new List<CapacityData>
                 {
                     new CapacityData {Name = "Weight", Amount = 3500}
@@ -506,7 +508,8 @@ namespace NFleet.Tests
                     Capacities = vehicleCapacities,
                     StartLocation = vehiclePickup,
                     EndLocation = vehicleDelivery,
-                    TimeWindows = vehicleTimeWindow
+                    TimeWindows = vehicleTimeWindow,
+                    CanBeRelocated = "None"
                 };
                 importRequest.Items.Add(veh);
             }
@@ -528,7 +531,8 @@ namespace NFleet.Tests
                     Capacities = vehicleCapacities,
                     StartLocation = vehiclePickup,
                     EndLocation = vehicleDelivery,
-                    TimeWindows = vehicleTimeWindow
+                    TimeWindows = vehicleTimeWindow,
+                    CanBeRelocated = "None"
                 };
                 vehicleList.Add(vehicleReq);
             }
@@ -649,6 +653,7 @@ namespace NFleet.Tests
             {
                 var task = new TaskUpdateRequest {Name = "test name"};
                 task.CanBeRelocated = "None";
+                task.ActivityState = "Active";
 
                 var pickup = new TaskEventUpdateRequest
                 {

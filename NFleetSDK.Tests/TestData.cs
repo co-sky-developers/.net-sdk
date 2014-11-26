@@ -49,7 +49,7 @@ namespace NFleet.Tests
                 CanBeRelocated = "None",
             });
 
-            var newTask = new TaskUpdateRequest { Name = "task", CanBeRelocated = "None" };
+            var newTask = new TaskUpdateRequest { Name = "task", CanBeRelocated = "None", ActivityState = "Active" };
             var capacity = new CapacityData { Name = "Weight", Amount = 20 };
 
             var pickup = new TaskEventUpdateRequest
