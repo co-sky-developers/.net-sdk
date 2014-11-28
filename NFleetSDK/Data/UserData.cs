@@ -18,6 +18,8 @@ namespace NFleet.Data
         public int TaskLimit { get; set; }
         [DataMember]
         public int OptimizationQueueLimit { get; set; }
+        [DataMember]
+        public int OptimizationCount { get; set; }
 
         #region Implementation of IResponseData
         [DataMember]
