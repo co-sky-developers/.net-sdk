@@ -43,6 +43,13 @@ namespace NFleet.Tests
             responses = ResponseReader.readResponses(responsePath);
             deserializer = new JsonDeserializer();
             TestUtils.Deserializer = deserializer;
+            var users = api.Navigate<UserDataSet>(rootLinks.GetLink( "list-users" ));
+
+            foreach ( var user in users.Items )
+            {
+                var u = api.Navigate<UserData>( user.GetLink( "self" ) );
+                api.Navigate<ResponseData>( u.GetLink( "delete-user" ) );
+            } 
         }
 
         [Test]
@@ -334,6 +341,10 @@ namespace NFleet.Tests
             var mockCreation = TestUtils.GetMockResponse<ResponseData>(responses["startingoptresp"].json);
             Trace.Write(JsonConvert.SerializeObject(res));
             TestUtils.ResponsesAreEqual(mockCreation, res);
+
+            problem = api.Navigate<RoutingProblemData>(problem.GetLink("self"));
+            //##BEGIN EXAMPLE stoppingopt##
+            res = api.Navigate<ResponseData>( problem.GetLink( "toggle-optimization" ), new RoutingProblemUpdateRequest { Name = problem.Name, State = "Stopped" } );
         }
 
 
@@ -444,7 +455,7 @@ namespace NFleet.Tests
 
             while (true)
             {
-                Thread.Sleep(100);
+                Thread.Sleep(1000);
                 var progress = api.Navigate<RoutingProblemData>(problem.GetLink("self")).Progress;
                 Console.WriteLine("Progress: " + progress + "%");
                 if (progress >= 100) break;

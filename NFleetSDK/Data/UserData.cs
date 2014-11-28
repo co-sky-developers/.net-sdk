@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 namespace NFleet.Data
 {
     [DataContract]
-    public class UserData : IResponseData
+    public class UserData : IResponseData, IVersioned
     {
         public static string MIMEType = "application/vnd.jyu.nfleet.user";
         public static string MIMEVersion = "2.0";
