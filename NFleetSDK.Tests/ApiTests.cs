@@ -43,13 +43,30 @@ namespace NFleet.Tests
             responses = ResponseReader.readResponses(responsePath);
             deserializer = new JsonDeserializer();
             TestUtils.Deserializer = deserializer;
-            var users = api.Navigate<UserDataSet>(rootLinks.GetLink( "list-users" ));
+             
+
+            
+        }
+
+        [TestFixtureTearDown]
+        public void Cleanup()
+        {
+            string url = ConfigurationManager.AppSettings["url"];
+            string clientKey = ConfigurationManager.AppSettings["client-key"];
+            string clientSecret = ConfigurationManager.AppSettings["client-secret"];
+            string responsePath = ConfigurationManager.AppSettings["response-path"];
+
+            var api = new Api( url, clientKey, clientSecret );
+            var tokenResponse = api.Authenticate();
+            var rootLinks = api.Root;
+
+            var users = api.Navigate<UserDataSet>( rootLinks.GetLink( "list-users" ) );
 
             foreach ( var user in users.Items )
             {
                 var u = api.Navigate<UserData>( user.GetLink( "self" ) );
                 api.Navigate<ResponseData>( u.GetLink( "delete-user" ) );
-            } 
+            }
         }
 
         [Test]
