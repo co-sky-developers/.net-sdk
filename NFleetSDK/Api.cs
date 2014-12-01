@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using Newtonsoft.Json;
 using NFleet.Data;
 using RestSharp;
@@ -89,6 +90,12 @@ namespace NFleet
                 result = client.Execute<T>( request );
                 if ( result.StatusCode == HttpStatusCode.Unauthorized )
                     ThrowException( result );
+            }
+
+            if ( (int)result.StatusCode >= 500)
+            {
+                Thread.Sleep( 1000 );
+                result = client.Execute<T>( request );
             }
 
             if ( result.StatusCode != HttpStatusCode.NoContent && result.StatusCode == 0 )
