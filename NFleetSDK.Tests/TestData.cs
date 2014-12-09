@@ -46,10 +46,10 @@ namespace NFleet.Tests
                     }
                 },
                 TimeWindows = { new TimeWindowData { Start = new DateTime(2013, 5, 14, 8, 0, 0), End = new DateTime(2013, 5, 14, 12, 0, 0) } },
-                CanBeRelocated = "None",
+                RelocationType = "None",
             });
 
-            var newTask = new TaskUpdateRequest { Name = "task", CanBeRelocated = "None", ActivityState = "Active" };
+            var newTask = new TaskUpdateRequest { Name = "task", RelocationType = "None", ActivityState = "Active" };
             var capacity = new CapacityData { Name = "Weight", Amount = 20 };
 
             var pickup = new TaskEventUpdateRequest

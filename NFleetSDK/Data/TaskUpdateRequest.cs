@@ -12,7 +12,7 @@ namespace NFleet.Data
         public double Profit { get; set; }
         public List<string> IncompatibleVehicleTypes { get; set; } 
         public List<TaskEventUpdateRequest> TaskEvents { get; set; }
-        public string CanBeRelocated { get; set; }
+        public string RelocationType { get; set; }
         public string ActivityState { get; set; }
 
         public TaskUpdateRequest()

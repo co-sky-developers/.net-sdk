@@ -39,6 +39,8 @@ namespace NFleet.Data
         public double KilometerCost { get; set; }
         [DataMember]
         public double HourCost { get; set; }
+        [DataMember]
+        public string RelocationType { get; set; }
 
         public VehicleData()
         {
