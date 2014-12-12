@@ -10,7 +10,10 @@ namespace NFleet.Data
         public string Name { get; set; }
         public string Info { get; set; }
         public double Priority { get; set; }
-        public List<string> IncompatibleVehicleTypes { get; set; } 
+        public List<string> IncompatibleVehicleTypes { get; set; }
+        public List<string> CompatibleVehicleTypes { get; set; }
+        public List<string> IncompatibleDepotTypes { get; set; }
+        public List<string> CompatibleDepotTypes { get; set; } 
         public List<TaskEventUpdateRequest> TaskEvents { get; set; }
         public string RelocationType { get; set; }
         public string ActivityState { get; set; }

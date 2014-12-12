@@ -29,8 +29,9 @@ namespace NFleet
             { VehicleData.MIMEType, VehicleData.MIMEType + versionPrefix + VehicleData.MIMEVersion + versionPostfix },
             { VehicleDataSet.MIMEType, VehicleDataSet.MIMEType + versionPrefix + VehicleDataSet.MIMEVersion + versionPostfix },
             { VehicleTypeData.MIMEType, VehicleTypeData.MIMEType + versionPrefix + VehicleTypeData.MIMEVersion + versionPostfix },
-
-        }; 
+            { DepotData.MIMEType, DepotData.MIMEType + versionPrefix + DepotData.MIMEVersion + versionPostfix},
+            { DepotDataSet.MIMEType, DepotDataSet.MIMEType + versionPrefix + DepotDataSet.MIMEVersion + versionPostfix}
+        };
 
         public static string GetSupportedType( string typeString )
         {
