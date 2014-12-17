@@ -8,7 +8,7 @@ namespace NFleet.Data
     public class DepotDataSet : IResponseData, IVersioned
     {
         public static string MIMEType = "application/vnd.jyu.nfleet.depotset";
-        public static string MIMEVersion = "2.1";
+        public static string MIMEVersion = "2.2";
 
         int IVersioned.VersionNumber { get; set; }
         public List<VehicleData> Items { get; set; }

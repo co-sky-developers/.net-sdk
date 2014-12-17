@@ -86,6 +86,7 @@
     <Compile Include="Data\DeleteRoutingProblemRequest.cs" />
     <Compile Include="Data\DepotData.cs" />
     <Compile Include="Data\DepotDataSet.cs" />
+    <Compile Include="Data\DepotError.cs" />
     <Compile Include="Data\ErrorData.cs" />
     <Compile Include="Data\FieldsItem.cs" />
     <Compile Include="Data\ImportData.cs" />
