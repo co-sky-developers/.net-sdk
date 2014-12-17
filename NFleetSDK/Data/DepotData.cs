@@ -9,7 +9,7 @@ namespace NFleet.Data
     public class DepotData : IResponseData, IVersioned
     {
         public static string MIMEType = "application/vnd.jyu.nfleet.depot";
-        public static string MIMEVersion = "2.1";
+        public static string MIMEVersion = "2.2";
 
 
         [DataMember]

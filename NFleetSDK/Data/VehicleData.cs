@@ -16,6 +16,8 @@ namespace NFleet.Data
         [DataMember]
         public string Name { get; set; }
         [DataMember]
+        public string Info1 { get; set; }
+        [DataMember]
         public List<CapacityData> Capacities { get; set; }
         [DataMember]
         public List<TimeWindowData> TimeWindows { get; set; }
@@ -39,6 +41,10 @@ namespace NFleet.Data
         public double KilometerCost { get; set; }
         [DataMember]
         public double HourCost { get; set; }
+        [DataMember]
+        public double MaxDrivingHours { get; set; }
+        [DataMember]
+        public double MaxWorkingHours { get; set; }
         [DataMember]
         public string RelocationType { get; set; }
 

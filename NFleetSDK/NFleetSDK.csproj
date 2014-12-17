@@ -86,6 +86,7 @@
     <Compile Include="Data\DeleteRoutingProblemRequest.cs" />
     <Compile Include="Data\DepotData.cs" />
     <Compile Include="Data\DepotDataSet.cs" />
+    <Compile Include="Data\DepotError.cs" />
     <Compile Include="Data\ErrorData.cs" />
     <Compile Include="Data\FieldsItem.cs" />
     <Compile Include="Data\ImportData.cs" />
@@ -123,6 +124,7 @@
     <Compile Include="Data\TaskUpdateRequest.cs" />
     <Compile Include="Data\TimeWindowData.cs" />
     <Compile Include="Data\TokenData.cs" />
+    <Compile Include="Data\UpdateDepotRequest.cs" />
     <Compile Include="Data\UserData.cs" />
     <Compile Include="Data\UserDataSet.cs" />
     <Compile Include="Data\UserSetRequest.cs" />
