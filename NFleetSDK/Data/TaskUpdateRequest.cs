@@ -22,6 +22,9 @@ namespace NFleet.Data
         {
             TaskEvents = new List<TaskEventUpdateRequest>();
             IncompatibleVehicleTypes = new List<string>();
+            IncompatibleDepotTypes = new List<string>();
+            CompatibleDepotTypes = new List<string>();
+            CompatibleVehicleTypes = new List<string>();
         }
     }
 }
