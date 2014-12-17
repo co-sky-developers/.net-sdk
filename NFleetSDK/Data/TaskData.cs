@@ -11,6 +11,9 @@ namespace NFleet.Data
         public int Id { get; set; }
         public string Name { get; set; }
         public string Info { get; set; }
+        public string Info2 { get; set; }
+        public string Info3 { get; set; }
+        public string Info4 { get; set; }
         public List<string> IncompatibleVehicleTypes { get; set; }
         public List<string> CompatibleVehicleTypes { get; set; }
         public List<string> IncompatibleDepotTypes { get; set; }
@@ -26,6 +29,10 @@ namespace NFleet.Data
         {
             TaskEvents = new List<TaskEventData>();
             Meta = new List<Link>();
+            IncompatibleVehicleTypes = new List<string>();
+            CompatibleVehicleTypes = new List<string>();
+            IncompatibleDepotTypes = new List<string>();
+            CompatibleDepotTypes = new List<string>();
         }
     }
 }

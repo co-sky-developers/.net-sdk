@@ -124,6 +124,7 @@
     <Compile Include="Data\TaskUpdateRequest.cs" />
     <Compile Include="Data\TimeWindowData.cs" />
     <Compile Include="Data\TokenData.cs" />
+    <Compile Include="Data\UpdateDepotRequest.cs" />
     <Compile Include="Data\UserData.cs" />
     <Compile Include="Data\UserDataSet.cs" />
     <Compile Include="Data\UserSetRequest.cs" />

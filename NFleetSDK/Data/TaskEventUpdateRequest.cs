@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace NFleet.Data
 {
@@ -10,6 +11,13 @@ namespace NFleet.Data
         public List<CapacityData> Capacities { get; set; }
         public List<TimeWindowData> TimeWindows { get; set; }
         public double ServiceTime { get; set; }
+        public double StoppingTime { get; set; }
+
+        public string VehicleId { get; set; }
+        public int SequenceNumber { get; set; }
+
+        public bool IsLocked { get; set; }
+        public DateTime? PresetArrivalTime { get; set; }
 
         public TaskEventUpdateRequest()
         {

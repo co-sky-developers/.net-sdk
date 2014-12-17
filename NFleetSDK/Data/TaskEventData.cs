@@ -26,6 +26,8 @@ namespace NFleet.Data
         [DataMember]
         public double ServiceTime { get; set; }
         [DataMember]
+        public double StoppingTime { get; set; }
+        [DataMember]
         public List<Link> Meta { get; set; }
 
         public TaskEventData()
