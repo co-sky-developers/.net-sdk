@@ -10,6 +10,9 @@ namespace NFleet.Data
         public int VersionNumber { get; set; }
         public SpeedProfile DefaultVehicleSpeedProfile { get; set; }
         public double DefaultVehicleSpeedFactor { get; set; }
+        public string AlgorithmTree { get; set; }
+
+        public double InsertionAggressiveness { get; set; }
         public List<Link> Meta { get; set; }
     }
 }
