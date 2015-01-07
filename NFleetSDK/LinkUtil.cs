@@ -31,7 +31,7 @@ namespace NFleet
             if (op.Uri.Contains("../"))
                 uri = BuildUri(self.Uri, op.Uri);
 
-            return new Link { Method = op.Method, Rel = rel, Uri = uri };
+            return new Link { Method = op.Method, Rel = rel, Uri = uri, Type = op.Type };
         }
 
         public static string BuildUri(string self, string op)

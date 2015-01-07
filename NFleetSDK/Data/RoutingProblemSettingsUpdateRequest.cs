@@ -11,5 +11,8 @@ namespace NFleet.Data
         public int ProblemId { get; set; }
         public string DefaultVehicleSpeedProfile { get; set; }
         public double DefaultVehicleSpeedFactor { get; set; }
+        public string AlgorithmTree { get; set; }
+
+        public double InsertionAggressiveness { get; set; }
     }
 }

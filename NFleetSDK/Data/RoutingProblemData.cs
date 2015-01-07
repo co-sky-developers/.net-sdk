@@ -7,6 +7,9 @@ namespace NFleet.Data
     [DataContract]
     public class RoutingProblemData : IResponseData, IVersioned
     {
+        public static string MIMEType = "application/vnd.jyu.nfleet.problem";
+        public static string MIMEVersion = "2.0";
+
         public RoutingProblemData()
         {
             Meta = new List<Link>();

@@ -45,11 +45,11 @@ namespace NFleet.Tests
                         System = "Euclidian"
                     }
                 },
-                TimeWindows = { new TimeWindowData { Start = new DateTime(2013, 5, 14, 8, 0, 0), End = new DateTime(2013, 5, 14, 12, 0, 0) } }
-
+                TimeWindows = { new TimeWindowData { Start = new DateTime(2013, 5, 14, 8, 0, 0), End = new DateTime(2013, 5, 14, 12, 0, 0) } },
+                RelocationType = "None",
             });
 
-            var newTask = new TaskUpdateRequest { Name = "task" };
+            var newTask = new TaskUpdateRequest { Name = "task", RelocationType = "None", ActivityState = "Active" };
             var capacity = new CapacityData { Name = "Weight", Amount = 20 };
 
             var pickup = new TaskEventUpdateRequest
