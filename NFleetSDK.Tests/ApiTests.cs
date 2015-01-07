@@ -740,7 +740,7 @@ namespace NFleet.Tests
                 var vehicle = TestHelper.GenerateVehicleUpdateRequestWithName("Vehicle" + i);
                 vehicleSet.Items.Add(vehicle);
             }
-
+            var depotSet = new ImportDepotSetRequest { Items = new List<UpdateDepotRequest>() };
 
             var taskSet = new TaskSetImportRequest
             {
@@ -756,7 +756,8 @@ namespace NFleet.Tests
             var request = new ImportRequest
             {
                 Tasks = taskSet,
-                Vehicles = vehicleSet
+                Vehicles = vehicleSet,
+                Depots = depotSet
             };
 
             var result = api.Navigate<ResponseData>(problem.GetLink("import-data"), request);
@@ -805,10 +806,13 @@ namespace NFleet.Tests
             }
             taskSet.Items.Add(TestHelper.GenerateTaskUpdateRequestWithName(""));
 
+            var depotSet = new ImportDepotSetRequest { Items = new List<UpdateDepotRequest>() };
+
             var request = new ImportRequest
             {
                 Tasks = taskSet,
-                Vehicles = vehicleSet
+                Vehicles = vehicleSet,
+                Depots = depotSet
             };
             var result = api.Navigate<ResponseData>(problem.GetLink("import-data"), request);
 
@@ -854,10 +858,13 @@ namespace NFleet.Tests
                 taskSet.Items.Add(task);
             }
 
+            var depotSet = new ImportDepotSetRequest { Items = new List<UpdateDepotRequest>() };
+
             var request = new ImportRequest
             {
                 Tasks = taskSet,
-                Vehicles = vehicleSet
+                Vehicles = vehicleSet,
+                Depots = depotSet
             };
 
             var result = api.Navigate<ResponseData>(problem.GetLink("import-data"), request);
