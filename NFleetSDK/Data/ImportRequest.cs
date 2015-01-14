@@ -5,5 +5,6 @@ namespace NFleet.Data
     {
         public VehicleSetImportRequest Vehicles { get; set; }
         public TaskSetImportRequest Tasks { get; set; }
+        public ImportDepotSetRequest Depots { get; set; }
     }
 }

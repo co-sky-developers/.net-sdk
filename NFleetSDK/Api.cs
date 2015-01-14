@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
+using Newtonsoft.Json;
 using NFleet.Data;
 using RestSharp;
 using RestSharp.Contrib;
@@ -23,7 +25,7 @@ namespace NFleet
 
         private TokenData currentToken;
 
-        public ApiData Root { get { return Navigate<ApiData>( new Link { Method = "GET", Uri = "" } ); } }
+        public ApiData Root { get { return Navigate<ApiData>( new Link { Method = "GET", Uri = "", Type = "application/json" } ); } }
 
         public Api( string url, string username, string password )
         {
@@ -55,14 +57,26 @@ namespace NFleet
         {
             if ( link == null )
                 throw new ArgumentNullException( "link" );
-
+            client.ClearHandlers();
+            client.AddHandler( link.Type, new CustomConverter() );
             var request = InitializeRequest( link, queryParameters );
+            if (link.Method == "GET") request.AddHeader( "Accept", link.Type );
+
+            request.AddHeader( "Content-Type", TypeHelper.GetSupportedType( link.Type ) );
 
             InsertIfNoneMatchHeader( ref request, data, cache, queryParameters );
             InsertAuthorizationHeader( ref request, currentToken );
 
             // when POSTing, if data is null, add an empty object to prevent error due to null payload
-            request.AddBody( data == null && (link.Method == "POST" || link.Method == "DELETE") ? new Empty() : data );
+            if ( data == null )
+            {
+                var b = ( link.Method == "POST" || link.Method == "DELETE" ) ? new Empty() : data;
+                request.AddParameter( TypeHelper.GetSupportedType( link.Type ), JsonConvert.SerializeObject( b ), ParameterType.RequestBody );
+            }
+            else
+            {
+                request.AddParameter( TypeHelper.GetSupportedType( link.Type ), JsonConvert.SerializeObject( data ), ParameterType.RequestBody );
+            }
             request.OnBeforeDeserialization = resp => resp.ContentType = "application/json";
             var result = client.Execute<T>( request );
 
@@ -78,11 +92,23 @@ namespace NFleet
                     ThrowException( result );
             }
 
+            if ( (int)result.StatusCode >= 500)
+            {
+                Thread.Sleep( 1000 );
+                result = client.Execute<T>( request );
+            }
+
             if ( result.StatusCode != HttpStatusCode.NoContent && result.StatusCode == 0 )
                 throw new IOException( string.Format( "Could not connect to server at {0}.", client.BaseUrl ) );
 
             if ( ( result.Content.Length > 0 && result.ResponseStatus != ResponseStatus.Completed ) )
-                throw new IOException( result.ErrorMessage );
+            {
+                var converter = new CustomConverter();
+                var res = converter.Deserialize<T>( result );
+                if ( res != null ) result.Data = res;
+                else throw new IOException( result.ErrorMessage );
+            }
+                
 
             var code = result.StatusCode;
 
@@ -109,15 +135,19 @@ namespace NFleet
             if ( code == HttpStatusCode.Created || code == HttpStatusCode.SeeOther )
             {
                 var parameter = result.Headers.FirstOrDefault( h => h.Name == "Location" );
-
+                var contentType = result.Headers.FirstOrDefault( h => h.Name == "Content-Type" );
                 if ( parameter == null || parameter.Value == null )
                     throw new IOException( "Server response missing Location header." );
+
+                if ( contentType == null || contentType.Value == null )
+                    throw new IOException( "Server response missing Content-Type header." );
 
                 var value = parameter.Value.ToString();
                 var entityLocation = new Uri( value ).AbsolutePath;
 
                 var responseData = new ResponseData();
-                responseData.Meta.Add( new Link { Method = "GET", Rel = "location", Uri = entityLocation } );
+
+                responseData.Meta.Add( new Link { Method = "GET", Rel = "location", Uri = entityLocation, Type = contentType.Value.ToString() } );
 
                 if ( !( responseData is T ) )
                     throw new InvalidOperationException( string.Format( "The response from the given URL is not of the requested type {0}.", typeof( T ).Name ) );
@@ -187,7 +217,7 @@ namespace NFleet
             var request = new RestRequest( uri, link.Method.ToMethod() )
             {
                 RequestFormat = DataFormat.Json,
-                JsonSerializer = new CustomConverter { ContentType = "application/json" }
+                JsonSerializer = new CustomConverter { ContentType = link.Type ?? "application/json" }
             };
 
             if ( link.Method == "GET" && queryParameters != null )

@@ -21,7 +21,12 @@ namespace NFleet.Data
         public double FixedCost { get; set; }
         public double KilometerCost { get; set; }
         public double HourCost { get; set; }
+        public double MaxDrivingHours { get; set; }
+        public double MaxWorkingHours { get; set; }
+        public string RelocationType { get; set; }
 
+        public string MimeType { get; set; }
+        public string MimeVersion { get; set; } 
 
         public VehicleUpdateRequest()
         {

@@ -43,6 +43,30 @@ namespace NFleet.Tests
             responses = ResponseReader.readResponses(responsePath);
             deserializer = new JsonDeserializer();
             TestUtils.Deserializer = deserializer;
+             
+
+            
+        }
+
+        [TestFixtureTearDown]
+        public void Cleanup()
+        {
+            string url = ConfigurationManager.AppSettings["url"];
+            string clientKey = ConfigurationManager.AppSettings["client-key"];
+            string clientSecret = ConfigurationManager.AppSettings["client-secret"];
+            string responsePath = ConfigurationManager.AppSettings["response-path"];
+
+            var api = new Api( url, clientKey, clientSecret );
+            var tokenResponse = api.Authenticate();
+            var rootLinks = api.Root;
+
+            var users = api.Navigate<UserDataSet>( rootLinks.GetLink( "list-users" ) );
+
+            foreach ( var user in users.Items )
+            {
+                var u = api.Navigate<UserData>( user.GetLink( "self" ) );
+                api.Navigate<ResponseData>( u.GetLink( "delete-user" ) );
+            }
         }
 
         [Test]
@@ -112,7 +136,7 @@ namespace NFleet.Tests
             var problem = TestHelper.CreateProblemWithDemoData(api, user);
             var tasks = api.Navigate<TaskDataSet>(problem.GetLink("list-tasks"));
             //##BEGIN EXAMPLE creatingtask##
-            var newTask = new TaskUpdateRequest {Name = "test name"};
+            var newTask = new TaskUpdateRequest { Name = "test name", RelocationType = "None", ActivityState = "Active" };
             var capacity = new CapacityData {Name = "Weight", Amount = 20};
 
             var pickup = new TaskEventUpdateRequest
@@ -188,6 +212,8 @@ namespace NFleet.Tests
                 Name = "Other name",
                 TaskEvents = oldTaskEvents,
                 TaskId = task.Id,
+                RelocationType = task.RelocationType,
+                ActivityState = task.ActivityState
             };
             var newTaskLocation = api.Navigate<ResponseData>(task.GetLink("update"), newTaskRequest);
             //##END EXAMPLE##
@@ -208,6 +234,7 @@ namespace NFleet.Tests
             var vehicle = new VehicleUpdateRequest
             {
                 Name = "vehicle 2",
+                RelocationType = "None",
                 Capacities = new List<CapacityData>
                 {
                     new CapacityData {Name = "Weight", Amount = 3500}
@@ -331,6 +358,10 @@ namespace NFleet.Tests
             var mockCreation = TestUtils.GetMockResponse<ResponseData>(responses["startingoptresp"].json);
             Trace.Write(JsonConvert.SerializeObject(res));
             TestUtils.ResponsesAreEqual(mockCreation, res);
+
+            problem = api.Navigate<RoutingProblemData>(problem.GetLink("self"));
+            //##BEGIN EXAMPLE stoppingopt##
+            res = api.Navigate<ResponseData>( problem.GetLink( "toggle-optimization" ), new RoutingProblemUpdateRequest { Name = problem.Name, State = "Stopped" } );
         }
 
 
@@ -441,7 +472,7 @@ namespace NFleet.Tests
 
             while (true)
             {
-                Thread.Sleep(100);
+                Thread.Sleep(1000);
                 var progress = api.Navigate<RoutingProblemData>(problem.GetLink("self")).Progress;
                 Console.WriteLine("Progress: " + progress + "%");
                 if (progress >= 100) break;
@@ -505,7 +536,8 @@ namespace NFleet.Tests
                     Capacities = vehicleCapacities,
                     StartLocation = vehiclePickup,
                     EndLocation = vehicleDelivery,
-                    TimeWindows = vehicleTimeWindow
+                    TimeWindows = vehicleTimeWindow,
+                    RelocationType = "None"
                 };
                 importRequest.Items.Add(veh);
             }
@@ -527,7 +559,8 @@ namespace NFleet.Tests
                     Capacities = vehicleCapacities,
                     StartLocation = vehiclePickup,
                     EndLocation = vehicleDelivery,
-                    TimeWindows = vehicleTimeWindow
+                    TimeWindows = vehicleTimeWindow,
+                    RelocationType = "None"
                 };
                 vehicleList.Add(vehicleReq);
             }
@@ -600,12 +633,14 @@ namespace NFleet.Tests
                     Capacities = vehicleCapacities,
                     StartLocation = vehiclePickup,
                     EndLocation = vehicleDelivery,
-                    TimeWindows = vehicleTimeWindow
+                    TimeWindows = vehicleTimeWindow,
+                    RelocationType = "None"
                 };
                 importRequest.Items.Add(veh);
             }
 
             var result = api.Navigate<ResponseData>(problem.GetLink("import-vehicles"), importRequest);
+            var vehicles = api.Navigate<VehicleDataSet>( problem.GetLink( "list-vehicles" ) );
             //##END EXAMPLE##
         }
 
@@ -645,7 +680,8 @@ namespace NFleet.Tests
             for (int i = 0; i < 10; i++)
             {
                 var task = new TaskUpdateRequest {Name = "test name"};
-
+                task.RelocationType = "None";
+                task.ActivityState = "Active";
 
                 var pickup = new TaskEventUpdateRequest
                 {
@@ -704,7 +740,7 @@ namespace NFleet.Tests
                 var vehicle = TestHelper.GenerateVehicleUpdateRequestWithName("Vehicle" + i);
                 vehicleSet.Items.Add(vehicle);
             }
-
+            var depotSet = new ImportDepotSetRequest { Items = new List<UpdateDepotRequest>() };
 
             var taskSet = new TaskSetImportRequest
             {
@@ -720,7 +756,8 @@ namespace NFleet.Tests
             var request = new ImportRequest
             {
                 Tasks = taskSet,
-                Vehicles = vehicleSet
+                Vehicles = vehicleSet,
+                Depots = depotSet
             };
 
             var result = api.Navigate<ResponseData>(problem.GetLink("import-data"), request);
@@ -769,10 +806,13 @@ namespace NFleet.Tests
             }
             taskSet.Items.Add(TestHelper.GenerateTaskUpdateRequestWithName(""));
 
+            var depotSet = new ImportDepotSetRequest { Items = new List<UpdateDepotRequest>() };
+
             var request = new ImportRequest
             {
                 Tasks = taskSet,
-                Vehicles = vehicleSet
+                Vehicles = vehicleSet,
+                Depots = depotSet
             };
             var result = api.Navigate<ResponseData>(problem.GetLink("import-data"), request);
 
@@ -818,10 +858,13 @@ namespace NFleet.Tests
                 taskSet.Items.Add(task);
             }
 
+            var depotSet = new ImportDepotSetRequest { Items = new List<UpdateDepotRequest>() };
+
             var request = new ImportRequest
             {
                 Tasks = taskSet,
-                Vehicles = vehicleSet
+                Vehicles = vehicleSet,
+                Depots = depotSet
             };
 
             var result = api.Navigate<ResponseData>(problem.GetLink("import-data"), request);

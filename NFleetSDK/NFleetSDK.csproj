@@ -81,11 +81,16 @@
     <Compile Include="Data\AuthenticationRequest.cs" />
     <Compile Include="Data\CapacityData.cs" />
     <Compile Include="Data\CoordinateData.cs" />
+    <Compile Include="Data\CreateDepotRequest.cs" />
     <Compile Include="Data\DataUtil.cs" />
     <Compile Include="Data\DeleteRoutingProblemRequest.cs" />
+    <Compile Include="Data\DepotData.cs" />
+    <Compile Include="Data\DepotDataSet.cs" />
+    <Compile Include="Data\DepotError.cs" />
     <Compile Include="Data\ErrorData.cs" />
     <Compile Include="Data\FieldsItem.cs" />
     <Compile Include="Data\ImportData.cs" />
+    <Compile Include="Data\ImportDepotSetRequest.cs" />
     <Compile Include="Data\ImportRequest.cs" />
     <Compile Include="Data\IResponseData.cs" />
     <Compile Include="Data\IVersioned.cs" />
@@ -119,6 +124,7 @@
     <Compile Include="Data\TaskUpdateRequest.cs" />
     <Compile Include="Data\TimeWindowData.cs" />
     <Compile Include="Data\TokenData.cs" />
+    <Compile Include="Data\UpdateDepotRequest.cs" />
     <Compile Include="Data\UserData.cs" />
     <Compile Include="Data\UserDataSet.cs" />
     <Compile Include="Data\UserSetRequest.cs" />
@@ -131,6 +137,7 @@
     <Compile Include="LinkUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResponseData.cs" />
+    <Compile Include="TypeHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

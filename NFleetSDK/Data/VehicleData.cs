@@ -6,12 +6,17 @@ namespace NFleet.Data
     [DataContract]
     public class VehicleData : IResponseData, IVersioned
     {
+        public static string MIMEType = "application/vnd.jyu.nfleet.vehicle";
+        public static string MIMEVersion = "2.0";
+
         [IgnoreDataMember]
         int IVersioned.VersionNumber { get; set; }
         [DataMember]
         public int Id { get; set; }
         [DataMember]
         public string Name { get; set; }
+        [DataMember]
+        public string Info1 { get; set; }
         [DataMember]
         public List<CapacityData> Capacities { get; set; }
         [DataMember]
@@ -36,6 +41,12 @@ namespace NFleet.Data
         public double KilometerCost { get; set; }
         [DataMember]
         public double HourCost { get; set; }
+        [DataMember]
+        public double MaxDrivingHours { get; set; }
+        [DataMember]
+        public double MaxWorkingHours { get; set; }
+        [DataMember]
+        public string RelocationType { get; set; }
 
         public VehicleData()
         {

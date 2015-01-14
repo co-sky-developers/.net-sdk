@@ -6,6 +6,9 @@ namespace NFleet.Data
     [DataContract]
     public class TaskEventData
     {
+        public static string MIMEType = "application/vnd.jyu.nfleet.taskevent";
+        public static string MIMEVersion = "2.0";
+
         [DataMember]
         public int Id { get; set; }
         [DataMember]
@@ -22,6 +25,8 @@ namespace NFleet.Data
         public LocationData Location { get; set; }
         [DataMember]
         public double ServiceTime { get; set; }
+        [DataMember]
+        public double StoppingTime { get; set; }
         [DataMember]
         public List<Link> Meta { get; set; }
 
