@@ -8,7 +8,7 @@ namespace NFleet.Data
     public class UserDataSet: IResponseData, IVersioned
     {
         public static string MIMEType = "application/vnd.jyu.nfleet.userset";
-        public static string MIMEVersion = "2.0";
+        public static string MIMEVersion = "2.1";
 
         int IVersioned.VersionNumber { get; set; }
         public List<UserData> Items { get; set; }
