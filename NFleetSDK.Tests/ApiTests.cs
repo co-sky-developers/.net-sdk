@@ -36,9 +36,6 @@ namespace NFleet.Tests
             //##END EXAMPLE##
             // ReSharper restore UnusedVariable
 
-            //##BEGIN EXAMPLE oauth##
-            //Fail
-            //##END EXAMPLE##
 
             responses = ResponseReader.readResponses(responsePath);
             deserializer = new JsonDeserializer();
@@ -104,6 +101,10 @@ namespace NFleet.Tests
             var created = api.Navigate(user.GetLink("create-problem"), new RoutingProblemUpdateRequest {Name = "test"});
             //##BEGIN EXAMPLE accessingproblem##
             var problem = api.Navigate<RoutingProblemData>(created.Location);
+            //##END EXAMPLE##
+
+            //##BEGIN EXAMPLE accessingnewproblem##
+            problem = api.Navigate<RoutingProblemData>(created.Location);
             //##END EXAMPLE##
 
             var mockProblem = TestUtils.GetMockResponse<RoutingProblemData>(responses["accessingproblemresp"].json);
@@ -397,6 +398,10 @@ namespace NFleet.Tests
             {
                 //##BEGIN EXAMPLE oauth##
                 var result = api.Navigate<ResponseData>(user.GetLink("create-problem"));
+                //##END EXAMPLE##
+
+                //##BEGIN EXAMPLE badrequest##
+                var badRequest = api.Navigate<ResponseData>(user.GetLink("create-problem"));
                 //##END EXAMPLE##
             }
             catch (System.IO.IOException e)
@@ -763,7 +768,7 @@ namespace NFleet.Tests
             var result = api.Navigate<ResponseData>(problem.GetLink("import-data"), request);
             //##END EXAMPLE##
 
-            //#BEGIN EXAMPLE getimportresults##
+            //##BEGIN EXAMPLE getimportresults##
             var import = api.Navigate<ImportData>(result.Location);
             //##END EXAMPLE##
 
@@ -878,7 +883,7 @@ namespace NFleet.Tests
 
             Assert.IsTrue(import.Meta.Find(link => link.Rel.Equals("self")).Enabled);
             Assert.IsTrue(import.Meta.Find(link => link.Rel.Equals("apply-import")).Enabled);
-            //#BEGIN EXAMPLE applyimport##
+            //##BEGIN EXAMPLE applyimport##
             var appyResult = api.Navigate<ResponseData>(import.GetLink("apply-import"));
             //##END EXAMPLE##
             var vehicles = api.Navigate<VehicleDataSet>(problem.GetLink("list-vehicles"));
@@ -944,7 +949,7 @@ namespace NFleet.Tests
             
             RoutingProblemSettingsData after = null;
 
-            //##BEGIN EXAMPLE changeproblemsettings##
+            //##BEGIN EXAMPLE updatingroutingproblemsettings##
             var settings = api.Navigate<RoutingProblemSettingsData>( problem.GetLink( "view-settings" ) );
             var updatedSettings = new RoutingProblemSettingsUpdateRequest { DefaultVehicleSpeedFactor = 0.8, DefaultVehicleSpeedProfile = SpeedProfile.Max120Kmh.ToString() };
             //##END EXAMPLE##
@@ -1286,11 +1291,12 @@ namespace NFleet.Tests
             
             var tasksSet = api.Navigate<TaskDataSet>( problem.GetLink( "list-tasks" ) );
             Assert.AreEqual( 2, tasksSet.Items.Count );
+            //##BEGIN EXAMPLE deletingtask##
 
             problem = api.Navigate<RoutingProblemData>( problem.GetLink( "self" ) );
             var task = api.Navigate<TaskData>( response.Location );
             api.Navigate<ResponseData>( task.GetLink( "delete" ) );
-
+            //##END EXAMPLE##
             //response = api.Navigate<ResponseData>( problem.GetLink( "delete-tasks" ), new DeleteTasksRequest() );
 
             tasksSet = api.Navigate<TaskDataSet>( problem.GetLink( "list-tasks" ) );
