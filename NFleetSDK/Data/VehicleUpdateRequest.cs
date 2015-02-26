@@ -6,7 +6,7 @@ namespace NFleet.Data
     {
         public int VehicleId { get; set; }
         public string Info { get; set; }
-        public string State { get; set; }
+        public string ActivityState { get; set; }
         public string Name { get; set; }
         public string VehicleType { get; set; }
         public List<string> IncompatibleVehicleTypes { get; set; }
