@@ -54,7 +54,9 @@ namespace NFleet.Tests
             string responsePath = ConfigurationManager.AppSettings["response-path"];
 
             var api = new Api( url, clientKey, clientSecret );
+            //##BEGIN EXAMPLE oauth##
             var tokenResponse = api.Authenticate();
+            //##END EXAMPLE##
             var rootLinks = api.Root;
 
             var users = api.Navigate<UserDataSet>( rootLinks.GetLink( "list-users" ) );
@@ -396,9 +398,8 @@ namespace NFleet.Tests
             var user = TestHelper.GetOrCreateUser(api);
             try
             {
-                //##BEGIN EXAMPLE oauth##
                 var result = api.Navigate<ResponseData>(user.GetLink("create-problem"));
-                //##END EXAMPLE##
+                
 
                 //##BEGIN EXAMPLE badrequest##
                 var badRequest = api.Navigate<ResponseData>(user.GetLink("create-problem"));
