@@ -363,7 +363,7 @@ namespace NFleet.Tests
             TestUtils.ResponsesAreEqual(mockCreation, res);
 
             problem = api.Navigate<RoutingProblemData>(problem.GetLink("self"));
-            //##BEGIN EXAMPLE stoppingopt##
+
             res = api.Navigate<ResponseData>( problem.GetLink( "toggle-optimization" ), new RoutingProblemUpdateRequest { Name = problem.Name, State = "Stopped" } );
         }
 
@@ -1302,6 +1302,33 @@ namespace NFleet.Tests
 
             tasksSet = api.Navigate<TaskDataSet>( problem.GetLink( "list-tasks" ) );
             Assert.AreEqual( 1, tasksSet.Items.Count );
+        }
+
+        [Test]
+        public void T35CreateDepot()
+        {
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetOrCreateUser(api);
+            var problem = TestHelper.CreateProblem(api, user, "CreateDepot");
+            //##BEGIN EXAMPLE createdepot##
+            var depot = new CreateDepotRequest
+            {
+                Name = "Depot02",
+                Location = new LocationData { Coordinate = new CoordinateData { Latitude = 0, Longitude = 0, System = "Euclidian" } },
+                Capacities = new List<CapacityData> { new CapacityData { Amount = 1, Name = "mushrooms" }, new CapacityData { Amount = 10, Name = "volume" } },
+                Info1 = "Info",
+                DataSource = "",
+                Type = "SomeType"
+            };
+
+            var response = api.Navigate<ResponseData>(problem.GetLink("create-depot"), depot);
+
+            var depotData = api.Navigate<DepotData>(response.Location);
+            //##END EXAMPLE##
+            Assert.AreEqual(depot.Name, depotData.Name);
+
+            Assert.AreEqual(JsonConvert.SerializeObject(depot.Location.Coordinate), JsonConvert.SerializeObject(depotData.Location.Coordinate));
+            Assert.AreEqual(JsonConvert.SerializeObject(depot.Capacities), JsonConvert.SerializeObject(depotData.Capacities));
         }
     }
 }
