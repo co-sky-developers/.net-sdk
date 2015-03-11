@@ -1329,6 +1329,42 @@ namespace NFleet.Tests
 
             Assert.AreEqual(JsonConvert.SerializeObject(depot.Location.Coordinate), JsonConvert.SerializeObject(depotData.Location.Coordinate));
             Assert.AreEqual(JsonConvert.SerializeObject(depot.Capacities), JsonConvert.SerializeObject(depotData.Capacities));
+
+        }
+
+        [Test]
+        public void T36CreateDepotSet()
+        {
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetOrCreateUser(api);
+            var problem = TestHelper.CreateProblem(api, user, "CreateDepotSet");
+
+            //##BEGIN EXAMPLE createdepotset##
+            var request = new ImportDepotSetRequest
+            {
+                Items = new List<UpdateDepotRequest>()
+            };
+
+            for (int i = 1; i < 4; i++)
+            {
+                var depot = new UpdateDepotRequest
+                {
+                    Name = "Depot0"+i,
+                    Location = new LocationData { Coordinate = new CoordinateData { Latitude = 0, Longitude = 0, System = "Euclidian" } },
+                    Capacities = new List<CapacityData> { new CapacityData { Amount = 10, Name = "weight" }, new CapacityData { Amount = 30, Name = "volume" } },
+                    Info1 = "Info",
+                    DataSource = "",
+                    Type = "SomeType"
+                };
+                request.Items.Add(depot);
+            }
+
+            var response = api.Navigate<ResponseData>(problem.GetLink("import-depots"), request);
+
+            var result = api.Navigate<DepotDataSet>(problem.GetLink("list-depots"));
+            //##END EXAMPLE##
+
+            Assert.AreEqual(3, result.Items.Count);
         }
     }
 }
