@@ -1311,11 +1311,11 @@ namespace NFleet.Tests
             var user = TestHelper.GetOrCreateUser(api);
             var problem = TestHelper.CreateProblem(api, user, "CreateDepot");
             //##BEGIN EXAMPLE createdepot##
-            var depot = new CreateDepotRequest
+            var depot = new UpdateDepotRequest
             {
                 Name = "Depot02",
                 Location = new LocationData { Coordinate = new CoordinateData { Latitude = 0, Longitude = 0, System = "Euclidian" } },
-                Capacities = new List<CapacityData> { new CapacityData { Amount = 1, Name = "mushrooms" }, new CapacityData { Amount = 10, Name = "volume" } },
+                Capacities = new List<CapacityData> { new CapacityData { Amount = 10, Name = "weight" }, new CapacityData { Amount = 30, Name = "volume" } },
                 Info1 = "Info",
                 DataSource = "",
                 Type = "SomeType"
