@@ -1339,7 +1339,8 @@ namespace NFleet.Tests
             var user = TestHelper.GetOrCreateUser(api);
             var problem = TestHelper.CreateProblem(api, user, "CreateDepotSet");
 
-            //##BEGIN EXAMPLE createdepotset##
+            //##BEGIN EXAMPLE importdepots##
+
             var request = new ImportDepotSetRequest
             {
                 Items = new List<UpdateDepotRequest>()
