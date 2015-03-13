@@ -1367,5 +1367,44 @@ namespace NFleet.Tests
 
             Assert.AreEqual(3, result.Items.Count);
         }
+
+        [Test]
+        public void T37UpdateDepot()
+        {
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetOrCreateUser(api);
+            var problem = TestHelper.CreateProblem(api, user, "CreateDepot");
+            
+            var depot = new UpdateDepotRequest
+            {
+                Name = "Depot",
+                Location = new LocationData { Coordinate = new CoordinateData { Latitude = 0, Longitude = 0, System = "Euclidian" } },
+                Capacities = new List<CapacityData> { new CapacityData { Amount = 10, Name = "weight" }, new CapacityData { Amount = 30, Name = "volume" } },
+                Info1 = "Info",
+                DataSource = "",
+                Type = "SomeType"
+            };
+
+            var response = api.Navigate<ResponseData>(problem.GetLink("create-depot"), depot);
+
+            //##BEGIN EXAMPLE updatedepot##
+            var depotData = api.Navigate<DepotData>(response.Location);
+
+            var update = new UpdateDepotRequest
+            {
+                Name = depotData.Name,
+                Location = depotData.Location,
+                Capacities = depotData.Capacities,
+                Info1 = "UpdatedInfo",
+                DataSource = depotData.DataSource,
+                Type = depotData.Type
+            };
+
+            response = api.Navigate<ResponseData>(depotData.GetLink("update"), update);
+            var updatedDepot = api.Navigate<DepotData>(response.Location);
+            //##END EXAMPLE##
+
+            Assert.AreEqual(update.Info1, updatedDepot.Info1);
+        }
     }
 }
