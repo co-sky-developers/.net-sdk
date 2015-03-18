@@ -84,7 +84,7 @@ namespace NFleet.Tests
             var api = TestHelper.Authenticate();
             var user = TestHelper.GetOrCreateUser(api);
             //##BEGIN EXAMPLE creatingproblem##
-            var created = api.Navigate(user.GetLink("create-problem"), new RoutingProblemUpdateRequest {Name = "test"});
+            var created = api.Navigate<ResponseData>(user.GetLink("create-problem"), new RoutingProblemUpdateRequest {Name = "test"});
             var problem = api.Navigate<RoutingProblemData>(created.Location);
             //##END EXAMPLE##
 
@@ -453,7 +453,7 @@ namespace NFleet.Tests
             //##BEGIN EXAMPLE creatingauser##
 
             var users = api.Navigate<UserDataSet>(api.Root.GetLink("list-users"));
-            var response = api.Navigate(users.GetLink("create"));
+            var response = api.Navigate<ResponseData>(users.GetLink("create"));
             var user = api.Navigate<UserData>(response.Location);
             //##END EXAMPLE##
 
