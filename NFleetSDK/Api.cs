@@ -314,14 +314,21 @@ namespace NFleet
             if ( response.StatusCode < HttpStatusCode.BadRequest && response.StatusCode != HttpStatusCode.Created && response.StatusCode != HttpStatusCode.SeeOther )
                 throw new IOException( "Unexpected response from server." );
 
-            if (response.StatusCode >= HttpStatusCode.BadRequest)
+            if (response.StatusCode >= HttpStatusCode.BadRequest && response.StatusCode < HttpStatusCode.InternalServerError )
             {
                 Thread.Sleep(1000);
                 response = client.Execute<AuthenticationData>(authorizationRequest);
 
                 if (response.StatusCode >= HttpStatusCode.BadRequest) ThrowException(response);
             }
-                
+
+            if (response.StatusCode >= HttpStatusCode.InternalServerError)
+            {
+                Thread.Sleep(1000);
+                response = client.Execute<AuthenticationData>(authorizationRequest);
+
+                if (response.StatusCode >= HttpStatusCode.InternalServerError) ThrowException(response);
+            }
 
             var tokenLocationParameter = response.Headers.FirstOrDefault( h => h.Name == "Location" );
 
