@@ -8,7 +8,7 @@ namespace NFleet.Data
     public class RoutingProblemSummaryData : IResponseData, IVersioned
     {
         public static string MIMEType = "application/vnd.jyu.nfleet.problemsummary";
-        public static string MIMEVersion = "2.2";
+        public static string MIMEVersion = "2.0";
         public int VersionNumber { get; set; }
 
         public int Id { get; set; }
