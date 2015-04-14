@@ -112,8 +112,10 @@
     <Compile Include="Data\RoutingProblemDataSet.cs" />
     <Compile Include="Data\RoutingProblemSettingsData.cs" />
     <Compile Include="Data\RoutingProblemSettingsUpdateRequest.cs" />
+    <Compile Include="Data\RoutingProblemSummaryData.cs" />
     <Compile Include="Data\RoutingProblemUpdateRequest.cs" />
     <Compile Include="Data\SpeedProfile.cs" />
+    <Compile Include="Data\SummaryData.cs" />
     <Compile Include="Data\TaskData.cs" />
     <Compile Include="Data\TaskDataSet.cs" />
     <Compile Include="Data\TaskError.cs" />
