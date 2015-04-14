@@ -30,6 +30,8 @@ namespace NFleet.Data
         [DataMember]
         public string State { get; set; }
         [DataMember]
+        public string DataState { get; set; }
+        [DataMember]
         public int Progress { get; set; }
     }
 }
