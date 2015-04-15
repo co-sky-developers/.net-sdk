@@ -16,6 +16,7 @@ namespace NFleet.Tests
     {
         private Dictionary<string, Response> responses;
         private JsonDeserializer deserializer;
+        private string responsePath;
 
         [SetUp]
         public void Setup()
@@ -23,7 +24,7 @@ namespace NFleet.Tests
             string url = ConfigurationManager.AppSettings["url"];
             string clientKey = ConfigurationManager.AppSettings["client-key"];
             string clientSecret = ConfigurationManager.AppSettings["client-secret"];
-            string responsePath = ConfigurationManager.AppSettings["response-path"];
+            responsePath = ConfigurationManager.AppSettings["response-path"];
 
             Assert.IsNotNullOrEmpty(clientKey);
             Assert.IsNotNullOrEmpty(clientSecret);
@@ -35,7 +36,6 @@ namespace NFleet.Tests
             var rootLinks = api.Root;
             //##END EXAMPLE##
             // ReSharper restore UnusedVariable
-
 
             responses = ResponseReader.readResponses(responsePath);
             deserializer = new JsonDeserializer();
@@ -66,6 +66,8 @@ namespace NFleet.Tests
                 var u = api.Navigate<UserData>( user.GetLink( "self" ) );
                 api.Navigate<ResponseData>( u.GetLink( "delete-user" ) );
             }
+
+            ResponseWriter.WriteAll(responsePath, responsePath+"/nfleet-responses/nfleet-responses.txt", ".dat");
         }
 
         [Test]
@@ -75,6 +77,8 @@ namespace NFleet.Tests
             var rootLinks = api.Root;
             var mockRootLinks = TestUtils.GetMockResponse<ApiData>(responses["accessingapiresp"].json);
             Trace.Write(JsonConvert.SerializeObject(rootLinks));
+
+            ResponseWriter.Write(JsonConvert.SerializeObject(api, Formatting.Indented), "accessingapiresp", responsePath + "/accessingapiresp.dat");
             TestUtils.ListsAreEqual<Link>(rootLinks.Meta, mockRootLinks.Meta, TestUtils.LinksAreEqual);
         }
 
@@ -90,8 +94,7 @@ namespace NFleet.Tests
 
             var mockCreated = TestUtils.GetMockResponse<RoutingProblemData>(responses["accessingnewproblemresp"].json);
 
-            Trace.Write(JsonConvert.SerializeObject(created));
-
+            ResponseWriter.Write(JsonConvert.SerializeObject(created, Formatting.Indented), "accessingnewproblemresp", responsePath + "/accessingnewproblemresp.dat");
             TestUtils.RoutingProblemsAreEqual(mockCreated, problem);
         }
 
@@ -110,7 +113,8 @@ namespace NFleet.Tests
             //##END EXAMPLE##
 
             var mockProblem = TestUtils.GetMockResponse<RoutingProblemData>(responses["accessingproblemresp"].json);
-            Trace.Write(JsonConvert.SerializeObject(problem));
+
+            ResponseWriter.Write(JsonConvert.SerializeObject(problem, Formatting.Indented), "accessingproblemresp", responsePath + "/accessingproblemresp.dat");
             TestUtils.RoutingProblemsAreEqual(mockProblem, problem);
         }
 
@@ -126,7 +130,8 @@ namespace NFleet.Tests
             //##END EXAMPLE##
 
             var mockTasks = TestUtils.GetMockResponse<TaskDataSet>(responses["listingtasksresp"].json);
-            Trace.Write(JsonConvert.SerializeObject(tasks));
+
+            ResponseWriter.Write(JsonConvert.SerializeObject(tasks, Formatting.Indented), "listingtasksresp", responsePath + "/listingtasksresp.dat");
             TestUtils.TaskDataSetsAreEqual(mockTasks, tasks);
         }
 
@@ -182,7 +187,7 @@ namespace NFleet.Tests
             var mockTaskCreationResult = TestUtils.GetMockResponse<ResponseData>(responses["creatingtaskresp"].json);
 
             TestUtils.ResponsesAreEqual(mockTaskCreationResult, taskCreationResult);
-            Trace.Write(JsonConvert.SerializeObject(taskCreationResult));
+            ResponseWriter.Write(JsonConvert.SerializeObject(taskCreationResult, Formatting.Indented), "creatingtaskresp", responsePath + "/creatingtaskresp.dat");
         }
 
         [Test]
@@ -276,8 +281,8 @@ namespace NFleet.Tests
             //##END EXAMPLE##
 
             var mockVehicles = TestUtils.GetMockResponse<VehicleDataSet>(responses["listingvehiclesresp"].json);
-            Trace.Write(JsonConvert.SerializeObject(vehicles));
-            TestUtils.VehicleDataSetsAreEqual(mockVehicles, vehicles);
+            ResponseWriter.Write(JsonConvert.SerializeObject(vehicles, Formatting.Indented), "listingvehiclesresp", responsePath + "/listingvehiclesresp.dat");
+            //TestUtils.VehicleDataSetsAreEqual(mockVehicles, vehicles);
         }
 
         [Test]
@@ -298,7 +303,7 @@ namespace NFleet.Tests
             var taskEvents = api.Navigate<TaskEventDataSet>(vehicle.GetLink("list-events"));
             //##END EXAMPLE##
             var mockTaskEvents = TestUtils.GetMockResponse<TaskEventDataSet>(responses["accessingtaskseqresp"].json);
-            Trace.Write(JsonConvert.SerializeObject(taskEvents));
+            ResponseWriter.Write(JsonConvert.SerializeObject(taskEvents, Formatting.Indented), "accessingtaskseqresp", responsePath + "/accessingtaskseqresp.dat");
             TestUtils.TaskEventDataSetsAreEqual(mockTaskEvents, taskEvents);
         }
 
@@ -321,6 +326,7 @@ namespace NFleet.Tests
             //##END EXAMPLE##
             Trace.Write(JsonConvert.SerializeObject(route));
             var mockRoute = TestUtils.GetMockResponse<RouteData>(responses["accessingrouteresp"].json);
+            ResponseWriter.Write(JsonConvert.SerializeObject(route, Formatting.Indented), "accessingrouteresp", responsePath + "/accessingrouteresp.dat");
             TestUtils.RoutesAreEqual(mockRoute, route);
         }
 
@@ -359,7 +365,7 @@ namespace NFleet.Tests
             //##END EXAMPLE##
 
             var mockCreation = TestUtils.GetMockResponse<ResponseData>(responses["startingoptresp"].json);
-            Trace.Write(JsonConvert.SerializeObject(res));
+            ResponseWriter.Write(JsonConvert.SerializeObject(res, Formatting.Indented), "startingoptresp", responsePath + "/startingoptresp.dat");
             TestUtils.ResponsesAreEqual(mockCreation, res);
 
             problem = api.Navigate<RoutingProblemData>(problem.GetLink("self"));
@@ -385,7 +391,7 @@ namespace NFleet.Tests
                 new RoutingProblemUpdateRequest {Name = problem.Name, State = "Stopped"});
             //##END EXAMPLE##
             var mockResponse = TestUtils.GetMockResponse<ResponseData>(responses["stoppingoptresp"].json);
-            Trace.Write(JsonConvert.SerializeObject(res));
+            ResponseWriter.Write(JsonConvert.SerializeObject(res, Formatting.Indented), "stoppingoptresp", responsePath + "/stoppingoptresp.dat");
             TestUtils.ResponsesAreEqual(mockResponse, res);
         }
 
@@ -484,7 +490,6 @@ namespace NFleet.Tests
                 if (progress >= 100) break;
             }
             //##END EXAMPLE##
-
         }
 
         [Test]
@@ -498,7 +503,7 @@ namespace NFleet.Tests
             //##BEGIN EXAMPLE getrouteEvents##
             var events = api.Navigate<RouteEventDataSet>(vehicle.GetLink("list-events"));
             //##END EXAMPLE##
-            Trace.Write(JsonConvert.SerializeObject(events));
+            ResponseWriter.Write(JsonConvert.SerializeObject(events, Formatting.Indented), "accessingrouteeventsresp", responsePath + "/accessingrouteeventsresp.dat");
             var mockevents = TestUtils.GetMockResponse<RouteEventDataSet>(responses["accessingrouteeventsresp"].json);
         }
 
