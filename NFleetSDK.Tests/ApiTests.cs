@@ -1411,5 +1411,29 @@ namespace NFleet.Tests
 
             Assert.AreEqual(update.Info1, updatedDepot.Info1);
         }
+
+        [Test]
+        public void T37GetRoutingProblemSummaryData()
+        {
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetOrCreateUser( api );
+            var problem = TestHelper.CreateProblemWithDemoData( api, user );
+            
+            var summary = api.Navigate<RoutingProblemSummaryData>(problem.GetLink("summary"));
+            
+            Assert.AreEqual(summary.Summary.TotalTaskCount, 1);
+        }
+
+        [Test]
+        public void T38GetRoutingProblemSummaryDataSet()
+        {
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetOrCreateUser( api );
+            var problem = TestHelper.CreateProblemWithDemoData( api, user );
+
+            var summarySet = api.Navigate<RoutingProblemSummaryDataSet>(user.GetLink("list-summaries"));
+
+            Assert.AreEqual(summarySet.Items.Count, 1);
+        }
     }
 }
