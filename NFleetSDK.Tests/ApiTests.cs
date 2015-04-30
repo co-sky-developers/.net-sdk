@@ -1418,9 +1418,11 @@ namespace NFleet.Tests
             var api = TestHelper.Authenticate();
             var user = TestHelper.GetOrCreateUser( api );
             var problem = TestHelper.CreateProblemWithDemoData( api, user );
-            
+
+            //##BEGIN EXAMPLE getproblemsummary##
             var summary = api.Navigate<RoutingProblemSummaryData>(problem.GetLink("summary"));
-            
+            //##END EXAMPLE##
+            ResponseWriter.Write( JsonConvert.SerializeObject( summary, Formatting.Indented ), "getproblemsummaryresp", responsePath + "/getproblemsummaryresp.dat" );
             Assert.AreEqual(summary.Summary.TotalTaskCount, 1);
         }
 

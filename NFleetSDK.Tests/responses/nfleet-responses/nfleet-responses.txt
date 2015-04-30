@@ -59,8 +59,8 @@
 {
   "Id": 2,
   "Name": "test",
-  "CreationDate": "2015-04-15T07:23:12Z",
-  "ModifiedDate": "2015-04-15T07:23:12Z",
+  "CreationDate": "2015-04-30T11:11:51Z",
+  "ModifiedDate": "2015-04-30T11:11:51Z",
   "Meta": [
     {
       "Uri": "/users/1/problems/2",
@@ -463,7 +463,7 @@
   ],
   "Meta": [
     {
-      "Uri": "/users/1/problems/8/vehicles/1/route",
+      "Uri": "/users/1/problems/1/vehicles/1/route",
       "Rel": "self",
       "Method": "GET",
       "Enabled": false,
@@ -881,6 +881,82 @@
 //##END EXAMPLE##
 
 
+//##BEGIN EXAMPLE getproblemsummary##
+{
+  "VersionNumber": 3,
+  "Id": 31,
+  "Name": "test",
+  "Modified": "2015-04-30T11:15:54Z",
+  "State": "Stopped",
+  "Progress": 0,
+  "Settings": {
+    "VersionNumber": 1,
+    "DefaultVehicleSpeedProfile": 3,
+    "DefaultVehicleSpeedFactor": 0.9,
+    "AlgorithmTree": null,
+    "InsertionAggressiveness": 1.0,
+    "DateTimeFormatString": null,
+    "Meta": []
+  },
+  "Summary": {
+    "TravelDistanceSum": 0.0,
+    "WorkingTimeSum": 0.0,
+    "TotalTaskCount": 1,
+    "PlannedTaskCount": 0,
+    "TotalVehicleCount": 1,
+    "UsedVehicleCount": 0
+  },
+  "Meta": [
+    {
+      "Uri": "/users/1/problems/31/summary",
+      "Rel": "self",
+      "Method": "GET",
+      "Enabled": true,
+      "Type": "application/vnd.jyu.nfleet.problemsummary-2.0+json"
+    }
+  ]
+}
+//##END EXAMPLE##
+
+
+//##BEGIN EXAMPLE getproblemsummaryresp##
+{
+  "VersionNumber": 3,
+  "Id": 1,
+  "Name": "test",
+  "Modified": "2015-04-30T11:23:48Z",
+  "State": "Stopped",
+  "Progress": 0,
+  "Settings": {
+    "VersionNumber": 1,
+    "DefaultVehicleSpeedProfile": 3,
+    "DefaultVehicleSpeedFactor": 0.9,
+    "AlgorithmTree": null,
+    "InsertionAggressiveness": 1.0,
+    "DateTimeFormatString": null,
+    "Meta": []
+  },
+  "Summary": {
+    "TravelDistanceSum": 0.0,
+    "WorkingTimeSum": 0.0,
+    "TotalTaskCount": 1,
+    "PlannedTaskCount": 0,
+    "TotalVehicleCount": 1,
+    "UsedVehicleCount": 0
+  },
+  "Meta": [
+    {
+      "Uri": "/users/1/problems/1/summary",
+      "Rel": "self",
+      "Method": "GET",
+      "Enabled": true,
+      "Type": "application/vnd.jyu.nfleet.problemsummary-2.0+json"
+    }
+  ]
+}
+//##END EXAMPLE##
+
+
 //##BEGIN EXAMPLE listingtasksresp##
 {
   "Items": [
@@ -1025,7 +1101,7 @@
   "Items": [
     {
       "Id": 1,
-      "Name": "TestVehicle-K1V8YJH5",
+      "Name": "TestVehicle-JSKPGFRN",
       "Info1": null,
       "Capacities": [
         {
