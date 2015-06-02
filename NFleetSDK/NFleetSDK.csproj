@@ -74,6 +74,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api.cs" />
+    <Compile Include="AppService.cs" />
+    <Compile Include="AppUserData.cs" />
+    <Compile Include="AppUserDataSet.cs" />
+    <Compile Include="AppUserUpdateRequest.cs" />
     <Compile Include="CustomConverter.cs" />
     <Compile Include="Data\AddressData.cs" />
     <Compile Include="Data\ApiData.cs" />
