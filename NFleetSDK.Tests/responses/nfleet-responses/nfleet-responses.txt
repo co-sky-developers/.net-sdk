@@ -1,5 +1,3 @@
-
-
 //##BEGIN EXAMPLE accessingapiresp##
 {
   "Root": {
@@ -1295,3 +1293,4 @@
   "VersionNumber": 0
 }
 //##END EXAMPLE##
+
