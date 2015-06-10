@@ -6,5 +6,8 @@
         public string City { get; set; }
         public string PostalCode { get; set; }
         public string Street { get; set; }
+        public int HouseNumber { get; set; }
+        public string ApartmentLetter { get; set; }
+        public int ApartmentNumber { get; set; }
     }
 }
