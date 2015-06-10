@@ -31,5 +31,9 @@ namespace NFleet.Data
         public string Type { get; set; }
 
         public LocationData Location { get; set; }
+
+        public List<CapacityData> Capacities { get; set; }
+
+        public List<TimeWindowData> TimeWindows { get; set; }
     }
 }
