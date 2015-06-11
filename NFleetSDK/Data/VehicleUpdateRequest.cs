@@ -4,7 +4,6 @@ namespace NFleet.Data
 {
     public class VehicleUpdateRequest
     {
-        public int VehicleId { get; set; }
         public string Info { get; set; }
         public string ActivityState { get; set; }
         public string Name { get; set; }

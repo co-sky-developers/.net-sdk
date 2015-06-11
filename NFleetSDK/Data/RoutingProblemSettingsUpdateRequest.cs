@@ -4,8 +4,6 @@ namespace NFleet.Data
 {
     public class RoutingProblemSettingsUpdateRequest 
     {
-        public int UserId { get; set; }
-        public int ProblemId { get; set; }
         public string DefaultVehicleSpeedProfile { get; set; }
         public double DefaultVehicleSpeedFactor { get; set; }
         public string AlgorithmTree { get; set; }

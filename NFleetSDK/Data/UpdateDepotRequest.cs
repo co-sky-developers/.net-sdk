@@ -4,8 +4,6 @@ namespace NFleet.Data
 {
     public class UpdateDepotRequest
     {
-        public int DepotId { get; set; }
-
         public string Name { get; set; }
         public string Info1 { get; set; }
         public List<CapacityData> Capacities { get; set; }
