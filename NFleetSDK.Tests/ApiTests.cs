@@ -206,7 +206,6 @@ namespace NFleet.Tests
                     Capacities = te.Capacities,
                     Location = te.Location,
                     ServiceTime = te.ServiceTime,
-                    TaskEventId = te.Id,
                     TimeWindows = te.TimeWindows,
                     Type = te.Type,
                 };
@@ -219,7 +218,6 @@ namespace NFleet.Tests
                 Info = task.Info,
                 Name = "Other name",
                 TaskEvents = oldTaskEvents,
-                TaskId = task.Id,
                 RelocationType = task.RelocationType,
                 ActivityState = task.ActivityState
             };
@@ -1044,24 +1042,36 @@ namespace NFleet.Tests
             api.Navigate<ResponseData>(vehicleResult1.GetLink("set-route"), new RouteUpdateRequest { Items = route1 });
             api.Navigate<ResponseData>(vehicleResult2.GetLink("set-route"), new RouteUpdateRequest { Items = route2 });
 
-            var events1 = api.Navigate<RouteEventDataSet>(vehicleResult1.GetLink("list-events"));
-            var events2 = api.Navigate<RouteEventDataSet>(vehicleResult2.GetLink("list-events"));
+            
 
+            var p = api.Navigate<RoutingProblemData>( problem.GetLink( "self" ) );
+
+            while (p.DataState == "Pending")
+            {
+                Thread.Sleep(1000);
+                p = api.Navigate<RoutingProblemData>( problem.GetLink( "self" ) );
+            }
+            var events1 = api.Navigate<RouteEventDataSet>( vehicleResult1.GetLink( "list-events" ) );
+            var events2 = api.Navigate<RouteEventDataSet>( vehicleResult2.GetLink( "list-events" ) );
             foreach (var item in events1.Items)
             {
-                var @event = api.Navigate<RouteEventData>(item.GetLink("self"));
-                if (@event.TaskEventId < 20000) api.Navigate<ResponseData>(@event.GetLink("lock-to-vehicle"), new RouteEventUpdateRequest
-                {
-                    State = "LockedToVehicle"
-                });
+                if (item.TaskEventId < 20000) {
+                    var @event = api.Navigate<RouteEventData>( item.GetLink( "self" ) );
+                    api.Navigate<ResponseData>( @event.GetLink( "lock-to-vehicle" ), new RouteEventUpdateRequest
+                    {
+                        State = "LockedToVehicle"
+                    });
+                }
             }
             foreach (var item in events2.Items)
             {
-                var @event = api.Navigate<RouteEventData>(item.GetLink("self"));
-                if (@event.TaskEventId < 20000) api.Navigate<ResponseData>(@event.GetLink("lock-to-vehicle"), new RouteEventUpdateRequest
-                {
-                    State = "LockedToVehicle"
-                } );
+                if (item.TaskEventId < 20000) {
+                    var @event = api.Navigate<RouteEventData>( item.GetLink( "self" ) );
+                    api.Navigate<ResponseData>( @event.GetLink( "lock-to-vehicle" ), new RouteEventUpdateRequest
+                    {
+                        State = "LockedToVehicle"
+                    } );
+                }
             }
 
             problem = api.Navigate<RoutingProblemData>(problem.GetLink("self"));
@@ -1094,19 +1104,26 @@ namespace NFleet.Tests
 
             foreach (var item in events1.Items)
             {
-                var @event = api.Navigate<RouteEventData>(item.GetLink("self"));
-                if (@event.TaskEventId < 20000) api.Navigate<ResponseData>(@event.GetLink("lock-to-vehicle"), new RouteEventUpdateRequest
+
+                if ( item.TaskEventId < 20000 )
                 {
-                    State = "UnlockedFromVehicle"
-                });
+                    var @event = api.Navigate<RouteEventData>( item.GetLink( "self" ) );
+                    api.Navigate<ResponseData>(@event.GetLink("lock-to-vehicle"), new RouteEventUpdateRequest
+                    {
+                        State = "UnlockedFromVehicle"
+                    });
+                }
             }
             foreach (var item in events2.Items)
             {
-                var @event = api.Navigate<RouteEventData>(item.GetLink("self"));
-                if (@event.TaskEventId < 20000) api.Navigate<ResponseData>(@event.GetLink("lock-to-vehicle"), new RouteEventUpdateRequest
-                {
-                    State = "UnlockedFromVehicle"
-                });
+                
+                if ( item.TaskEventId < 20000 ) {
+                    var @event = api.Navigate<RouteEventData>( item.GetLink( "self" ) );
+                    api.Navigate<ResponseData>(@event.GetLink("lock-to-vehicle"), new RouteEventUpdateRequest
+                    {
+                        State = "UnlockedFromVehicle"
+                    });
+                }
             }
 
             problem = api.Navigate<RoutingProblemData>(problem.GetLink("self"));
