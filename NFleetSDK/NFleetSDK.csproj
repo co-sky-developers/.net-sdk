@@ -138,6 +138,7 @@
     <Compile Include="Data\VehicleData.cs" />
     <Compile Include="Data\VehicleDataSet.cs" />
     <Compile Include="Data\VehicleError.cs" />
+    <Compile Include="Data\VehiclePlanData.cs" />
     <Compile Include="Data\VehicleSetImportRequest.cs" />
     <Compile Include="Data\VehicleTypeData.cs" />
     <Compile Include="Data\VehicleUpdateRequest.cs" />
