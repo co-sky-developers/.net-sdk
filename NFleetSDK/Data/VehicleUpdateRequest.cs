@@ -17,6 +17,8 @@ namespace NFleet.Data
         public string SpeedProfile { get; set; }
         public double SpeedFactor { get; set; }
 
+        public string DataSource { get; set; }
+
         public double FixedCost { get; set; }
         public double KilometerCost { get; set; }
         public double HourCost { get; set; }

@@ -47,6 +47,8 @@ namespace NFleet.Data
         public double MaxWorkingHours { get; set; }
         [DataMember]
         public string RelocationType { get; set; }
+        [DataMember]
+        public string DataSource { get; set; }
 
         public VehicleData()
         {

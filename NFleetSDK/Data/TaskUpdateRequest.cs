@@ -20,7 +20,7 @@ namespace NFleet.Data
         public bool IsLockedToVehicle { get; set; }
         public string MimeType { get; set; }
         public string MimeVersion { get; set; }
-
+        public string DataSource { get; set; }
 
         public TaskUpdateRequest()
         {
