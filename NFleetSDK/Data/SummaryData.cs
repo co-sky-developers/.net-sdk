@@ -9,5 +9,6 @@ namespace NFleet.Data
         public int PlannedTaskCount { get; set; }
         public int TotalVehicleCount { get; set; }
         public int UsedVehicleCount { get; set; }
+        public double AccumulatedCost { get; set; }
     }
 }
