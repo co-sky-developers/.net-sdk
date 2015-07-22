@@ -11,12 +11,12 @@ namespace NFleet.Data
         public static string MIMEVersion = "2.2";
 
         int IVersioned.VersionNumber { get; set; }
-        public List<VehicleData> Items { get; set; }
+        public List<DepotData> Items { get; set; }
         public List<Link> Meta { get; set; }
 
         public DepotDataSet()
         {
-            Items = new List<VehicleData>();
+            Items = new List<DepotData>();
             Meta = new List<Link>();
         }
     }

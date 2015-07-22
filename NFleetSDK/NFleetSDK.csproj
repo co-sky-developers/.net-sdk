@@ -74,6 +74,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api.cs" />
+    <Compile Include="AppService.cs" />
+    <Compile Include="AppUserData.cs" />
+    <Compile Include="AppUserDataSet.cs" />
+    <Compile Include="AppUserUpdateRequest.cs" />
     <Compile Include="CustomConverter.cs" />
     <Compile Include="Data\AddressData.cs" />
     <Compile Include="Data\ApiData.cs" />
@@ -112,8 +116,11 @@
     <Compile Include="Data\RoutingProblemDataSet.cs" />
     <Compile Include="Data\RoutingProblemSettingsData.cs" />
     <Compile Include="Data\RoutingProblemSettingsUpdateRequest.cs" />
+    <Compile Include="Data\RoutingProblemSummaryData.cs" />
+    <Compile Include="Data\RoutingProblemSummaryDataSet.cs" />
     <Compile Include="Data\RoutingProblemUpdateRequest.cs" />
     <Compile Include="Data\SpeedProfile.cs" />
+    <Compile Include="Data\SummaryData.cs" />
     <Compile Include="Data\TaskData.cs" />
     <Compile Include="Data\TaskDataSet.cs" />
     <Compile Include="Data\TaskError.cs" />
@@ -131,6 +138,7 @@
     <Compile Include="Data\VehicleData.cs" />
     <Compile Include="Data\VehicleDataSet.cs" />
     <Compile Include="Data\VehicleError.cs" />
+    <Compile Include="Data\VehiclePlanData.cs" />
     <Compile Include="Data\VehicleSetImportRequest.cs" />
     <Compile Include="Data\VehicleTypeData.cs" />
     <Compile Include="Data\VehicleUpdateRequest.cs" />

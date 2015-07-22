@@ -16,6 +16,7 @@ namespace NFleet.Tests
     {
         private Dictionary<string, Response> responses;
         private JsonDeserializer deserializer;
+        private string responsePath;
 
         [SetUp]
         public void Setup()
@@ -23,7 +24,7 @@ namespace NFleet.Tests
             string url = ConfigurationManager.AppSettings["url"];
             string clientKey = ConfigurationManager.AppSettings["client-key"];
             string clientSecret = ConfigurationManager.AppSettings["client-secret"];
-            string responsePath = ConfigurationManager.AppSettings["response-path"];
+            responsePath = ConfigurationManager.AppSettings["response-path"];
 
             Assert.IsNotNullOrEmpty(clientKey);
             Assert.IsNotNullOrEmpty(clientSecret);
@@ -35,10 +36,6 @@ namespace NFleet.Tests
             var rootLinks = api.Root;
             //##END EXAMPLE##
             // ReSharper restore UnusedVariable
-
-            //##BEGIN EXAMPLE oauth##
-            //Fail
-            //##END EXAMPLE##
 
             responses = ResponseReader.readResponses(responsePath);
             deserializer = new JsonDeserializer();
@@ -57,7 +54,9 @@ namespace NFleet.Tests
             string responsePath = ConfigurationManager.AppSettings["response-path"];
 
             var api = new Api( url, clientKey, clientSecret );
+            //##BEGIN EXAMPLE oauth##
             var tokenResponse = api.Authenticate();
+            //##END EXAMPLE##
             var rootLinks = api.Root;
 
             var users = api.Navigate<UserDataSet>( rootLinks.GetLink( "list-users" ) );
@@ -67,6 +66,8 @@ namespace NFleet.Tests
                 var u = api.Navigate<UserData>( user.GetLink( "self" ) );
                 api.Navigate<ResponseData>( u.GetLink( "delete-user" ) );
             }
+
+            ResponseWriter.WriteAll(responsePath, responsePath+"/nfleet-responses/nfleet-responses.txt", ".dat");
         }
 
         [Test]
@@ -76,6 +77,8 @@ namespace NFleet.Tests
             var rootLinks = api.Root;
             var mockRootLinks = TestUtils.GetMockResponse<ApiData>(responses["accessingapiresp"].json);
             Trace.Write(JsonConvert.SerializeObject(rootLinks));
+
+            ResponseWriter.Write(JsonConvert.SerializeObject(api, Formatting.Indented), "accessingapiresp", responsePath + "/accessingapiresp.dat");
             TestUtils.ListsAreEqual<Link>(rootLinks.Meta, mockRootLinks.Meta, TestUtils.LinksAreEqual);
         }
 
@@ -85,14 +88,13 @@ namespace NFleet.Tests
             var api = TestHelper.Authenticate();
             var user = TestHelper.GetOrCreateUser(api);
             //##BEGIN EXAMPLE creatingproblem##
-            var created = api.Navigate(user.GetLink("create-problem"), new RoutingProblemUpdateRequest {Name = "test"});
+            var created = api.Navigate<ResponseData>(user.GetLink("create-problem"), new RoutingProblemUpdateRequest {Name = "test"});
             var problem = api.Navigate<RoutingProblemData>(created.Location);
             //##END EXAMPLE##
 
             var mockCreated = TestUtils.GetMockResponse<RoutingProblemData>(responses["accessingnewproblemresp"].json);
 
-            Trace.Write(JsonConvert.SerializeObject(created));
-
+            ResponseWriter.Write(JsonConvert.SerializeObject(created, Formatting.Indented), "accessingnewproblemresp", responsePath + "/accessingnewproblemresp.dat");
             TestUtils.RoutingProblemsAreEqual(mockCreated, problem);
         }
 
@@ -106,8 +108,13 @@ namespace NFleet.Tests
             var problem = api.Navigate<RoutingProblemData>(created.Location);
             //##END EXAMPLE##
 
+            //##BEGIN EXAMPLE accessingnewproblem##
+            problem = api.Navigate<RoutingProblemData>(created.Location);
+            //##END EXAMPLE##
+
             var mockProblem = TestUtils.GetMockResponse<RoutingProblemData>(responses["accessingproblemresp"].json);
-            Trace.Write(JsonConvert.SerializeObject(problem));
+
+            ResponseWriter.Write(JsonConvert.SerializeObject(problem, Formatting.Indented), "accessingproblemresp", responsePath + "/accessingproblemresp.dat");
             TestUtils.RoutingProblemsAreEqual(mockProblem, problem);
         }
 
@@ -123,7 +130,8 @@ namespace NFleet.Tests
             //##END EXAMPLE##
 
             var mockTasks = TestUtils.GetMockResponse<TaskDataSet>(responses["listingtasksresp"].json);
-            Trace.Write(JsonConvert.SerializeObject(tasks));
+
+            ResponseWriter.Write(JsonConvert.SerializeObject(tasks, Formatting.Indented), "listingtasksresp", responsePath + "/listingtasksresp.dat");
             TestUtils.TaskDataSetsAreEqual(mockTasks, tasks);
         }
 
@@ -179,7 +187,7 @@ namespace NFleet.Tests
             var mockTaskCreationResult = TestUtils.GetMockResponse<ResponseData>(responses["creatingtaskresp"].json);
 
             TestUtils.ResponsesAreEqual(mockTaskCreationResult, taskCreationResult);
-            Trace.Write(JsonConvert.SerializeObject(taskCreationResult));
+            ResponseWriter.Write(JsonConvert.SerializeObject(taskCreationResult, Formatting.Indented), "creatingtaskresp", responsePath + "/creatingtaskresp.dat");
         }
 
         [Test]
@@ -198,7 +206,6 @@ namespace NFleet.Tests
                     Capacities = te.Capacities,
                     Location = te.Location,
                     ServiceTime = te.ServiceTime,
-                    TaskEventId = te.Id,
                     TimeWindows = te.TimeWindows,
                     Type = te.Type,
                 };
@@ -211,7 +218,6 @@ namespace NFleet.Tests
                 Info = task.Info,
                 Name = "Other name",
                 TaskEvents = oldTaskEvents,
-                TaskId = task.Id,
                 RelocationType = task.RelocationType,
                 ActivityState = task.ActivityState
             };
@@ -273,8 +279,8 @@ namespace NFleet.Tests
             //##END EXAMPLE##
 
             var mockVehicles = TestUtils.GetMockResponse<VehicleDataSet>(responses["listingvehiclesresp"].json);
-            Trace.Write(JsonConvert.SerializeObject(vehicles));
-            TestUtils.VehicleDataSetsAreEqual(mockVehicles, vehicles);
+            ResponseWriter.Write(JsonConvert.SerializeObject(vehicles, Formatting.Indented), "listingvehiclesresp", responsePath + "/listingvehiclesresp.dat");
+            //TestUtils.VehicleDataSetsAreEqual(mockVehicles, vehicles);
         }
 
         [Test]
@@ -295,7 +301,7 @@ namespace NFleet.Tests
             var taskEvents = api.Navigate<TaskEventDataSet>(vehicle.GetLink("list-events"));
             //##END EXAMPLE##
             var mockTaskEvents = TestUtils.GetMockResponse<TaskEventDataSet>(responses["accessingtaskseqresp"].json);
-            Trace.Write(JsonConvert.SerializeObject(taskEvents));
+            ResponseWriter.Write(JsonConvert.SerializeObject(taskEvents, Formatting.Indented), "accessingtaskseqresp", responsePath + "/accessingtaskseqresp.dat");
             TestUtils.TaskEventDataSetsAreEqual(mockTaskEvents, taskEvents);
         }
 
@@ -318,6 +324,7 @@ namespace NFleet.Tests
             //##END EXAMPLE##
             Trace.Write(JsonConvert.SerializeObject(route));
             var mockRoute = TestUtils.GetMockResponse<RouteData>(responses["accessingrouteresp"].json);
+            ResponseWriter.Write(JsonConvert.SerializeObject(route, Formatting.Indented), "accessingrouteresp", responsePath + "/accessingrouteresp.dat");
             TestUtils.RoutesAreEqual(mockRoute, route);
         }
 
@@ -356,11 +363,11 @@ namespace NFleet.Tests
             //##END EXAMPLE##
 
             var mockCreation = TestUtils.GetMockResponse<ResponseData>(responses["startingoptresp"].json);
-            Trace.Write(JsonConvert.SerializeObject(res));
+            ResponseWriter.Write(JsonConvert.SerializeObject(res, Formatting.Indented), "startingoptresp", responsePath + "/startingoptresp.dat");
             TestUtils.ResponsesAreEqual(mockCreation, res);
 
             problem = api.Navigate<RoutingProblemData>(problem.GetLink("self"));
-            //##BEGIN EXAMPLE stoppingopt##
+
             res = api.Navigate<ResponseData>( problem.GetLink( "toggle-optimization" ), new RoutingProblemUpdateRequest { Name = problem.Name, State = "Stopped" } );
         }
 
@@ -382,7 +389,7 @@ namespace NFleet.Tests
                 new RoutingProblemUpdateRequest {Name = problem.Name, State = "Stopped"});
             //##END EXAMPLE##
             var mockResponse = TestUtils.GetMockResponse<ResponseData>(responses["stoppingoptresp"].json);
-            Trace.Write(JsonConvert.SerializeObject(res));
+            ResponseWriter.Write(JsonConvert.SerializeObject(res, Formatting.Indented), "stoppingoptresp", responsePath + "/stoppingoptresp.dat");
             TestUtils.ResponsesAreEqual(mockResponse, res);
         }
 
@@ -395,8 +402,11 @@ namespace NFleet.Tests
             var user = TestHelper.GetOrCreateUser(api);
             try
             {
-                //##BEGIN EXAMPLE oauth##
                 var result = api.Navigate<ResponseData>(user.GetLink("create-problem"));
+                
+
+                //##BEGIN EXAMPLE badrequest##
+                var badRequest = api.Navigate<ResponseData>(user.GetLink("create-problem"));
                 //##END EXAMPLE##
             }
             catch (System.IO.IOException e)
@@ -447,7 +457,7 @@ namespace NFleet.Tests
             //##BEGIN EXAMPLE creatingauser##
 
             var users = api.Navigate<UserDataSet>(api.Root.GetLink("list-users"));
-            var response = api.Navigate(users.GetLink("create"));
+            var response = api.Navigate<ResponseData>(users.GetLink("create"));
             var user = api.Navigate<UserData>(response.Location);
             //##END EXAMPLE##
 
@@ -478,7 +488,6 @@ namespace NFleet.Tests
                 if (progress >= 100) break;
             }
             //##END EXAMPLE##
-
         }
 
         [Test]
@@ -492,7 +501,7 @@ namespace NFleet.Tests
             //##BEGIN EXAMPLE getrouteEvents##
             var events = api.Navigate<RouteEventDataSet>(vehicle.GetLink("list-events"));
             //##END EXAMPLE##
-            Trace.Write(JsonConvert.SerializeObject(events));
+            ResponseWriter.Write(JsonConvert.SerializeObject(events, Formatting.Indented), "accessingrouteeventsresp", responsePath + "/accessingrouteeventsresp.dat");
             var mockevents = TestUtils.GetMockResponse<RouteEventDataSet>(responses["accessingrouteeventsresp"].json);
         }
 
@@ -763,7 +772,7 @@ namespace NFleet.Tests
             var result = api.Navigate<ResponseData>(problem.GetLink("import-data"), request);
             //##END EXAMPLE##
 
-            //#BEGIN EXAMPLE getimportresults##
+            //##BEGIN EXAMPLE getimportresults##
             var import = api.Navigate<ImportData>(result.Location);
             //##END EXAMPLE##
 
@@ -878,8 +887,16 @@ namespace NFleet.Tests
 
             Assert.IsTrue(import.Meta.Find(link => link.Rel.Equals("self")).Enabled);
             Assert.IsTrue(import.Meta.Find(link => link.Rel.Equals("apply-import")).Enabled);
-            //#BEGIN EXAMPLE applyimport##
+            //##BEGIN EXAMPLE applyimport##
             var appyResult = api.Navigate<ResponseData>(import.GetLink("apply-import"));
+            problem = api.Navigate<RoutingProblemData>(problem.GetLink("self"));
+
+            // now we wait for NFleet to do geocoding i.e. data state turns from 'Pending' into 'Ready'
+            while (problem.DataState == "Pending")
+            {
+                Thread.Sleep(1000);
+                problem = api.Navigate<RoutingProblemData>( problem.GetLink( "self" ) );
+            }
             //##END EXAMPLE##
             var vehicles = api.Navigate<VehicleDataSet>(problem.GetLink("list-vehicles"));
             var tasks = api.Navigate<VehicleDataSet>(problem.GetLink("list-tasks"));
@@ -944,9 +961,9 @@ namespace NFleet.Tests
             
             RoutingProblemSettingsData after = null;
 
-            //##BEGIN EXAMPLE changeproblemsettings##
+            //##BEGIN EXAMPLE updatingroutingproblemsettings##
             var settings = api.Navigate<RoutingProblemSettingsData>( problem.GetLink( "view-settings" ) );
-            var updatedSettings = new RoutingProblemSettingsUpdateRequest { DefaultVehicleSpeedFactor = 0.8, DefaultVehicleSpeedProfile = SpeedProfile.Max120Kmh.ToString() };
+            var updatedSettings = new RoutingProblemSettingsUpdateRequest { DefaultVehicleSpeedFactor = 0.8, DefaultVehicleSpeedProfile = SpeedProfile.Max120Kmh.ToString(), InsertionAggressiveness = 0.5 };
             //##END EXAMPLE##
 
             var response = api.Navigate<ResponseData>(settings.GetLink("update-settings"), updatedSettings);
@@ -1025,24 +1042,36 @@ namespace NFleet.Tests
             api.Navigate<ResponseData>(vehicleResult1.GetLink("set-route"), new RouteUpdateRequest { Items = route1 });
             api.Navigate<ResponseData>(vehicleResult2.GetLink("set-route"), new RouteUpdateRequest { Items = route2 });
 
-            var events1 = api.Navigate<RouteEventDataSet>(vehicleResult1.GetLink("list-events"));
-            var events2 = api.Navigate<RouteEventDataSet>(vehicleResult2.GetLink("list-events"));
+            
 
+            var p = api.Navigate<RoutingProblemData>( problem.GetLink( "self" ) );
+
+            while (p.DataState == "Pending")
+            {
+                Thread.Sleep(1000);
+                p = api.Navigate<RoutingProblemData>( problem.GetLink( "self" ) );
+            }
+            var events1 = api.Navigate<RouteEventDataSet>( vehicleResult1.GetLink( "list-events" ) );
+            var events2 = api.Navigate<RouteEventDataSet>( vehicleResult2.GetLink( "list-events" ) );
             foreach (var item in events1.Items)
             {
-                var @event = api.Navigate<RouteEventData>(item.GetLink("self"));
-                if (@event.TaskEventId < 20000) api.Navigate<ResponseData>(@event.GetLink("lock-to-vehicle"), new RouteEventUpdateRequest
-                {
-                    State = "LockedToVehicle"
-                });
+                if (item.TaskEventId < 20000) {
+                    var @event = api.Navigate<RouteEventData>( item.GetLink( "self" ) );
+                    api.Navigate<ResponseData>( @event.GetLink( "lock-to-vehicle" ), new RouteEventUpdateRequest
+                    {
+                        State = "LockedToVehicle"
+                    });
+                }
             }
             foreach (var item in events2.Items)
             {
-                var @event = api.Navigate<RouteEventData>(item.GetLink("self"));
-                if (@event.TaskEventId < 20000) api.Navigate<ResponseData>(@event.GetLink("lock-to-vehicle"), new RouteEventUpdateRequest
-                {
-                    State = "LockedToVehicle"
-                } );
+                if (item.TaskEventId < 20000) {
+                    var @event = api.Navigate<RouteEventData>( item.GetLink( "self" ) );
+                    api.Navigate<ResponseData>( @event.GetLink( "lock-to-vehicle" ), new RouteEventUpdateRequest
+                    {
+                        State = "LockedToVehicle"
+                    } );
+                }
             }
 
             problem = api.Navigate<RoutingProblemData>(problem.GetLink("self"));
@@ -1075,19 +1104,26 @@ namespace NFleet.Tests
 
             foreach (var item in events1.Items)
             {
-                var @event = api.Navigate<RouteEventData>(item.GetLink("self"));
-                if (@event.TaskEventId < 20000) api.Navigate<ResponseData>(@event.GetLink("lock-to-vehicle"), new RouteEventUpdateRequest
+
+                if ( item.TaskEventId < 20000 )
                 {
-                    State = "UnlockedFromVehicle"
-                });
+                    var @event = api.Navigate<RouteEventData>( item.GetLink( "self" ) );
+                    api.Navigate<ResponseData>(@event.GetLink("lock-to-vehicle"), new RouteEventUpdateRequest
+                    {
+                        State = "UnlockedFromVehicle"
+                    });
+                }
             }
             foreach (var item in events2.Items)
             {
-                var @event = api.Navigate<RouteEventData>(item.GetLink("self"));
-                if (@event.TaskEventId < 20000) api.Navigate<ResponseData>(@event.GetLink("lock-to-vehicle"), new RouteEventUpdateRequest
-                {
-                    State = "UnlockedFromVehicle"
-                });
+                
+                if ( item.TaskEventId < 20000 ) {
+                    var @event = api.Navigate<RouteEventData>( item.GetLink( "self" ) );
+                    api.Navigate<ResponseData>(@event.GetLink("lock-to-vehicle"), new RouteEventUpdateRequest
+                    {
+                        State = "UnlockedFromVehicle"
+                    });
+                }
             }
 
             problem = api.Navigate<RoutingProblemData>(problem.GetLink("self"));
@@ -1286,15 +1322,145 @@ namespace NFleet.Tests
             
             var tasksSet = api.Navigate<TaskDataSet>( problem.GetLink( "list-tasks" ) );
             Assert.AreEqual( 2, tasksSet.Items.Count );
+            //##BEGIN EXAMPLE deletingtask##
 
             problem = api.Navigate<RoutingProblemData>( problem.GetLink( "self" ) );
             var task = api.Navigate<TaskData>( response.Location );
             api.Navigate<ResponseData>( task.GetLink( "delete" ) );
-
+            //##END EXAMPLE##
             //response = api.Navigate<ResponseData>( problem.GetLink( "delete-tasks" ), new DeleteTasksRequest() );
 
             tasksSet = api.Navigate<TaskDataSet>( problem.GetLink( "list-tasks" ) );
             Assert.AreEqual( 1, tasksSet.Items.Count );
+        }
+
+        [Test]
+        public void T35CreateDepot()
+        {
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetOrCreateUser(api);
+            var problem = TestHelper.CreateProblem(api, user, "CreateDepot");
+            //##BEGIN EXAMPLE createdepot##
+            var depot = new UpdateDepotRequest
+            {
+                Name = "Depot02",
+                Location = new LocationData { Coordinate = new CoordinateData { Latitude = 0, Longitude = 0, System = "Euclidian" } },
+                Capacities = new List<CapacityData> { new CapacityData { Amount = 10, Name = "weight" }, new CapacityData { Amount = 30, Name = "volume" } },
+                Info1 = "Info",
+                DataSource = "",
+                Type = "SomeType"
+            };
+
+            var response = api.Navigate<ResponseData>(problem.GetLink("create-depot"), depot);
+
+            var depotData = api.Navigate<DepotData>(response.Location);
+            //##END EXAMPLE##
+            Assert.AreEqual(depot.Name, depotData.Name);
+
+            Assert.AreEqual(JsonConvert.SerializeObject(depot.Location.Coordinate), JsonConvert.SerializeObject(depotData.Location.Coordinate));
+            Assert.AreEqual(JsonConvert.SerializeObject(depot.Capacities), JsonConvert.SerializeObject(depotData.Capacities));
+
+        }
+
+        [Test]
+        public void T36CreateDepotSet()
+        {
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetOrCreateUser(api);
+            var problem = TestHelper.CreateProblem(api, user, "CreateDepotSet");
+
+            //##BEGIN EXAMPLE importdepots##
+
+            var request = new ImportDepotSetRequest
+            {
+                Items = new List<UpdateDepotRequest>()
+            };
+
+            for (int i = 1; i < 4; i++)
+            {
+                var depot = new UpdateDepotRequest
+                {
+                    Name = "Depot0"+i,
+                    Location = new LocationData { Coordinate = new CoordinateData { Latitude = 0, Longitude = 0, System = "Euclidian" } },
+                    Capacities = new List<CapacityData> { new CapacityData { Amount = 10, Name = "weight" }, new CapacityData { Amount = 30, Name = "volume" } },
+                    Info1 = "Info",
+                    DataSource = "",
+                    Type = "SomeType"
+                };
+                request.Items.Add(depot);
+            }
+
+            var response = api.Navigate<ResponseData>(problem.GetLink("import-depots"), request);
+
+            var result = api.Navigate<DepotDataSet>(problem.GetLink("list-depots"));
+            //##END EXAMPLE##
+
+            Assert.AreEqual(3, result.Items.Count);
+        }
+
+        [Test]
+        public void T37UpdateDepot()
+        {
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetOrCreateUser(api);
+            var problem = TestHelper.CreateProblem(api, user, "CreateDepot");
+            
+            var depot = new UpdateDepotRequest
+            {
+                Name = "Depot",
+                Location = new LocationData { Coordinate = new CoordinateData { Latitude = 0, Longitude = 0, System = "Euclidian" } },
+                Capacities = new List<CapacityData> { new CapacityData { Amount = 10, Name = "weight" }, new CapacityData { Amount = 30, Name = "volume" } },
+                Info1 = "Info",
+                DataSource = "",
+                Type = "SomeType"
+            };
+
+            var response = api.Navigate<ResponseData>(problem.GetLink("create-depot"), depot);
+
+            //##BEGIN EXAMPLE updatedepot##
+            var depotData = api.Navigate<DepotData>(response.Location);
+
+            var update = new UpdateDepotRequest
+            {
+                Name = depotData.Name,
+                Location = depotData.Location,
+                Capacities = depotData.Capacities,
+                Info1 = "UpdatedInfo",
+                DataSource = depotData.DataSource,
+                Type = depotData.Type
+            };
+
+            response = api.Navigate<ResponseData>(depotData.GetLink("update"), update);
+            var updatedDepot = api.Navigate<DepotData>(response.Location);
+            //##END EXAMPLE##
+
+            Assert.AreEqual(update.Info1, updatedDepot.Info1);
+        }
+
+        [Test]
+        public void T37GetRoutingProblemSummaryData()
+        {
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetOrCreateUser( api );
+            var problem = TestHelper.CreateProblemWithDemoData( api, user );
+
+            //##BEGIN EXAMPLE getproblemsummary##
+            var summary = api.Navigate<RoutingProblemSummaryData>(problem.GetLink("summary"));
+            //##END EXAMPLE##
+            ResponseWriter.Write( JsonConvert.SerializeObject( summary, Formatting.Indented ), "getproblemsummaryresp", responsePath + "/getproblemsummaryresp.dat" );
+            Assert.AreEqual(summary.Summary.TotalTaskCount, 1);
+        }
+
+        [Test]
+        public void T38GetRoutingProblemSummaryDataSet()
+        {
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetOrCreateUser( api );
+            var problem = TestHelper.CreateProblemWithDemoData( api, user );
+
+            var summarySet = api.Navigate<RoutingProblemSummaryDataSet>(user.GetLink("list-summaries"));
+
+            Assert.AreEqual(summarySet.Items.Count, 1);
         }
     }
 }

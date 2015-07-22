@@ -4,9 +4,6 @@ namespace NFleet.Data
 {
     public class TaskUpdateRequest
     {
-        public int UserId { get; set; }
-        public int ProblemId { get; set; }
-        public int TaskId { get; set; }
         public string Name { get; set; }
         public string Info { get; set; }
         public string Info2 { get; set; }
@@ -23,7 +20,7 @@ namespace NFleet.Data
         public bool IsLockedToVehicle { get; set; }
         public string MimeType { get; set; }
         public string MimeVersion { get; set; }
-
+        public string DataSource { get; set; }
 
         public TaskUpdateRequest()
         {

@@ -7,8 +7,8 @@ namespace NFleet.Data
     public class VehicleData : IResponseData, IVersioned
     {
         public static string MIMEType = "application/vnd.jyu.nfleet.vehicle";
-        public static string MIMEVersion = "2.0";
-
+        public static string MIMEVersion = "2.1";
+            
         [IgnoreDataMember]
         int IVersioned.VersionNumber { get; set; }
         [DataMember]
@@ -28,7 +28,7 @@ namespace NFleet.Data
         [DataMember]
         public List<Link> Meta { get; set; }
         [DataMember]
-        public string State { get; set; }
+        public string ActivityState { get; set; }
         [DataMember]
         public string VehicleType { get; set; }
         [DataMember]
@@ -47,6 +47,8 @@ namespace NFleet.Data
         public double MaxWorkingHours { get; set; }
         [DataMember]
         public string RelocationType { get; set; }
+        [DataMember]
+        public string DataSource { get; set; }
 
         public VehicleData()
         {

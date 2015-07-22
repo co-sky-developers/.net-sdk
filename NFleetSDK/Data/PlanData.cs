@@ -12,13 +12,13 @@ namespace NFleet.Data
 
         public List<Link> Meta { get; set; }
 
-        public List<FieldsItem> Items { get; set; }
+        public List<VehiclePlanData> Items { get; set; }
 
         public KPIData KPIs { get; set; }
 
         public PlanData()
         {
-            Items = new List<FieldsItem>();
+            Items = new List<VehiclePlanData>();
             Meta = new List<Link>();
         }
     }

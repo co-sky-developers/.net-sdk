@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Text;
 
 namespace NFleet.Data
 {
@@ -28,8 +25,11 @@ namespace NFleet.Data
         public string Type { get; set; }
         [DataMember]
         public string DataSource { get; set; }
+        [DataMember]
+        public double StoppingTime { get; set; }
         [IgnoreDataMember]
         int IVersioned.VersionNumber { get; set; }
+
 
         public DepotData()
         {

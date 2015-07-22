@@ -4,9 +4,8 @@ namespace NFleet.Data
 {
     public class VehicleUpdateRequest
     {
-        public int VehicleId { get; set; }
         public string Info { get; set; }
-        public string State { get; set; }
+        public string ActivityState { get; set; }
         public string Name { get; set; }
         public string VehicleType { get; set; }
         public List<string> IncompatibleVehicleTypes { get; set; }
@@ -17,6 +16,8 @@ namespace NFleet.Data
 
         public string SpeedProfile { get; set; }
         public double SpeedFactor { get; set; }
+
+        public string DataSource { get; set; }
 
         public double FixedCost { get; set; }
         public double KilometerCost { get; set; }

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using NFleet.Data;
 
@@ -141,20 +139,21 @@ namespace NFleet.Example
         {
             // To build a test case we first need to create a vehicle.
             // We start by defining vehicle capacity.
-            var vehicleCapacities = new List<CapacityData> {new CapacityData() {Name = "Weight", Amount = 100000}};
+            var vehicleCapacities = new List<CapacityData> {new CapacityData {Name = "Weight", Amount = 100000}};
             // ...the time window(s)
             var vehicleTimeWindow = new List<TimeWindowData> { new TimeWindowData { Start = new DateTime( 2013, 5, 14, 7, 0, 0 ), End = new DateTime( 2013, 5, 14, 16, 0, 0 ) }};
             // ... the locations for pickup and delivery
-            var vehiclePickup = new LocationData() {Coordinate = new CoordinateData { Latitude = 62.244588, Longitude = 25.742683, System = "WGS84" }};
-            var vehicleDelivery = new LocationData() {Coordinate = new CoordinateData { Latitude = 62.244588, Longitude = 25.742683, System = "WGS84" }};
+            var vehiclePickup = new LocationData {Coordinate = new CoordinateData { Latitude = 62.244588, Longitude = 25.742683, System = "WGS84" }};
+            var vehicleDelivery = new LocationData {Coordinate = new CoordinateData { Latitude = 62.244588, Longitude = 25.742683, System = "WGS84" }};
             // And then we wrap these into a single vehicle update request.
-            var vehicleUpdateRequest = new VehicleUpdateRequest()
+            var vehicleUpdateRequest = new VehicleUpdateRequest
                                            {
                                                Name = "Vehicle1",
                                                Capacities = vehicleCapacities,
                                                StartLocation = vehiclePickup,
                                                EndLocation = vehicleDelivery,
-                                               TimeWindows = vehicleTimeWindow
+                                               TimeWindows = vehicleTimeWindow,
+                                               RelocationType = "None"
                                            };
 
 
@@ -181,7 +180,7 @@ namespace NFleet.Example
                 Type = "Pickup",
                 Location = task1PickupLocation,
                 TimeWindows = task1PickupTimeWindows,
-                Capacities = new List<CapacityData>() {capacity}
+                Capacities = new List<CapacityData> {capacity}
             };
 
 
@@ -202,12 +201,12 @@ namespace NFleet.Example
                 Type = "Delivery",
                 Location = task1DeliveryLocation,
                 TimeWindows = task1DeliveryTimeWindows,
-                Capacities = new List<CapacityData>() { capacity }
+                Capacities = new List<CapacityData> { capacity }
             };
 
 
             // And finally we contain the pickup and delivery in a task update request and send it.
-            var newTask = new TaskUpdateRequest() {Name = "Task1"};
+            var newTask = new TaskUpdateRequest {Name = "Task1", RelocationType = "None"};
             newTask.TaskEvents.Add( pickup );
             newTask.TaskEvents.Add( delivery );
 

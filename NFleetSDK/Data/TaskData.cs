@@ -24,6 +24,7 @@ namespace NFleet.Data
         public double Priority { get; set; }
         public string RelocationType { get; set; }
         public string ActivityState { get; set; }
+        public string DataSource { get; set; }
 
         public TaskData()
         {
