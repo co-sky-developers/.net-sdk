@@ -80,6 +80,7 @@
     <Compile Include="AppUserUpdateRequest.cs" />
     <Compile Include="CustomConverter.cs" />
     <Compile Include="Data\AddressData.cs" />
+    <Compile Include="Data\AddressResolution.cs" />
     <Compile Include="Data\ApiData.cs" />
     <Compile Include="Data\AuthenticationData.cs" />
     <Compile Include="Data\AuthenticationRequest.cs" />

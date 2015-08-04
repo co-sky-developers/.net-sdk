@@ -9,5 +9,7 @@
         public int HouseNumber { get; set; }
         public string ApartmentLetter { get; set; }
         public int ApartmentNumber { get; set; }
+        public AddressResolution Resolution { get; set; }
+        public double Confidence { get; set; }
     }
 }
