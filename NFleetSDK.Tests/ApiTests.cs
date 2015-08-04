@@ -1462,5 +1462,30 @@ namespace NFleet.Tests
 
             Assert.AreEqual(summarySet.Items.Count, 1);
         }
+
+        [Test]
+        public void T39UpdatingVehicleLocationTest()
+        {
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetOrCreateUser(api);
+            var problem = TestHelper.CreateProblemWithDemoData(api, user);
+            var vehicles = api.Navigate<VehicleDataSet>(problem.GetLink("list-vehicles"));
+            var vehicle = api.Navigate<VehicleData>(vehicles.Items[0].GetLink("self"));
+
+            var currentLocation = new CoordinateData
+            {
+                Latitude = 61.4938,
+                Longitude = 26.523,
+                System = "Euclidian"
+            };
+            vehicle.CurrentLocation = currentLocation;
+
+            api.Navigate(vehicle.GetLink("update"), vehicle);
+            vehicle = api.Navigate<VehicleData>(vehicles.Items[0].GetLink("self"));
+
+            Assert.IsNotNull(vehicle.CurrentLocation);
+            Assert.AreEqual(currentLocation.Latitude, vehicle.CurrentLocation.Latitude);
+            Assert.AreEqual(currentLocation.Longitude, vehicle.CurrentLocation.Longitude);
+        }
     }
 }
