@@ -7,7 +7,7 @@ namespace NFleet.Data
     public class VehicleData : IResponseData, IVersioned
     {
         public static string MIMEType = "application/vnd.jyu.nfleet.vehicle";
-        public static string MIMEVersion = "2.1";
+        public static string MIMEVersion = "2.2";
             
         [IgnoreDataMember]
         int IVersioned.VersionNumber { get; set; }
@@ -49,6 +49,8 @@ namespace NFleet.Data
         public string RelocationType { get; set; }
         [DataMember]
         public string DataSource { get; set; }
+        [DataMember]
+        public CoordinateData CurrentLocation { get; set; }
 
         public VehicleData()
         {

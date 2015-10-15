@@ -1462,5 +1462,95 @@ namespace NFleet.Tests
 
             Assert.AreEqual(summarySet.Items.Count, 1);
         }
+
+        [Test]
+        public void T39CreatingTaskWithAddressTest()
+        {
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetOrCreateUser( api );
+            var problem = TestHelper.CreateProblemWithDemoData( api, user );
+            var tasks = api.Navigate<TaskDataSet>( problem.GetLink( "list-tasks" ) );
+            //##BEGIN EXAMPLE creatingtaskwithaddress##
+            var newTask = new TaskUpdateRequest { Name = "test name", RelocationType = "None", ActivityState = "Active" };
+            var capacity = new CapacityData { Name = "Weight", Amount = 20 };
+
+            var pickup = new TaskEventUpdateRequest
+            {
+                Type = "Pickup",
+                Location = new LocationData
+                {
+                    Address = new AddressData
+                    {
+                        Country = "Finland",
+                        Street = "Tuohitie",
+                        ApartmentNumber = 42,
+                        PostalCode = "40320",
+                    }
+                },
+                TimeWindows = { new TimeWindowData { Start = new DateTime( 2013, 5, 14, 8, 0, 0 ), End = new DateTime( 2013, 5, 14, 12, 0, 0 ) } }
+            };
+            pickup.Capacities.Add( capacity );
+            newTask.TaskEvents.Add( pickup );
+
+            var delivery = new TaskEventUpdateRequest
+            {
+                Type = "Delivery",
+                Location = new LocationData
+                {
+                    Address = new AddressData
+                    {
+                        Country = "Finland",
+                        Street = "Pajatie",
+                        ApartmentNumber = 8,
+                        ApartmentLetter = "F",
+                        PostalCode = "40630"
+                    }
+                },
+                TimeWindows = { new TimeWindowData { Start = new DateTime( 2013, 5, 14, 8, 0, 0 ), End = new DateTime( 2013, 5, 14, 12, 0, 0 ) } }
+            };
+            delivery.Capacities.Add( capacity );
+            newTask.TaskEvents.Add( delivery );
+
+            var taskCreationResult = api.Navigate<ResponseData>( problem.GetLink( "create-task" ), newTask );
+            //##END EXAMPLE##
+            problem = api.Navigate<RoutingProblemData>(problem.GetLink("self"));
+
+            while (problem.DataState.Equals("Pending"))
+            {
+                Thread.Sleep(1000);
+                problem = api.Navigate<RoutingProblemData>(problem.GetLink("self"));
+            }
+
+            var task = api.Navigate<TaskData>(taskCreationResult.Location);
+            Console.WriteLine( task.TaskEvents[0].Location.Address.Resolution );
+            Assert.NotNull(task.TaskEvents[0].Location.Address.Resolution);
+            
+            
+        }
+
+        [Test]
+        public void T39UpdatingVehicleLocationTest()
+        {
+            var api = TestHelper.Authenticate();
+            var user = TestHelper.GetOrCreateUser(api);
+            var problem = TestHelper.CreateProblemWithDemoData(api, user);
+            var vehicles = api.Navigate<VehicleDataSet>(problem.GetLink("list-vehicles"));
+            var vehicle = api.Navigate<VehicleData>(vehicles.Items[0].GetLink("self"));
+
+            var currentLocation = new CoordinateData
+            {
+                Latitude = 61.4938,
+                Longitude = 26.523,
+                System = "Euclidian"
+            };
+            vehicle.CurrentLocation = currentLocation;
+
+            api.Navigate(vehicle.GetLink("update"), vehicle);
+            vehicle = api.Navigate<VehicleData>(vehicles.Items[0].GetLink("self"));
+
+            Assert.IsNotNull(vehicle.CurrentLocation);
+            Assert.AreEqual(currentLocation.Latitude, vehicle.CurrentLocation.Latitude);
+            Assert.AreEqual(currentLocation.Longitude, vehicle.CurrentLocation.Longitude);
+        }
     }
 }
