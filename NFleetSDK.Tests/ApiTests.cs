@@ -1456,11 +1456,11 @@ namespace NFleet.Tests
         {
             var api = TestHelper.Authenticate();
             var user = TestHelper.GetOrCreateUser( api );
-            var problem = TestHelper.CreateProblemWithDemoData( api, user );
+            TestHelper.CreateProblemWithDemoData( api, user );
 
             var summarySet = api.Navigate<RoutingProblemSummaryDataSet>(user.GetLink("list-summaries"));
 
-            Assert.AreEqual(summarySet.Items.Count, 1);
+            Assert.AreEqual(1, summarySet.Items.Count);
         }
 
         [Test]
