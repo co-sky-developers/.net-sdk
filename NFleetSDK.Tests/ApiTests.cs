@@ -45,7 +45,7 @@ namespace NFleet.Tests
             
         }
 
-        [TestFixtureTearDown]
+        [TearDown]
         public void Cleanup()
         {
             string url = ConfigurationManager.AppSettings["url"];
