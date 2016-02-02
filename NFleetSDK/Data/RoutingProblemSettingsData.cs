@@ -9,7 +9,7 @@ namespace NFleet.Data
         public static string MIMEVersion = "2.1";
 
         public int VersionNumber { get; set; }
-        public SpeedProfile DefaultVehicleSpeedProfile { get; set; }
+        public string DefaultVehicleSpeedProfile { get; set; }
         public double DefaultVehicleSpeedFactor { get; set; }
         public string AlgorithmTree { get; set; }
 
