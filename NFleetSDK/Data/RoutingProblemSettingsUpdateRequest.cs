@@ -9,5 +9,6 @@ namespace NFleet.Data
         public string AlgorithmTree { get; set; }
         public double InsertionAggressiveness { get; set; }
         public String DateTimeFormatString { get; set; }
+        public String DefaultDeliveryProcedureType { get; set; }
     }
 }
