@@ -4,7 +4,7 @@ Content-Type: application/vnd.jyu.nfleet.taskset+json;version=2.0
   "Items":[
     {
       "Id":32001,
-      "Name":null,
+      "Name":"TestVehicle",
       "Info":null,
       "Type":"Start",
       "Capacities":[
@@ -91,7 +91,7 @@ Content-Type: application/vnd.jyu.nfleet.taskset+json;version=2.0
     },
     {
       "Id":11,
-      "Name":null,
+      "Name":"task",
       "Info":null,
       "Type":"Pickup",
       "Capacities":[
@@ -184,7 +184,7 @@ Content-Type: application/vnd.jyu.nfleet.taskset+json;version=2.0
     },
     {
       "Id":12,
-      "Name":null,
+      "Name":"task",
       "Info":null,
       "Type":"Delivery",
       "Capacities":[
@@ -277,7 +277,7 @@ Content-Type: application/vnd.jyu.nfleet.taskset+json;version=2.0
     },
     {
       "Id":16001,
-      "Name":null,
+      "Name":"TestVehicle",
       "Info":null,
       "Type":"End",
       "Capacities":[

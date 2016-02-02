@@ -58,7 +58,7 @@ namespace NFleet.Tests
 
         private static TaskEventData TaskEventsAreEqual( TaskEventData expected, TaskEventData actual )
         {
-            Assert.AreEqual( expected.Name, actual.Name );
+            NamesAreEqualEnough( expected.Name, actual.Name );
             Assert.AreEqual( expected.Info, actual.Info );
             Assert.AreEqual( expected.Type, actual.Type );
             
@@ -70,6 +70,12 @@ namespace NFleet.Tests
             ListsAreEqual( expected.Meta, actual.Meta, LinksAreEqual );
 
             return null;
+        }
+
+        private static void NamesAreEqualEnough( string expected, string actual )
+        {
+            if ( expected == actual ) return;
+            Assert.IsTrue( actual.Contains( expected ) );
         }
 
         public static void TaskEventDataSetsAreEqual( TaskEventDataSet expected, TaskEventDataSet actual )
