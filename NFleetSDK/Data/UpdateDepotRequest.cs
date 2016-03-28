@@ -9,6 +9,7 @@ namespace NFleet.Data
         public List<CapacityData> Capacities { get; set; }
         public LocationData Location { get; set; }
         public string Type { get; set; }
+        public double StoppingTime { get; set; }
         public string DataSource { get; set; }
         public int VersionNumber { get; set; }
 
