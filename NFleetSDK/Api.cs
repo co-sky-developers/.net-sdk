@@ -48,12 +48,12 @@ namespace NFleet
             return Navigate<ResponseData>( link, data, queryParameters );
         }
 
-        public T Navigate<T>( Link link, Dictionary<string, string> queryParameters ) where T : IResponseData, new()
+        public T Navigate<T>( Link link, Dictionary<string, string> queryParameters ) where T : new()
         {
             return Navigate<T>( link, null, queryParameters );
         }
 
-        public T Navigate<T>( Link link, object data = null, Dictionary<string, string> queryParameters = null ) where T : IResponseData, new()
+        public T Navigate<T>( Link link, object data = null, Dictionary<string, string> queryParameters = null ) where T : new()
         {
             if ( link == null )
                 throw new ArgumentNullException( "link" );
