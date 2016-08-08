@@ -108,6 +108,8 @@
     <Compile Include="Data\ObjectiveValueDataSet.cs" />
     <Compile Include="Data\ObjectiveValuesRequest.cs" />
     <Compile Include="Data\PlanData.cs" />
+    <Compile Include="Data\RoadSetImportRequest.cs" />
+    <Compile Include="Data\RoadUpdateRequest.cs" />
     <Compile Include="Data\RouteData.cs" />
     <Compile Include="Data\RouteEventData.cs" />
     <Compile Include="Data\RouteEventDataSet.cs" />
