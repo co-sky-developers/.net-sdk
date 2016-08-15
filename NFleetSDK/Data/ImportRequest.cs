@@ -6,5 +6,6 @@
         public TaskSetImportRequest Tasks { get; set; }
         public ImportDepotSetRequest Depots { get; set; }
         public RoadSetImportRequest Roads { get; set; }
+        public MapImportRequest Map { get; set; }
     }
 }

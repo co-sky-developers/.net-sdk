@@ -103,6 +103,7 @@
     <Compile Include="Data\Link.cs" />
     <Compile Include="Data\LocationData.cs" />
     <Compile Include="Data\LocationDataSet.cs" />
+    <Compile Include="Data\MapImportRequest.cs" />
     <Compile Include="Data\NFleetRequestException.cs" />
     <Compile Include="Data\ObjectiveValueData.cs" />
     <Compile Include="Data\ObjectiveValueDataSet.cs" />
