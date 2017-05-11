@@ -144,7 +144,7 @@ namespace NFleet
                 ? ( (ResponseData)(IResponseData)result.Data ).Items
                 : new List<ErrorData>();
 
-            throw new NFleetRequestException( String.Format( "{0} {1} from {2}", (int)code, result.StatusDescription, result.ResponseUri ) ) { Items = errors };
+            throw new NFleetRequestException( String.Format( "{0} {1} from {2}", (int)code, result.StatusDescription, result.ResponseUri ) ) { Items = errors, StatusCode = code };
         }
     }
 }
