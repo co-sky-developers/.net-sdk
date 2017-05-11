@@ -13,6 +13,10 @@ namespace NFleet
 {
     public class AppService
     {
+        private static int retryWaitTimeFactor = 1000;
+        private static int unavailableRetryWaitTimeFactor = 10000;
+        private static int requestAttempts = 3;
+
         private readonly RestClient client;
         private readonly string clientKey;
         private readonly string clientSecret;
@@ -35,6 +39,11 @@ namespace NFleet
         {
             if ( link == null )
                 throw new ArgumentNullException( "link" );
+            return SendRequest<T>( link, data, requestAttempts );
+        }
+
+        private T SendRequest<T>( Link link, object data, int attempts ) where T : new()
+        {
             client.ClearHandlers();
 
             var request = new RestRequest( link.Uri, link.Method.ToMethod() )
@@ -61,10 +70,31 @@ namespace NFleet
                 ThrowException( result );
             }
 
-            if ( (int)result.StatusCode >= 500 )
+            if ( result.StatusCode >= HttpStatusCode.InternalServerError && result.StatusCode < HttpStatusCode.BadGateway )
             {
-                Thread.Sleep( 1000 );
-                result = client.Execute<T>( request );
+                if ( attempts > 0 )
+                {
+                    var attempt = requestAttempts - attempts + 1;
+                    var waiting = attempt * attempt * retryWaitTimeFactor;
+                    Thread.Sleep( waiting );
+                    return SendRequest<T>( link, data, attempts - 1 );
+                }
+                ThrowException( result );
+            }
+            else if ( result.StatusCode >= HttpStatusCode.BadGateway && result.StatusCode < HttpStatusCode.HttpVersionNotSupported )
+            {
+                if ( attempts > 0 )
+                {
+                    var attempt = requestAttempts - attempts + 1;
+                    var waiting = attempt * attempt * unavailableRetryWaitTimeFactor;
+                    Thread.Sleep( waiting );
+                    return SendRequest<T>( link, data, attempts - 1 );
+                }
+                ThrowException( result );
+            }
+            else if ( result.StatusCode >= HttpStatusCode.HttpVersionNotSupported )
+            {
+                ThrowException( result );
             }
 
             if ( result.StatusCode != HttpStatusCode.NoContent && result.StatusCode == 0 )

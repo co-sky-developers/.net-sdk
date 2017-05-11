@@ -15,6 +15,10 @@ namespace NFleet
 {
     public sealed class Api
     {
+        private static int retryWaitTimeFactor = 1000;
+        private static int unavailableRetryWaitTimeFactor = 10000;
+        private static int requestAttempts = 3;
+
         private readonly Dictionary<string, object> cache = new Dictionary<string, object>();
 
         private const string versionNumberHeader = "If-None-Match";
@@ -57,6 +61,11 @@ namespace NFleet
         {
             if ( link == null )
                 throw new ArgumentNullException( "link" );
+            return SendRequest<T>( link, data, queryParameters, requestAttempts );
+        }
+
+        private T SendRequest<T>( Link link, object data, Dictionary<string, string> queryParameters, int attempts ) where T : new()
+        {
             client.ClearHandlers();
             client.AddHandler( link.Type, new CustomConverter() );
             var request = InitializeRequest( link, queryParameters );
@@ -92,10 +101,31 @@ namespace NFleet
                     ThrowException( result );
             }
 
-            if ( (int)result.StatusCode >= 500)
+            if ( result.StatusCode >= HttpStatusCode.InternalServerError && result.StatusCode < HttpStatusCode.BadGateway )
             {
-                Thread.Sleep( 1000 );
-                result = client.Execute<T>( request );
+                if ( attempts > 0 )
+                {
+                    var attempt = requestAttempts - attempts + 1;
+                    var waiting = attempt * attempt * retryWaitTimeFactor;
+                    Thread.Sleep( waiting );
+                    return SendRequest<T>( link, data, queryParameters, attempts - 1 );
+                }
+                ThrowException( result );
+            }
+            else if ( result.StatusCode >= HttpStatusCode.BadGateway && result.StatusCode < HttpStatusCode.HttpVersionNotSupported )
+            {
+                if ( attempts > 0 )
+                {
+                    var attempt = requestAttempts - attempts + 1;
+                    var waiting = attempt * attempt * unavailableRetryWaitTimeFactor;
+                    Thread.Sleep( waiting );
+                    return SendRequest<T>( link, data, queryParameters, attempts - 1 );
+                }
+                ThrowException( result );
+            }
+            else if ( result.StatusCode >= HttpStatusCode.HttpVersionNotSupported )
+            {
+                ThrowException( result );
             }
 
             if ( result.StatusCode != HttpStatusCode.NoContent && result.StatusCode == 0 )
