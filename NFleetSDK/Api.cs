@@ -297,19 +297,19 @@ namespace NFleet
         private void Authenticate( string key, string secret )
         {
             //  make an unsuccessful request to root to obtain authentication url
-            var authenticationUrl = GetAuthLocation();
+            var authenticationUrl = GetAuthLocation( requestAttempts );
 
             // if we did not receive location, we do not have to (or cannot) authorize
             if ( authenticationUrl == null ) return;
 
             // post to the authentication url to create a token
-            var tokenLocation = Authenticate( key, secret, authenticationUrl );
+            var tokenLocation = Authenticate( key, secret, authenticationUrl, requestAttempts );
 
             // request and store the token
-            currentToken = RequestToken( tokenLocation );
+            currentToken = RequestToken( tokenLocation, requestAttempts );
         }
 
-        private string GetAuthLocation()
+        private string GetAuthLocation( int attempts )
         {
             var result = client.Execute<ApiData>( new RestRequest( "", Method.GET ) );
 
@@ -325,63 +325,124 @@ namespace NFleet
 
                 authLocation = new Uri( locationParameter.Value.ToString() ).AbsolutePath;
             }
-            else if ( code >= HttpStatusCode.BadRequest )
+            else if ( result.StatusCode >= HttpStatusCode.InternalServerError && result.StatusCode < HttpStatusCode.BadGateway )
             {
-                throw new IOException( String.Format( "{0} {1}", (int)code, result.StatusDescription ) );
+                if ( attempts > 0 )
+                {
+                    var attempt = requestAttempts - attempts + 1;
+                    var waiting = attempt * attempt * retryWaitTimeFactor;
+                    Thread.Sleep( waiting );
+                    return GetAuthLocation( attempts - 1 );
+                }
+                ThrowException( result );
+            }
+            else if ( result.StatusCode >= HttpStatusCode.BadGateway && result.StatusCode < HttpStatusCode.HttpVersionNotSupported )
+            {
+                if ( attempts > 0 )
+                {
+                    var attempt = requestAttempts - attempts + 1;
+                    var waiting = attempt * attempt * unavailableRetryWaitTimeFactor;
+                    Thread.Sleep( waiting );
+                    return GetAuthLocation(attempts - 1);
+                }
+                ThrowException( result );
+            }
+            else if ( result.StatusCode >= HttpStatusCode.HttpVersionNotSupported )
+            {
+                ThrowException( result );
             }
 
             return authLocation;
         }
 
-        private string Authenticate( string key, string secret, string authLocation )
+        private string Authenticate( string key, string secret, string authLocation, int attempts )
         {
             var authorizationRequest = new RestRequest( authLocation, Method.POST ) { RequestFormat = DataFormat.Json };
             authorizationRequest.AddHeader( "Authorization", "Basic " + Convert.ToBase64String( Encoding.UTF8.GetBytes( String.Format( "{0}:{1}", key, secret ) ) ) );
             authorizationRequest.AddBody( new AuthenticationRequest { Scope = "data optimization" } );
 
-            var response = client.Execute<AuthenticationData>( authorizationRequest );
+            var result = client.Execute<AuthenticationData>( authorizationRequest );
 
-            if ( response.StatusCode < HttpStatusCode.BadRequest && response.StatusCode != HttpStatusCode.Created && response.StatusCode != HttpStatusCode.SeeOther )
-                throw new IOException( "Unexpected response from server." );
-
-            if (response.StatusCode >= HttpStatusCode.BadRequest && response.StatusCode < HttpStatusCode.InternalServerError )
+            if ( result.StatusCode >= HttpStatusCode.InternalServerError && result.StatusCode < HttpStatusCode.BadGateway )
             {
-                Thread.Sleep(1000);
-                response = client.Execute<AuthenticationData>(authorizationRequest);
-
-                if (response.StatusCode >= HttpStatusCode.BadRequest) ThrowException(response);
+                if ( attempts > 0 )
+                {
+                    var attempt = requestAttempts - attempts + 1;
+                    var waiting = attempt * attempt * retryWaitTimeFactor;
+                    Thread.Sleep( waiting );
+                    return Authenticate( key, secret, authLocation, attempts - 1 );
+                }
+                ThrowException( result );
+            }
+            else if ( result.StatusCode >= HttpStatusCode.BadGateway && result.StatusCode < HttpStatusCode.HttpVersionNotSupported )
+            {
+                if ( attempts > 0 )
+                {
+                    var attempt = requestAttempts - attempts + 1;
+                    var waiting = attempt * attempt * unavailableRetryWaitTimeFactor;
+                    Thread.Sleep( waiting );
+                    return Authenticate( key, secret, authLocation, attempts - 1 );
+                }
+                ThrowException( result );
+            }
+            else if ( result.StatusCode >= HttpStatusCode.HttpVersionNotSupported )
+            {
+                ThrowException( result );
             }
 
-            if (response.StatusCode >= HttpStatusCode.InternalServerError)
-            {
-                Thread.Sleep(1000);
-                response = client.Execute<AuthenticationData>(authorizationRequest);
+            if ( result.StatusCode < HttpStatusCode.BadRequest && result.StatusCode != HttpStatusCode.Created && result.StatusCode != HttpStatusCode.SeeOther )
+                throw new IOException( string.Format( "Unexpected response from server when authenticating: {0}.", result.StatusCode ) );
 
-                if (response.StatusCode >= HttpStatusCode.InternalServerError) ThrowException(response);
-            }
-
-            var tokenLocationParameter = response.Headers.FirstOrDefault( h => h.Name == "Location" );
+            var tokenLocationParameter = result.Headers.FirstOrDefault( h => h.Name == "Location" );
 
             if ( tokenLocationParameter == null || tokenLocationParameter.Value == null )
-                throw new IOException( "Server response missing Location header." );
+                throw new IOException( "Server response missing Location header when authenticating." );
 
             return new Uri( tokenLocationParameter.Value.ToString() ).AbsolutePath;
         }
 
-        private TokenData RequestToken( string tokenLocation )
+        private TokenData RequestToken( string tokenLocation, int attempts )
         {
             var tokenRequest = new RestRequest( tokenLocation, Method.GET ) { RequestFormat = DataFormat.Json };
-            var tokenResponse = client.Execute<TokenData>( tokenRequest );
-            if ( tokenResponse.ResponseStatus != ResponseStatus.Completed )
+            var result = client.Execute<TokenData>( tokenRequest );
+
+            if ( result.StatusCode >= HttpStatusCode.InternalServerError && result.StatusCode < HttpStatusCode.BadGateway )
             {
-                throw new IOException( tokenResponse.ErrorMessage );
+                if ( attempts > 0 )
+                {
+                    var attempt = requestAttempts - attempts + 1;
+                    var waiting = attempt * attempt * retryWaitTimeFactor;
+                    Thread.Sleep( waiting );
+                    return RequestToken( tokenLocation, attempts - 1 );
+                }
+                ThrowException( result );
             }
-            if ( tokenResponse.StatusCode != HttpStatusCode.OK )
+            else if ( result.StatusCode >= HttpStatusCode.BadGateway && result.StatusCode < HttpStatusCode.HttpVersionNotSupported )
             {
-                throw new IOException( "Error receiving authorization token." );
+                if ( attempts > 0 )
+                {
+                    var attempt = requestAttempts - attempts + 1;
+                    var waiting = attempt * attempt * unavailableRetryWaitTimeFactor;
+                    Thread.Sleep( waiting );
+                    return RequestToken( tokenLocation, attempts - 1 );
+                }
+                ThrowException( result );
+            }
+            else if ( result.StatusCode >= HttpStatusCode.HttpVersionNotSupported )
+            {
+                ThrowException( result );
             }
 
-            return tokenResponse.Data;
+            if ( result.ResponseStatus != ResponseStatus.Completed )
+            {
+                throw new IOException( result.ErrorMessage );
+            }
+            if ( result.StatusCode != HttpStatusCode.OK )
+            {
+                throw new IOException( string.Format( "Error receiving authorization token: {0}.", result.StatusCode ) );
+            }
+
+            return result.Data;
         }
 
         private Dictionary<string, string> ParseQueryParameters( string url )
