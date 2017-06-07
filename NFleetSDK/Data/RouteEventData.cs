@@ -30,6 +30,8 @@ namespace NFleet.Data
 
         public int TaskEventId { get; set; }
 
+        public int SequenceNumber { get; set; }
+
         public int TaskId { get; set; }
 
         public KPIData KPIs { get; set; }
@@ -37,6 +39,14 @@ namespace NFleet.Data
         public string Type { get; set; }
 
         public string Style { get; set; }
+
+        public string Info { get; set; }
+
+        public string Info2 { get; set; }
+
+        public string Info3 { get; set; }
+
+        public string Info4 { get; set; }
 
         public LocationData Location { get; set; }
 
