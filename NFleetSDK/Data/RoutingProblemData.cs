@@ -33,5 +33,9 @@ namespace NFleet.Data
         public string DataState { get; set; }
         [DataMember]
         public int Progress { get; set; }
+        [DataMember]
+        public double LatestExecutionTime { get; set; }
+        [DataMember]
+        public double LatestExecutionTimeToResult { get; set; }
     }
 }
