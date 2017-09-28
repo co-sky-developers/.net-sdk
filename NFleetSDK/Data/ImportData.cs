@@ -13,6 +13,8 @@ namespace NFleet.Data
         public List<VehicleError> Vehicles { get; set; }
         public List<TaskError> Tasks { get; set; }
         public List<DepotError> Depots { get; set; } 
+        public List<ModificationError> Modifications { get; set; }
+        public List<ModificationAreaError> ModificationAreas { get; set; }
 
         public ImportData()
         {
@@ -20,6 +22,8 @@ namespace NFleet.Data
             Vehicles = new List<VehicleError>();
             Tasks = new List<TaskError>();
             Depots = new List<DepotError>();
+            Modifications = new List<ModificationError>();
+            ModificationAreas = new List<ModificationAreaError>();
         }
     }
 }

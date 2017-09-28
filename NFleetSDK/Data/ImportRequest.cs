@@ -7,5 +7,7 @@
         public ImportDepotSetRequest Depots { get; set; }
         public RoadSetImportRequest Roads { get; set; }
         public MapImportRequest Map { get; set; }
+        public ModificationSetImportRequest Modifications { get; set; }
+        public ModificationAreaSetImportRequest ModificationAreas { get; set; }
     }
 }

@@ -104,6 +104,16 @@
     <Compile Include="Data\LocationData.cs" />
     <Compile Include="Data\LocationDataSet.cs" />
     <Compile Include="Data\MapImportRequest.cs" />
+    <Compile Include="Data\ModificationAreaData.cs" />
+    <Compile Include="Data\ModificationAreaError.cs" />
+    <Compile Include="Data\ModificationAreaImportRequest.cs" />
+    <Compile Include="Data\ModificationAreaSetImportRequest.cs" />
+    <Compile Include="Data\ModificationAreaUpdateRequest.cs" />
+    <Compile Include="Data\ModificationData.cs" />
+    <Compile Include="Data\ModificationDataSet.cs" />
+    <Compile Include="Data\ModificationError.cs" />
+    <Compile Include="Data\ModificationSetImportRequest.cs" />
+    <Compile Include="Data\ModificationUpdateRequest.cs" />
     <Compile Include="Data\NFleetRequestException.cs" />
     <Compile Include="Data\ObjectiveValueData.cs" />
     <Compile Include="Data\ObjectiveValueDataSet.cs" />
