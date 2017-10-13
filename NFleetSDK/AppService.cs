@@ -56,6 +56,11 @@ namespace NFleet
             return AppToken;
         }
 
+        public Uri MakeAppUrl( string appAddress, string problemUri )
+        {
+            return new Uri( appAddress + "#view" + Regex.Replace( problemUri, @"/users/\d+", "" ) + "/plan?accesstoken=" + AppToken.Token, UriKind.Absolute );
+        }
+
         private T SendRequest<T>( Link link, object data, int attempts ) where T : new()
         {
             client.ClearHandlers();
