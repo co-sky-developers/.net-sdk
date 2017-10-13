@@ -16,6 +16,10 @@ namespace NFleet.Data
 
         public KPIData KPIs { get; set; }
 
+        public List<TaskData> Unassigned { get; set; }
+
+        public List<DepotData> Depots { get; set; }
+
         public List<ModificationData> Modifications { get; set; }
 
         public PlanData()
