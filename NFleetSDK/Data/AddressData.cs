@@ -11,5 +11,6 @@
         public int ApartmentNumber { get; set; }
         public AddressResolution Resolution { get; set; }
         public double Confidence { get; set; }
+        public string AdditionalInfo { get; set; }
     }
 }
