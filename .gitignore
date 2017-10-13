@@ -156,3 +156,4 @@ packages/
 
 # project specific
 NFleetSDK.Tests/responses/*.dat
+.vs/
