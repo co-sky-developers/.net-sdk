@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using Newtonsoft.Json;
 using NFleet.Data;
@@ -18,11 +19,14 @@ namespace NFleet
         private static int requestAttempts = 3;
 
         private readonly RestClient client;
+        private readonly string appServiceAddress;
         private readonly string clientKey;
         private readonly string clientSecret;
+        public AppToken AppToken { get; set; }
 
         public AppService( string appServiceAddress, string clientKey, string clientSecret )
         {
+            this.appServiceAddress = appServiceAddress;
             this.clientKey = clientKey;
             this.clientSecret = clientSecret;
             client = new RestClient( appServiceAddress + "/appusers" ) { FollowRedirects = false };
@@ -40,6 +44,16 @@ namespace NFleet
             if ( link == null )
                 throw new ArgumentNullException( "link" );
             return SendRequest<T>( link, data, requestAttempts );
+        }
+
+        public AppToken Login( string user, string password )
+        {
+            var authClient = new RestClient( appServiceAddress ) { FollowRedirects = false };
+            var authorizationRequest = new RestRequest( "signin", Method.GET ) { RequestFormat = DataFormat.Json };
+            authorizationRequest.AddHeader( "Authorization", "Basic " + Convert.ToBase64String( Encoding.UTF8.GetBytes( string.Format( "{0}:{1}", user, password ) ) ) );
+            var result = authClient.Execute<AppToken>( authorizationRequest );
+            AppToken = result.Data;
+            return AppToken;
         }
 
         private T SendRequest<T>( Link link, object data, int attempts ) where T : new()
