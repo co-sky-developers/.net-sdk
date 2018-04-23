@@ -34,5 +34,9 @@ namespace NFleet.Data
         public double LoadingTimePercentage { get; set; }
 
         public double WaitingTimePercentage { get; set; }
+
+        public double AccumulatedLocations { get; set; }
+
+        public double AccumulatedCost { get; set; }
     }
 }
