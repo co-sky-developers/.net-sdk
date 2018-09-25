@@ -9,7 +9,7 @@ using System.Threading;
 using Newtonsoft.Json;
 using NFleet.Data;
 using RestSharp;
-using RestSharp.Contrib;
+using RestSharp.Extensions.MonoHttp;
 
 namespace NFleet
 {
@@ -86,7 +86,6 @@ namespace NFleet
             {
                 request.AddParameter( TypeHelper.GetSupportedType( link.Type ), JsonConvert.SerializeObject( data ), ParameterType.RequestBody );
             }
-            request.OnBeforeDeserialization = resp => resp.ContentType = "application/json";
             var result = client.Execute<T>( request );
 
             if ( result.StatusCode == HttpStatusCode.Unauthorized )
