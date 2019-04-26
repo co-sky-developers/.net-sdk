@@ -64,6 +64,7 @@ namespace NFleet
         private T SendRequest<T>( Link link, object data, int attempts ) where T : new()
         {
             client.ClearHandlers();
+            client.AddHandler( "application/json", new CustomConverter() );
 
             var request = new RestRequest( link.Uri, link.Method.ToMethod() )
             {
