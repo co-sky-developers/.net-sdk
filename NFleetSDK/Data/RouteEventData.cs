@@ -12,6 +12,8 @@ namespace NFleet.Data
 
         public string State { get; set; }
 
+        public string Name { get; set; }
+
         public string LockState { get; set; }
 
         public string TimeState { get; set; }
