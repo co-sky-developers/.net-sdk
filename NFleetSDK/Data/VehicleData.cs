@@ -48,6 +48,8 @@ namespace NFleet.Data
         [DataMember]
         public string RelocationType { get; set; }
         [DataMember]
+        public string SchedulingType { get; set; }
+        [DataMember]
         public string DataSource { get; set; }
         [DataMember]
         public CoordinateData CurrentLocation { get; set; }

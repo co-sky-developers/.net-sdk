@@ -25,6 +25,7 @@ namespace NFleet.Data
         public double MaxDrivingHours { get; set; }
         public double MaxWorkingHours { get; set; }
         public string RelocationType { get; set; }
+        public string SchedulingType { get; set; }
         public bool IsLocked { get; set; }
 
         public string MimeType { get; set; }
